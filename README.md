@@ -82,7 +82,7 @@ Download and add MaterialNavigationDrawerModule to your project as module.<br>
 Add this to your build.gradle:
 ```java 
 dependencies {
-    compile project(':MaterialTabsModule')
+    compile project(':MaterialNavigationDrawerModule')
 }
 ```
 
