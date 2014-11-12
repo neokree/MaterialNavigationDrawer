@@ -1,7 +1,8 @@
 MaterialNavigationDrawer
 ========================
 
-Navigation Drawer Activity with material design style and simplified methods
+Navigation Drawer Activity with material design style and simplified methods<br>
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-MaterialNavigationDrawer-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1114)
 
 It requires 14+ API and android support v7 (Toolbar)<br>
 
