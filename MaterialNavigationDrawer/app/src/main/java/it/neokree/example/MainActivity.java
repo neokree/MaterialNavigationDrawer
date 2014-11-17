@@ -41,6 +41,8 @@ public class MainActivity extends MaterialNavigationDrawer {
 
         // add your sections
         this.addSection(this.newSection("Section 1"));
+        this.addSection(this.newSection("Section 2"));
+        this.addDivisor();
         this.addSection(this.newSection("Section 2",this.getResources().getDrawable(R.drawable.ic_mic_white_24dp)));
         this.addBottomSection(this.newBottomSection("Settings",this.getResources().getDrawable(R.drawable.ic_settings_black_24dp)));
     }

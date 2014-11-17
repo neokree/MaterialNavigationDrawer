@@ -4,10 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -316,6 +318,16 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)(48 * density));
         bottomSectionList.add(section);
         bottomSections.addView(section.getView(),params);
+    }
+
+    public void addDivisor() {
+        View view = new View(this);
+        view.setBackgroundColor(Color.parseColor("#e0e0e0"));
+        // height 1 px
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,1);
+        params.setMargins(0,(int) (4 * density), 0 , (int) (4 * density));
+
+        sections.addView(view, params);
     }
 
     public MaterialSection newSection(String text, Drawable icon) {
