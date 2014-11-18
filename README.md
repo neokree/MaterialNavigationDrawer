@@ -77,6 +77,14 @@ In your styles.xml
 ```
 N.B. Not override <code>OnCreate</code> method! Use <code>init</code> method instead.<br>
 
+<h5>Add separator</h5>
+```java
+@Override
+    public void init(Bundle savedInstanceState) {
+        this.addDivisor();
+    }
+```
+
 <h3>How to import </h3>
 <h6>Android Studio</h6>
 Download and add MaterialNavigationDrawerModule to your project as module.<br>
@@ -89,7 +97,6 @@ dependencies {
 
 <h3>Limitations</h3>
 Actually, this library have some limitations: 
-- There are no possibility to add separators
 - There are no possibility to choose the color of section
 
 These problems are currently in development
