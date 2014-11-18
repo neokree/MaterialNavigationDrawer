@@ -39,7 +39,7 @@ import java.util.List;
  * @author created by neokree
  */
 @SuppressLint("InflateParams")
-public abstract class MaterialNavigationDrawer extends ActionBarActivity implements MaterialSectionListener, ViewTreeObserver.OnGlobalLayoutListener{
+public abstract class MaterialNavigationDrawer extends ActionBarActivity implements MaterialSectionListener{
 
     public static final int BOTTOM_SECTION_START = 100;
     public static final int SECTION_START = 0;
@@ -124,12 +124,9 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
 
         layout.setDrawerListener(pulsante);
 
-        // si setta la grandezza ottimale del drawer
-        //int width_screen = Utils.getScreenWidth(this);
-        //int width = width_screen - Utils.dpToPx(this, 56);
-        //DrawerLayout.LayoutParams params = new DrawerLayout.LayoutParams(width, DrawerLayout.LayoutParams.MATCH_PARENT);
-        //lista.setLayoutParams(params);
+
         MaterialSection section = sectionList.get(0);
+        section.select();
         setFragment(section.getTargetFragment(),section.getTitle());
     }
 
@@ -283,12 +280,6 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
         });
     }
     */
-
-    @Override
-    public void onGlobalLayout() {
-        // after layout loaded set first section selected
-        sectionList.get(0).select();
-    }
 
     // Method used for customize layout
 
