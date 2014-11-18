@@ -1,6 +1,7 @@
 package it.neokree.materialnavigationdrawer;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -23,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -37,7 +39,7 @@ import java.util.List;
  * @author created by neokree
  */
 @SuppressLint("InflateParams")
-public abstract class MaterialNavigationDrawer extends ActionBarActivity implements MaterialSectionListener{
+public abstract class MaterialNavigationDrawer extends ActionBarActivity implements MaterialSectionListener, ViewTreeObserver.OnGlobalLayoutListener{
 
     public static final int BOTTOM_SECTION_START = 100;
     public static final int SECTION_START = 0;
@@ -98,7 +100,7 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
         actionBar.setHomeButtonEnabled(true);
 
         // Si preleva il titolo dell'activity
-        title = getCurrentTitle(indexFragment);
+        title = sectionList.get(indexFragment).getTitle();
 
         // si collega il DrawerLayout al codice e gli si setta l'ombra all'apertura
         layout = (DrawerLayout) this.findViewById(R.id.drawer_layout);
@@ -111,7 +113,7 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
             }
 
             public void onDrawerOpened(View drawerView) {
-                actionBar.setTitle(getCurrentTitle(-1));
+                //actionBar.setTitle(getCurrentTitle(-1));
                 invalidateOptionsMenu(); // termina il comando
             }
 
@@ -127,8 +129,8 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
         //int width = width_screen - Utils.dpToPx(this, 56);
         //DrawerLayout.LayoutParams params = new DrawerLayout.LayoutParams(width, DrawerLayout.LayoutParams.MATCH_PARENT);
         //lista.setLayoutParams(params);
-
-        setFragment(indexFragment);
+        MaterialSection section = sectionList.get(0);
+        setFragment(section.getTargetFragment(),section.getTitle());
     }
 
     public Toolbar getToolbar() {
@@ -184,17 +186,14 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
 
 
 
-    private void setFragment(int i) {
-        // si seleziona il fragment da utilizzare
-        android.support.v4.app.Fragment fragment = getCurrentFragment(i);
-
+    private void setFragment(Fragment fragment,String title) {
         // si fa il trasferimento del fragment sullo schermo
         FragmentManager fragmentManager = this.getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
 
         // si setta il titolo e si chiude il drawer
         //lista.setItemChecked(i, true);
-        setTitle(getCurrentTitle(i));
+        setTitle(title);
         layout.closeDrawer(drawer);
     }
 
@@ -204,16 +203,24 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
     }
 
     @Override
-    public void onClick(int position) {
-        setFragment(position);
-
-        for(MaterialSection section : sectionList) {
-            if(position != section.getPosition())
-                section.unSelect();
+    public void onClick(MaterialSection section) {
+        if(section.getTarget() == MaterialSection.TARGET_FRAGMENT)
+        {
+            setFragment(section.getTargetFragment(),section.getTitle());
         }
-        for(MaterialSection section : bottomSectionList) {
-            if(position != section.getPosition())
-                section.unSelect();
+        else {
+            this.startActivity(section.getTargetIntent());
+        }
+
+        int position = section.getPosition();
+
+        for(MaterialSection mySection : sectionList) {
+            if(position != mySection.getPosition())
+                mySection.unSelect();
+        }
+        for(MaterialSection mySection : bottomSectionList) {
+            if(position != mySection.getPosition())
+                mySection.unSelect();
         }
 
     }
@@ -277,6 +284,12 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
     }
     */
 
+    @Override
+    public void onGlobalLayout() {
+        // after layout loaded set first section selected
+        sectionList.get(0).select();
+    }
+
     // Method used for customize layout
 
     public void setUserEmail(String email) {
@@ -330,63 +343,125 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
         sections.addView(view, params);
     }
 
-    public MaterialSection newSection(String text, Drawable icon) {
-        MaterialSection section = new MaterialSection(this,sectionList.size(),true);
+    // create sections
+
+    public MaterialSection newSection(String title, Drawable icon, Fragment target) {
+        MaterialSection section = new MaterialSection(this,sectionList.size(),true,MaterialSection.TARGET_FRAGMENT);
         section.setOnClickListener(this);
         section.setIcon(icon);
-        section.setText(text);
+        section.setTitle(title);
+        section.setTarget(target);
 
         return section;
     }
 
-    public MaterialSection newSection(String text, Bitmap icon) {
-        MaterialSection section = new MaterialSection(this,sectionList.size(),true);
+    public MaterialSection newSection(String title, Drawable icon, Intent target) {
+        MaterialSection section = new MaterialSection(this,sectionList.size(),true,MaterialSection.TARGET_ACTIVITY);
         section.setOnClickListener(this);
         section.setIcon(icon);
-        section.setText(text);
+        section.setTitle(title);
+        section.setTarget(target);
 
         return section;
     }
 
-    public MaterialSection newSection(String text) {
-        MaterialSection section = new MaterialSection(this,sectionList.size(),false);
-        section.setOnClickListener(this);
-        section.setText(text);
-
-        return section;
-    }
-
-    public MaterialSection newBottomSection(String text, Drawable icon) {
-        MaterialSection section = new MaterialSection(this,BOTTOM_SECTION_START + bottomSectionList.size(),true);
+    public MaterialSection newSection(String title, Bitmap icon,Fragment target) {
+        MaterialSection section = new MaterialSection(this,sectionList.size(),true,MaterialSection.TARGET_FRAGMENT);
         section.setOnClickListener(this);
         section.setIcon(icon);
-        section.setText(text);
+        section.setTitle(title);
+        section.setTarget(target);
 
         return section;
     }
 
-    public MaterialSection newBottomSection(String text, Bitmap icon) {
-        MaterialSection section = new MaterialSection(this,BOTTOM_SECTION_START + bottomSectionList.size(),true);
+    public MaterialSection newSection(String title, Bitmap icon,Intent target) {
+        MaterialSection section = new MaterialSection(this,sectionList.size(),true,MaterialSection.TARGET_ACTIVITY);
         section.setOnClickListener(this);
         section.setIcon(icon);
-        section.setText(text);
+        section.setTitle(title);
+        section.setTarget(target);
 
         return section;
     }
 
-    public MaterialSection newBottomSection(String text) {
-        MaterialSection section = new MaterialSection(this,BOTTOM_SECTION_START + bottomSectionList.size(),false);
+    public MaterialSection newSection(String title,Fragment target) {
+        MaterialSection section = new MaterialSection(this,sectionList.size(),false,MaterialSection.TARGET_FRAGMENT);
         section.setOnClickListener(this);
-        section.setText(text);
+        section.setTitle(title);
+        section.setTarget(target);
+
+        return section;
+    }
+
+    public MaterialSection newSection(String title,Intent target) {
+        MaterialSection section = new MaterialSection(this,sectionList.size(),false,MaterialSection.TARGET_ACTIVITY);
+        section.setOnClickListener(this);
+        section.setTitle(title);
+        section.setTarget(target);
+
+        return section;
+    }
+
+    public MaterialSection newBottomSection(String title, Drawable icon,Fragment target) {
+        MaterialSection section = new MaterialSection(this,BOTTOM_SECTION_START + bottomSectionList.size(),true,MaterialSection.TARGET_FRAGMENT);
+        section.setOnClickListener(this);
+        section.setIcon(icon);
+        section.setTitle(title);
+        section.setTarget(target);
+
+        return section;
+    }
+
+    public MaterialSection newBottomSection(String title, Drawable icon,Intent target) {
+        MaterialSection section = new MaterialSection(this,BOTTOM_SECTION_START + bottomSectionList.size(),true,MaterialSection.TARGET_ACTIVITY);
+        section.setOnClickListener(this);
+        section.setIcon(icon);
+        section.setTitle(title);
+        section.setTarget(target);
+
+        return section;
+    }
+
+    public MaterialSection newBottomSection(String title, Bitmap icon,Fragment target) {
+        MaterialSection section = new MaterialSection(this,BOTTOM_SECTION_START + bottomSectionList.size(),true,MaterialSection.TARGET_FRAGMENT);
+        section.setOnClickListener(this);
+        section.setIcon(icon);
+        section.setTitle(title);
+        section.setTarget(target);
+
+        return section;
+    }
+
+    public MaterialSection newBottomSection(String title, Bitmap icon,Intent target) {
+        MaterialSection section = new MaterialSection(this,BOTTOM_SECTION_START + bottomSectionList.size(),true,MaterialSection.TARGET_ACTIVITY);
+        section.setOnClickListener(this);
+        section.setIcon(icon);
+        section.setTitle(title);
+        section.setTarget(target);
+
+        return section;
+    }
+
+    public MaterialSection newBottomSection(String title, Fragment target) {
+        MaterialSection section = new MaterialSection(this,BOTTOM_SECTION_START + bottomSectionList.size(),false,MaterialSection.TARGET_FRAGMENT);
+        section.setOnClickListener(this);
+        section.setTitle(title);
+        section.setTarget(target);
+
+        return section;
+    }
+
+    public MaterialSection newBottomSection(String title, Intent target) {
+        MaterialSection section = new MaterialSection(this,BOTTOM_SECTION_START + bottomSectionList.size(),false,MaterialSection.TARGET_ACTIVITY);
+        section.setOnClickListener(this);
+        section.setTitle(title);
+        section.setTarget(target);
 
         return section;
     }
 
     // abstract methods
-
-    public abstract String getCurrentTitle(int position);
-
-    public abstract Fragment getCurrentFragment(int position);
 
     public abstract void init(Bundle savedInstanceState);
 

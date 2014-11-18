@@ -1,9 +1,11 @@
 package it.neokree.materialnavigationdrawer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,19 +19,28 @@ import android.widget.TextView;
  */
 public class MaterialSection implements View.OnTouchListener {
 
+    public static final boolean TARGET_FRAGMENT = true;
+    public static final boolean TARGET_ACTIVITY = false;
+
     private int position;
     private View view;
     private TextView text;
     private ImageView icon;
     private MaterialSectionListener listener;
     private boolean isSelected;
+    private boolean targetType;
 
     private int colorPressed;
     private int colorUnpressed;
     private int colorSelected;
     private int iconColor;
 
-    public MaterialSection(Context ctx, int position, boolean hasIcon) {
+    private String title;
+
+    private Fragment targetFragment;
+    private Intent targetIntent;
+
+    public MaterialSection(Context ctx, int position, boolean hasIcon, boolean target ) {
 
         if(!hasIcon) {
             view = LayoutInflater.from(ctx).inflate(R.layout.layout_material_section,null);
@@ -52,6 +63,7 @@ public class MaterialSection implements View.OnTouchListener {
         iconColor = Color.rgb(98,98,98);
         this.position = position;
         isSelected = false;
+        targetType = target;
     }
 
     @Override
@@ -67,12 +79,17 @@ public class MaterialSection implements View.OnTouchListener {
             view.setBackgroundColor(colorSelected);
 
             if(listener != null)
-                listener.onClick(position);
+                listener.onClick(this);
 
             return true;
         }
 
         return false;
+    }
+
+    public void select() {
+        isSelected = true;
+        view.setBackgroundColor(colorSelected);
     }
 
     public void unSelect() {
@@ -92,8 +109,13 @@ public class MaterialSection implements View.OnTouchListener {
         return view;
     }
 
-    public void setText(String text) {
-        this.text.setText(text);
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+        this.text.setText(title);
     }
 
     public void setIcon(Drawable icon) {
@@ -105,4 +127,24 @@ public class MaterialSection implements View.OnTouchListener {
         this.icon.setImageBitmap(icon);
         this.icon.setColorFilter(iconColor);
     }
+
+    public void setTarget(Fragment target) {
+        this.targetFragment = target;
+    }
+
+    public void setTarget(Intent intent) {
+        this.targetIntent = intent;
+    }
+
+    public boolean getTarget() {
+        return targetType;
+    }
+
+    public Fragment getTargetFragment() {
+        return targetFragment;
+    }
+    public Intent getTargetIntent() {
+        return targetIntent;
+    }
+
 }

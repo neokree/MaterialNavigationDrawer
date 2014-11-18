@@ -16,21 +16,6 @@ public class MainActivity extends MaterialNavigationDrawer {
 
 
     @Override
-    public Fragment getCurrentFragment(int position) {
-        switch(position) {
-            case MaterialNavigationDrawer.SECTION_START:
-                return new FragmentIndex();
-            case MaterialNavigationDrawer.SECTION_START + 1:
-                return new FragmentIndex();
-
-            case MaterialNavigationDrawer.BOTTOM_SECTION_START:
-                return new FragmentSettings();
-
-            default: return new Fragment();
-        }
-    }
-
-    @Override
     public void init(Bundle savedInstanceState) {
         // set cover background
         this.setDrawerBackground(this.getResources().getDrawable(R.drawable.mat1));
@@ -40,26 +25,11 @@ public class MainActivity extends MaterialNavigationDrawer {
         this.setUserEmail("neokree@gmail.com");
 
         // add your sections
-        this.addSection(this.newSection("Section 1"));
-        this.addSection(this.newSection("Section 2"));
+        this.addSection(this.newSection("Section 1",new FragmentIndex()));
+        this.addSection(this.newSection("Section 2",new FragmentIndex()));
         this.addDivisor();
-        this.addSection(this.newSection("Section 2",this.getResources().getDrawable(R.drawable.ic_mic_white_24dp)));
-        this.addBottomSection(this.newBottomSection("Settings",this.getResources().getDrawable(R.drawable.ic_settings_black_24dp)));
-    }
-
-    @Override
-    public String getCurrentTitle(int position) {
-        switch(position) {
-            case MaterialNavigationDrawer.SECTION_START:
-                return "My First Section";
-            case MaterialNavigationDrawer.SECTION_START + 1:
-                return "My Second Section";
-
-            case MaterialNavigationDrawer.BOTTOM_SECTION_START:
-                return "Settings";
-
-            default: return "";
-        }
+        this.addSection(this.newSection("Section 2",this.getResources().getDrawable(R.drawable.ic_mic_white_24dp),new FragmentIndex()));
+        this.addBottomSection(this.newBottomSection("Settings",this.getResources().getDrawable(R.drawable.ic_settings_black_24dp),new FragmentSettings()));
     }
 
     public class FragmentIndex extends Fragment {

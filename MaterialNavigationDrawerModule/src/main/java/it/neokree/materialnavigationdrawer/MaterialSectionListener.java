@@ -5,5 +5,5 @@ package it.neokree.materialnavigationdrawer;
  */
 public interface MaterialSectionListener {
 
-    public void onClick(int position);
+    public void onClick(MaterialSection section);
 }
