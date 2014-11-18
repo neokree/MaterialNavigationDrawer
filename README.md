@@ -77,7 +77,7 @@ In your styles.xml
 ```
 N.B. Not override <code>OnCreate</code> method! Use <code>init</code> method instead.<br>
 
-<h5>Add separator</h5>
+<h6>Add separator</h6>
 ```java
 @Override
     public void init(Bundle savedInstanceState) {
