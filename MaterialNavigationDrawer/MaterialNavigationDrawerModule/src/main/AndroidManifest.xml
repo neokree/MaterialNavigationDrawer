@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="it.neokree.materialnavigationdrawer" >
+    package="it.neokree.materialnavigationdrawer"
+    android:versionCode="1"
+    android:versionName="0.5" >
 
     <application
         android:theme="@style/AppTheme">

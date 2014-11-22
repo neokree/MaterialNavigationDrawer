@@ -181,10 +181,9 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
         this.getSupportActionBar().setTitle(title);
     }
 
-
-
     private void setFragment(Fragment fragment,String title) {
-        // si fa il trasferimento del fragment sullo schermo
+        // si fa
+        // il trasferimento del fragment sullo schermo
         FragmentManager fragmentManager = this.getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
 
@@ -192,11 +191,6 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
         //lista.setItemChecked(i, true);
         setTitle(title);
         layout.closeDrawer(drawer);
-    }
-
-    @Override
-    public void onBackPressed() {
-        indexFragment = -1;
     }
 
     @Override
@@ -253,33 +247,6 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
         //return _bmp;
         return output;
     }
-
-    /*
-    private void setPalette() {
-
-        Palette.generateAsync(convertToBitmap(background), new Palette.PaletteAsyncListener() {
-            @Override
-            public void onGenerated(Palette palette) {
-                // Here's your generated palette
-                Palette.Swatch swatch = palette.getMutedSwatch();
-
-                // generate gradient for text background
-                GradientDrawable gd = new GradientDrawable(
-                        GradientDrawable.Orientation.TOP_BOTTOM,
-                        new int[] {0x00FFFFFF,swatch.getRgb()});
-                //gd.setCornerRadius(0f);
-
-                if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.JELLY_BEAN)
-                    gradient.setBackground(gd);
-                else
-                    gradient.setBackgroundDrawable(gd);
-
-                username.setTextColor(swatch.getTitleTextColor());
-                usermail.setTextColor(swatch.getBodyTextColor());
-            }
-        });
-    }
-    */
 
     // Method used for customize layout
 
