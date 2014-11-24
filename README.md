@@ -110,9 +110,11 @@ dependencies {
 
 <h3>Limitations</h3>
 Actually, this library have some limitations: 
-- There are no possibility to choose the color of section
+- Tablet Material Design style not implemented
 
 These problems are currently in development
 
 <img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen1.png" alt="screenshot" width="300px" height="auto" />
+<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen2.png" alt="screenshot" width="300px" height="auto" />
 <img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen3.png" alt="screenshot" width="300px" height="auto" />
+<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen4.png" alt="screenshot" width="300px" height="auto" />
