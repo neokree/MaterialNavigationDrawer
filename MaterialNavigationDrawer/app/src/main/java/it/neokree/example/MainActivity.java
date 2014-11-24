@@ -1,6 +1,7 @@
 package it.neokree.example;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -29,29 +30,9 @@ public class MainActivity extends MaterialNavigationDrawer {
         this.addSection(this.newSection("Section 2",new FragmentIndex()));
         this.addDivisor();
         this.addSection(this.newSection("Section 2",this.getResources().getDrawable(R.drawable.ic_mic_white_24dp),new FragmentIndex()));
-        this.addBottomSection(this.newBottomSection("Settings",this.getResources().getDrawable(R.drawable.ic_settings_black_24dp),new FragmentSettings()));
+        Intent i = new Intent(this,Settings.class);
+
+        this.addBottomSection(this.newBottomSection("Settings",this.getResources().getDrawable(R.drawable.ic_settings_black_24dp),i));
     }
 
-    public class FragmentIndex extends Fragment {
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-            TextView text = new TextView(this.getActivity());
-            text.setText("Section");
-            text.setGravity(Gravity.CENTER);
-            return text;
-        }
-    }
-
-    public class FragmentSettings extends Fragment {
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-            TextView text = new TextView(this.getActivity());
-            text.setText("Settings");
-            text.setGravity(Gravity.CENTER);
-            return text;
-        }
-    }
 }
