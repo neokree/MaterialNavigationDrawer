@@ -3,6 +3,7 @@ package it.neokree.materialnavigationdrawer;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -20,6 +21,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,6 +64,7 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
     private CharSequence title;
     private static int indexFragment = 0;
     private float density;
+    private int primaryColor;
 
     @Override
     /**
@@ -90,6 +93,12 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
 
         //get density
         density = this.getResources().getDisplayMetrics().density;
+
+        // get primary color
+        Resources.Theme theme = this.getTheme();
+        TypedValue typedValue = new TypedValue();
+        theme.resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        primaryColor = typedValue.data;
 
         init(savedInstanceState);
 
@@ -198,6 +207,12 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
         if(section.getTarget() == MaterialSection.TARGET_FRAGMENT)
         {
             setFragment(section.getTargetFragment(),section.getTitle());
+
+            // setting toolbar color if is setted
+            if(section.hasSectionColor())
+                this.getToolbar().setBackgroundColor(section.getSectionColor());
+            else
+                this.getToolbar().setBackgroundColor(primaryColor);
         }
         else {
             this.startActivity(section.getTargetIntent());
@@ -296,7 +311,7 @@ public abstract class MaterialNavigationDrawer extends ActionBarActivity impleme
         view.setBackgroundColor(Color.parseColor("#e0e0e0"));
         // height 1 px
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,1);
-        params.setMargins(0,(int) (4 * density), 0 , (int) (4 * density));
+        params.setMargins(0,(int) (8 * density), 0 , (int) (8 * density));
 
         sections.addView(view, params);
     }

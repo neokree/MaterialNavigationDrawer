@@ -29,6 +29,7 @@ public class MaterialSection implements View.OnTouchListener {
     private MaterialSectionListener listener;
     private boolean isSelected;
     private boolean targetType;
+    private boolean sectionColor;
 
     private int colorPressed;
     private int colorUnpressed;
@@ -63,6 +64,7 @@ public class MaterialSection implements View.OnTouchListener {
         iconColor = Color.rgb(98,98,98);
         this.position = position;
         isSelected = false;
+        sectionColor = false;
         targetType = target;
     }
 
@@ -78,6 +80,10 @@ public class MaterialSection implements View.OnTouchListener {
             isSelected = true;
             view.setBackgroundColor(colorSelected);
 
+            if (sectionColor) {
+                text.setTextColor(iconColor);
+            }
+
             if(listener != null)
                 listener.onClick(this);
 
@@ -90,11 +96,19 @@ public class MaterialSection implements View.OnTouchListener {
     public void select() {
         isSelected = true;
         view.setBackgroundColor(colorSelected);
+
+        if(sectionColor) {
+            text.setTextColor(iconColor);
+        }
     }
 
     public void unSelect() {
         isSelected = false;
         view.setBackgroundColor(colorUnpressed);
+
+        if (sectionColor) {
+            text.setTextColor(Color.BLACK);
+        }
     }
 
     public int getPosition() {
@@ -127,7 +141,7 @@ public class MaterialSection implements View.OnTouchListener {
         this.icon.setImageBitmap(icon);
         this.icon.setColorFilter(iconColor);
     }
-
+    
     public void setTarget(Fragment target) {
         this.targetFragment = target;
     }
@@ -143,8 +157,26 @@ public class MaterialSection implements View.OnTouchListener {
     public Fragment getTargetFragment() {
         return targetFragment;
     }
+
     public Intent getTargetIntent() {
         return targetIntent;
+    }
+    
+    public MaterialSection setSectionColor(int color) {
+        sectionColor = true;
+        iconColor = color;
+        if(icon != null)
+            this.icon.setColorFilter(color);
+        
+        return this;
+    }
+
+    public boolean hasSectionColor() {
+        return sectionColor;
+    }
+
+    public int getSectionColor() {
+        return iconColor;
     }
 
 }

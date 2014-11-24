@@ -19,7 +19,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginLeft="72dp"
         android:layout_marginRight="16dp"
-        android:textStyle="bold"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
+        android:textSize="14sp"
+        android:textColor="@android:color/black"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textStyle="bold"/>
 
 </RelativeLayout>
