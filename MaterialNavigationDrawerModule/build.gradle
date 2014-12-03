@@ -7,12 +7,11 @@ android {
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
-        versionName '0.8'
+        versionName 'dev'
         applicationId 'it.neokree.materialnavigationdrawer'
     }
     buildTypes {
         release {
-            runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

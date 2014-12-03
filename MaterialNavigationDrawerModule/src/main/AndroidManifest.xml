@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="it.neokree.materialnavigationdrawer"
     android:versionCode="1"
-    android:versionName="0.8" >
+    android:versionName="dev" >
 
     <application
         android:theme="@style/AppTheme">

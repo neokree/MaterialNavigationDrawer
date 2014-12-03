@@ -21,7 +21,7 @@ public class MainActivity extends MaterialNavigationDrawer {
     @Override
     public void init(Bundle savedInstanceState) {
         // set cover background
-        this.setDrawerBackground(this.getResources().getDrawable(R.drawable.mat1));
+        this.setDrawerBackground(this.getResources().getDrawable(R.drawable.bamboo));
         // set user photo and data
         this.setUserPhoto(this.getResources().getDrawable(R.drawable.photo));
         this.setUsername("NeoKree");
