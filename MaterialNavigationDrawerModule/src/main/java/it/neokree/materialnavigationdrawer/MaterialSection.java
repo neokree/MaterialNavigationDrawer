@@ -76,6 +76,16 @@ public class MaterialSection implements View.OnTouchListener {
             return true;
         }
 
+        if( event.getAction() == MotionEvent.ACTION_CANCEL) {
+            if(isSelected)
+                view.setBackgroundColor(colorSelected);
+            else
+                view.setBackgroundColor(colorUnpressed);
+
+            return true;
+        }
+
+
         if( event.getAction() == MotionEvent.ACTION_UP) {
             isSelected = true;
             view.setBackgroundColor(colorSelected);
