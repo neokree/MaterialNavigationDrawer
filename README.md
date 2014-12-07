@@ -48,55 +48,6 @@ In your styles.xml
 </resources>
 ```
 N.B. Not override <code>OnCreate</code> method! Use <code>init</code> method instead.<br>
-<h6>Add Section methods</h6>
-```java
-    // only text section, it opens an activity
-    public MaterialSection newSection(String title,Intent target)
-    
-    // only text section, it opens a fragment
-    public MaterialSection newSection(String title,Fragment target)
-    
-    // icon bitmap and text section, it opens an activity
-    public MaterialSection newSection(String title, Bitmap icon,Intent target)
-    
-    // icon bitmap and text section, it opens a fragment
-    public MaterialSection newSection(String title, Bitmap icon,Fragment target)
-    
-    // icon drawable and text section, it opens an activity
-    public MaterialSection newSection(String title, Drawable icon, Intent target)
-    
-    // icon drawable and text section, it opens a fragment
-    public MaterialSection newSection(String title, Drawable icon, Fragment target)
-```
-
-<h6>Add Bottom Section methods</h6>
-```java
-    // only text section, it opens an activity
-    public MaterialSection newBottomSection(String title,Intent target)
-    
-    // only text section, it opens a fragment
-    public MaterialSection newBottomSection(String title,Fragment target)
-    
-    // icon bitmap and text section, it opens an activity
-    public MaterialSection newBottomSection(String title, Bitmap icon,Intent target)
-    
-    // icon bitmap and text section, it opens a fragment
-    public MaterialSection newBottomSection(String title, Bitmap icon,Fragment target)
-    
-    // icon drawable and text section, it opens an activity
-    public MaterialSection newBottomSection(String title, Drawable icon, Intent target)
-    
-    // icon drawable and text section, it opens a fragment
-    public MaterialSection newBottomSection(String title, Drawable icon, Fragment target)
-```
-
-<h6>Add separator method</h6>
-```java
-@Override
-    public void init(Bundle savedInstanceState) {
-        this.addDivisor();
-    }
-```
 
 <h3>How to import </h3>
 <h6>Android Studio</h6>
@@ -110,6 +61,8 @@ dependencies {
     compile 'it.neokree:MaterialNavigationDrawer:1.0.1'
 }
 ```
+
+You don't know how to do something? Visit the [wiki](https://github.com/neokree/MaterialNavigationDrawer/wiki)!
 
 <img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen1.png" alt="screenshot" width="300px" height="auto" />
 <img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen2.png" alt="screenshot" width="300px" height="auto" />
