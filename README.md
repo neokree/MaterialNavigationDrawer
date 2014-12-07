@@ -8,7 +8,7 @@ It requires 11+ API and android support v7 (Toolbar)<br>
 
 [Download example apk](https://raw.github.com/neokree/MaterialNavigationDrawer/master/example.apk)<br>
 
-<h3>How to use</h3>
+### How to add to your project
 In your Activity...
 ```java
 public class MyActivity extends MaterialNavigationDrawer {
