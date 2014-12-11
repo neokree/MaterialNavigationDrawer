@@ -19,6 +19,9 @@
         <activity android:name="it.neokree.example.Settings" >
 
         </activity>
+        <activity android:name="it.neokree.example.Profile" >
+
+        </activity>
     </application>
 
 </manifest>

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +18,7 @@ import org.w3c.dom.Text;
  *
  * Created by neokree on 08/11/14.
  */
-public class MaterialSection implements View.OnTouchListener {
+public class MaterialSection<Fragment> implements View.OnTouchListener {
 
     public static final boolean TARGET_FRAGMENT = true;
     public static final boolean TARGET_ACTIVITY = false;

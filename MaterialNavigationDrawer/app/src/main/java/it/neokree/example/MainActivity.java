@@ -1,18 +1,24 @@
 package it.neokree.example;
 
 
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
+import it.neokree.materialnavigationdrawer.MaterialAccount;
+import it.neokree.materialnavigationdrawer.MaterialAccountListener;
 import it.neokree.materialnavigationdrawer.MaterialNavigationDrawer;
 import it.neokree.materialnavigationdrawer.MaterialSection;
 
-public class MainActivity extends MaterialNavigationDrawer {
+public class MainActivity extends MaterialNavigationDrawer implements MaterialAccountListener{
 
 
     @Override
     public void init(Bundle savedInstanceState) {
+        /*
         // set cover background
         this.setDrawerBackground(this.getResources().getDrawable(R.drawable.bamboo));
         // set user photo and data
@@ -21,6 +27,18 @@ public class MainActivity extends MaterialNavigationDrawer {
         this.setThirdAccountPhoto(this.getResources().getDrawable(R.drawable.photo));
         this.setUsername("NeoKree");
         this.setUserEmail("neokree@gmail.com");
+        */
+
+        // add first account
+        MaterialAccount account = new MaterialAccount("NeoKree","neokree@gmail.com",this.getResources().getDrawable(R.drawable.photo),this.getResources().getDrawable(R.drawable.bamboo));
+        this.addAccount(account);
+
+
+        MaterialAccount account2 = new MaterialAccount("Me", "hello@example.com",this.getResources().getDrawable(R.drawable.photo),this.getResources().getDrawable(R.drawable.mat2));
+        this.addAccount(account2);
+
+        // set listener
+        this.setAccountListener(this);
 
         // add your sections
         this.addSection(this.newSection("Section 1",new FragmentIndex()));
@@ -41,4 +59,16 @@ public class MainActivity extends MaterialNavigationDrawer {
 
     }
 
+
+    @Override
+    public void onAccountOpening(MaterialAccount account) {
+        // open profile activity
+        Intent i = new Intent(this,Profile.class);
+        startActivity(i);
+    }
+
+    @Override
+    public void onChangeAccount(MaterialAccount newAccount) {
+        // when another account is selected
+    }
 }

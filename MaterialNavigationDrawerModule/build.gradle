@@ -8,11 +8,10 @@ android {
         targetSdkVersion 21
         versionCode 1
         versionName 'dev'
-        applicationId 'it.neokree.materialnavigationdrawer'
     }
     buildTypes {
         release {
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     productFlavors {
