@@ -11,23 +11,35 @@ It requires 11+ API and android support v7 (Toolbar)<br>
 ### How to add to your project
 In your Activity...
 ```java
-public class MyActivity extends MaterialNavigationDrawer {
+public class MyActivity extends MaterialNavigationDrawer implements MaterialAccountListener {
 
     @Override
     public void init(Bundle savedInstanceState) {
-        // set cover background
-        this.setDrawerBackground(this.getResources().getDrawable(R.drawable.mat1));
-        // set user photo and data
-        this.setUserPhoto(this.getResources().getDrawable(R.drawable.photo));
-        this.setUsername("NeoKree");
-        this.setUserEmail("neokree@gmail.com");
+
+        // add first account
+        MaterialAccount account = new MaterialAccount("NeoKree","neokree@gmail.com",this.getResources().getDrawable(R.drawable.photo),this.getResources().getDrawable(R.drawable.bamboo));
+        this.addAccount(account);
+
+        // set listener
+        this.setAccountListener(this);
 
         // add your sections
         this.addSection(this.newSection("Section 1",new FragmentIndex()));
         this.addSection(this.newSection("Section 2",new FragmentIndex()));
         this.addDivisor();
-        this.addSection(this.newSection("Section 2",this.getResources().getDrawable(R.drawable.section2),new FragmentIndex()));
-        this.addBottomSection(this.newBottomSection("Settings",this.getResources().getDrawable(R.drawable.settings),new FragmentSettings()));
+        this.addSection(this.newSection("Recorder",this.getResources().getDrawable(R.drawable.ic_mic_white_24dp),new FragmentIndex()).setNotifications(10));
+
+        // add custom colored section with icon
+        this.addSection(this.newSection("Night Section", this.getResources().getDrawable(R.drawable.ic_hotel_grey600_24dp), new FragmentIndex())
+                .setSectionColor(Color.parseColor("#2196f3")).setNotifications(150)); // material blue 500
+
+        this.addDivisor();
+        // add custom colored section with only text
+        this.addSection(this.newSection("Last Section", new FragmentIndex()).setSectionColor((Color.parseColor("#ff9800")))); // material orange 500
+
+        Intent i = new Intent(this,Settings.class);
+        this.addBottomSection(this.newBottomSection("Settings",this.getResources().getDrawable(R.drawable.ic_settings_black_24dp),i));
+
     }
 
 }
@@ -58,7 +70,7 @@ repositories {
 }
 
 dependencies {
-    compile 'it.neokree:MaterialNavigationDrawer:1.1.3'
+    compile 'it.neokree:MaterialNavigationDrawer:1.1.7'
 }
 ```
 
