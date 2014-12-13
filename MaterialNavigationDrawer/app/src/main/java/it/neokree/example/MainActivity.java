@@ -1,6 +1,7 @@
 package it.neokree.example;
 
 
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,27 +16,14 @@ import it.neokree.materialnavigationdrawer.MaterialSection;
 
 public class MainActivity extends MaterialNavigationDrawer implements MaterialAccountListener{
 
+    MaterialAccount account;
 
     @Override
     public void init(Bundle savedInstanceState) {
-        /*
-        // set cover background
-        this.setDrawerBackground(this.getResources().getDrawable(R.drawable.bamboo));
-        // set user photo and data
-        this.setUserPhoto(this.getResources().getDrawable(R.drawable.photo));
-        this.setSecondAccountPhoto(this.getResources().getDrawable(R.drawable.photo));
-        this.setThirdAccountPhoto(this.getResources().getDrawable(R.drawable.photo));
-        this.setUsername("NeoKree");
-        this.setUserEmail("neokree@gmail.com");
-        */
 
         // add first account
-        MaterialAccount account = new MaterialAccount("NeoKree","neokree@gmail.com",this.getResources().getDrawable(R.drawable.photo),this.getResources().getDrawable(R.drawable.bamboo));
+        account = new MaterialAccount("NeoKree","neokree@gmail.com",new ColorDrawable(Color.parseColor("#9e9e9e")),this.getResources().getDrawable(R.drawable.bamboo));
         this.addAccount(account);
-
-
-        MaterialAccount account2 = new MaterialAccount("Me", "hello@example.com",this.getResources().getDrawable(R.drawable.photo),this.getResources().getDrawable(R.drawable.mat2));
-        this.addAccount(account2);
 
         // set listener
         this.setAccountListener(this);
@@ -71,4 +59,31 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
     public void onChangeAccount(MaterialAccount newAccount) {
         // when another account is selected
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        t.start();
+    }
+
+    Thread t = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(5000);
+                account.setPhoto(getResources().getDrawable(R.drawable.photo));
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        notifyAccountDataChanged();
+                    }
+                });
+                Log.w("PHOTO","user account photo setted");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    });
 }

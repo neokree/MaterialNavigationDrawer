@@ -107,8 +107,11 @@ public class MaterialAccount {
     }
 
     private Bitmap convertToBitmap(Drawable drawable) {
-
-        Bitmap mutableBitmap = Bitmap.createBitmap(drawable.getMinimumWidth(), drawable.getMinimumHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap mutableBitmap;
+        if(drawable.getMinimumHeight() == 0 || drawable.getMinimumWidth() == 0)
+            mutableBitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+        else
+            mutableBitmap = Bitmap.createBitmap(drawable.getMinimumWidth(), drawable.getMinimumHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(mutableBitmap);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         drawable.draw(canvas);

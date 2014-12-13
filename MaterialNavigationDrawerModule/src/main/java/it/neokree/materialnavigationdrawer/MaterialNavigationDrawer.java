@@ -204,21 +204,10 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         layout.setDrawerListener(pulsante);
 
         // init account views
-        switch(accountManager.size()) {
-            case 3:
-                this.setThirdAccountPhoto(accountManager.get(2).getCircularPhoto());
-            case 2:
-                this.setSecondAccountPhoto(accountManager.get(1).getCircularPhoto());
-            case 1:
-                MaterialAccount account = accountManager.get(0);
-                this.setFirstAccountPhoto(account.getCircularPhoto());
-                this.setDrawerBackground(account.getBackground());
-                this.setUsername(account.getTitle());
-                this.setUserEmail(account.getSubTitle());
-                currentAccount = account;
-            default:
+        if(accountManager.size() > 0) {
+            currentAccount = accountManager.get(0);
+            notifyAccountDataChanged();
         }
-
 
         // init section
         MaterialSection section = sectionList.get(0);
@@ -313,18 +302,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         currentAccount = newAccount;
 
         // refresh views
-        switch(accountManager.size()) {
-            case 3:
-                this.setThirdAccountPhoto(findAccountNumber(MaterialAccount.THIRD_ACCOUNT).getCircularPhoto());
-            case 2:
-                this.setSecondAccountPhoto(findAccountNumber(MaterialAccount.SECOND_ACCOUNT).getCircularPhoto());
-            case 1:
-                this.setFirstAccountPhoto(currentAccount.getCircularPhoto());
-                this.setDrawerBackground(currentAccount.getBackground());
-                this.setUsername(currentAccount.getTitle());
-                this.setUserEmail(currentAccount.getSubTitle());
-            default:
-        }
+        notifyAccountDataChanged();
     }
 
     private void setUserEmail(String email) {
@@ -418,6 +396,25 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
         account.setAccountNumber(accountManager.size());
         accountManager.add(account);
+    }
+
+
+    /**
+     * Reload Application data from Account Information
+     */
+    public void notifyAccountDataChanged() {
+        switch(accountManager.size()) {
+            case 3:
+                this.setThirdAccountPhoto(findAccountNumber(MaterialAccount.THIRD_ACCOUNT).getCircularPhoto());
+            case 2:
+                this.setSecondAccountPhoto(findAccountNumber(MaterialAccount.SECOND_ACCOUNT).getCircularPhoto());
+            case 1:
+                this.setFirstAccountPhoto(currentAccount.getCircularPhoto());
+                this.setDrawerBackground(currentAccount.getBackground());
+                this.setUsername(currentAccount.getTitle());
+                this.setUserEmail(currentAccount.getSubTitle());
+            default:
+        }
     }
 
     // create sections
