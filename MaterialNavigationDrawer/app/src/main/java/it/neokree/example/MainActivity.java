@@ -45,6 +45,9 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         Intent i = new Intent(this,Settings.class);
         this.addBottomSection(this.newBottomSection("Settings",this.getResources().getDrawable(R.drawable.ic_settings_black_24dp),i));
 
+        // start thread
+        t.start();
+
     }
 
 
@@ -60,13 +63,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         // when another account is selected
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        t.start();
-    }
-
+    // after 5 second (async task loading photo from website) change user photo
     Thread t = new Thread(new Runnable() {
         @Override
         public void run() {

@@ -5,13 +5,10 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -23,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -46,6 +45,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     private DrawerLayout layout;
     private ActionBar actionBar;
     private ActionBarDrawerToggle pulsante;
+    private ImageView statusBar;
     private Toolbar toolbar;
     private RelativeLayout drawer;
     private ImageView userphoto;
@@ -131,8 +131,12 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_material_navigation_drawer);
+        Window window = this.getWindow();
+        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-        // init toolbar
+        // init toolbar & status bar
+        statusBar = (ImageView) findViewById(R.id.statusBar);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         // init drawer components
@@ -165,6 +169,9 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         TypedValue typedValue = new TypedValue();
         theme.resolveAttribute(R.attr.colorPrimary, typedValue, true);
         primaryColor = typedValue.data;
+        // set darker status bar if device is kitkat
+        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT)
+            this.statusBar.setImageDrawable(new ColorDrawable(darkenColor(primaryColor)));
 
         init(savedInstanceState);
 
@@ -184,7 +191,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         // si collega il DrawerLayout al codice e gli si setta l'ombra all'apertura
         layout = (DrawerLayout) this.findViewById(R.id.drawer_layout);
 
-        pulsante = new ActionBarDrawerToggle(this,layout,R.string.nothing,R.string.nothing) {
+        pulsante = new ActionBarDrawerToggle(this,layout,toolbar,R.string.nothing,R.string.nothing) {
 
             public void onDrawerClosed(View view) {
                 actionBar.setTitle(title);
@@ -195,9 +202,6 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                 //actionBar.setTitle(getCurrentTitle(-1));
                 invalidateOptionsMenu(); // termina il comando
             }
-
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {}
 
         };
 
@@ -329,6 +333,13 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         usercover.setImageBitmap(background);
     }
 
+    private int darkenColor(int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= 0.8f; // value component
+        return Color.HSVToColor(hsv);
+    }
+
     @Override
     public void onClick(MaterialSection section) {
         currentSection = section;
@@ -339,9 +350,17 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
             // setting toolbar color if is setted
             if(section.hasSectionColor()) {
+                if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT)
+                    this.statusBar.setImageDrawable(new ColorDrawable(darkenColor(section.getSectionColor())));
+                else
+                    this.statusBar.setImageDrawable(new ColorDrawable(section.getSectionColor()));
                 this.getToolbar().setBackgroundColor(section.getSectionColor());
             }
             else {
+                if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT)
+                    this.statusBar.setImageDrawable(new ColorDrawable(darkenColor(primaryColor)));
+                else
+                    this.statusBar.setImageDrawable(new ColorDrawable(primaryColor));
                 this.getToolbar().setBackgroundColor(primaryColor);
             }
         }
