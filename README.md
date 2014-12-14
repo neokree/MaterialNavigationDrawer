@@ -49,12 +49,10 @@ In your styles.xml
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppTheme" parent="MaterialNavigationDrawerTheme">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/light_blue_500</item>
-        <item name="colorPrimaryDark">@color/light_blue_800</item>
         <item name="colorAccent">@color/grey_1000</item>
-        <item name="windowActionBar">false</item>
     </style>
 
 </resources>
@@ -70,7 +68,7 @@ repositories {
 }
 
 dependencies {
-    compile 'it.neokree:MaterialNavigationDrawer:1.1.8'
+    compile 'it.neokree:MaterialNavigationDrawer:1.1.9'
 }
 ```
 
