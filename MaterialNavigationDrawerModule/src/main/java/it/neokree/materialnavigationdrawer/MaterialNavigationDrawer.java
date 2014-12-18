@@ -1,6 +1,7 @@
 package it.neokree.materialnavigationdrawer;
 
 import android.annotation.SuppressLint;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -175,17 +176,17 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT)
             this.statusBar.setImageDrawable(new ColorDrawable(darkenColor(primaryColor)));
 
-        init(savedInstanceState);
-
-        if(sectionList.size() == 0) {
-            throw new RuntimeException("You must add at least one Section to top list.");
-        }
-
         // INIT ACTION BAR
         this.setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
+
+        init(savedInstanceState);
+
+        if(sectionList.size() == 0) {
+            throw new RuntimeException("You must add at least one Section to top list.");
+        }
 
         // Si preleva il titolo dell'activity
         title = sectionList.get(indexFragment).getTitle();
@@ -219,7 +220,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         MaterialSection section = sectionList.get(0);
         currentSection = section;
         section.select();
-        setFragment((Fragment) section.getTargetFragment(),section.getTitle());
+        setFragment((Fragment) section.getTargetFragment(),section.getTitle(),null);
     }
 
 
@@ -271,15 +272,24 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         this.getSupportActionBar().setTitle(title);
     }
 
-    private void setFragment(Fragment fragment,String title) {
-        
-        
+    private void setFragment(Fragment fragment,String title,Fragment oldFragment) {
+
         // change for default Fragment / support Fragment
-        if(fragment instanceof android.app.Fragment)
-            getFragmentManager().beginTransaction().replace(R.id.frame_container, (android.app.Fragment)fragment).commit();
-        else if(fragment instanceof android.support.v4.app.Fragment)
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,(android.support.v4.app.Fragment) fragment).commit();
-        else
+        if(fragment instanceof android.app.Fragment) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            if(oldFragment != null)
+                ft.remove((android.app.Fragment) oldFragment);
+
+            ft.replace(R.id.frame_container, (android.app.Fragment) fragment).commit();
+        }
+        else if(fragment instanceof android.support.v4.app.Fragment) {
+            android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            if(oldFragment != null)
+                ft.remove((android.support.v4.app.Fragment) oldFragment);
+            
+            ft.replace(R.id.frame_container, (android.support.v4.app.Fragment) fragment).commit();
+        }
+            else
             throw new RuntimeException("Fragment must be android.app.Fragment or android.support.v4.app.Fragment");
         
         // si setta il titolo e si chiude il drawer
@@ -401,11 +411,10 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
     @Override
     public void onClick(MaterialSection section) {
-        currentSection = section;
 
         if(section.getTarget() == MaterialSection.TARGET_FRAGMENT)
         {
-            setFragment((Fragment)section.getTargetFragment(),section.getTitle());
+            setFragment((Fragment)section.getTargetFragment(),section.getTitle(),(Fragment) currentSection.getTargetFragment());
 
             // setting toolbar color if is setted
             if(section.hasSectionColor()) {
@@ -438,6 +447,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                 mySection.unSelect();
         }
 
+        currentSection = section;
     }
 
     public void setAccountListener(MaterialAccountListener listener) {
