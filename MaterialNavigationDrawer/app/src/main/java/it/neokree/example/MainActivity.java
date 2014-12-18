@@ -33,10 +33,10 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         this.setAccountListener(this);
 
         // create sections
-        section1 = this.newSection("Section 1",new FragmentIndex());
-        section2 = this.newSection("Section 2",new FragmentIndex());
+        section1 = this.newSection("Section 1",new F1());
+        section2 = this.newSection("Section 2",new F2());
         // recorder section with icon and 10 notifications
-        recorder = this.newSection("Recorder",this.getResources().getDrawable(R.drawable.ic_mic_white_24dp),new FragmentIndex()).setNotifications(10);
+        recorder = this.newSection("Recorder",this.getResources().getDrawable(R.drawable.ic_mic_white_24dp),new F3()).setNotifications(10);
         // night section with icon, section color and notifications
         night = this.newSection("Night Section", this.getResources().getDrawable(R.drawable.ic_hotel_grey600_24dp), new FragmentIndex())
                 .setSectionColor(Color.parseColor("#2196f3")).setNotifications(150);

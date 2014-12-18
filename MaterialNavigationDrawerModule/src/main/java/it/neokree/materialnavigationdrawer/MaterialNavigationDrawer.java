@@ -197,12 +197,10 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         pulsante = new ActionBarDrawerToggle(this,layout,toolbar,R.string.nothing,R.string.nothing) {
 
             public void onDrawerClosed(View view) {
-                actionBar.setTitle(title);
                 invalidateOptionsMenu(); // termina il comando
             }
 
             public void onDrawerOpened(View drawerView) {
-                //actionBar.setTitle(getCurrentTitle(-1));
                 invalidateOptionsMenu(); // termina il comando
             }
 
@@ -273,28 +271,35 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     }
 
     private void setFragment(Fragment fragment,String title,Fragment oldFragment) {
+        // si setta il titolo
+        setTitle(title);
 
         // change for default Fragment / support Fragment
         if(fragment instanceof android.app.Fragment) {
+            if(oldFragment instanceof android.support.v4.app.Fragment)
+                throw new RuntimeException("You should use only one type of Fragment");
+
+
             FragmentTransaction ft = getFragmentManager().beginTransaction();
-            if(oldFragment != null)
+            if(oldFragment != null && fragment != oldFragment)
                 ft.remove((android.app.Fragment) oldFragment);
 
             ft.replace(R.id.frame_container, (android.app.Fragment) fragment).commit();
         }
         else if(fragment instanceof android.support.v4.app.Fragment) {
+            if(oldFragment instanceof android.app.Fragment)
+                throw new RuntimeException("You should use only one type of Fragment");
+
             android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            if(oldFragment != null)
+            if(oldFragment != null && oldFragment != fragment)
                 ft.remove((android.support.v4.app.Fragment) oldFragment);
-            
+
             ft.replace(R.id.frame_container, (android.support.v4.app.Fragment) fragment).commit();
         }
-            else
+        else
             throw new RuntimeException("Fragment must be android.app.Fragment or android.support.v4.app.Fragment");
         
-        // si setta il titolo e si chiude il drawer
-        //lista.setItemChecked(i, true);
-        setTitle(title);
+        // si chiude il drawer
         layout.closeDrawer(drawer);
     }
 
