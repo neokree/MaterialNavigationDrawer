@@ -38,7 +38,7 @@ public class MyActivity extends MaterialNavigationDrawer implements MaterialAcco
         this.addSection(this.newSection("Last Section", new FragmentIndex()).setSectionColor((Color.parseColor("#ff9800")))); // material orange 500
 
         Intent i = new Intent(this,Settings.class);
-        this.addBottomSection(this.newBottomSection("Settings",this.getResources().getDrawable(R.drawable.ic_settings_black_24dp),i));
+        this.addBottomSection(this.newSection("Settings",this.getResources().getDrawable(R.drawable.ic_settings_black_24dp),i));
 
     }
 
@@ -50,6 +50,12 @@ In your styles.xml
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="MaterialNavigationDrawerTheme">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/light_blue_500</item>
+        <item name="colorAccent">@color/grey_1000</item>
+    </style>
+    <!-- Light version theme. -->
+    <style name="AppTheme" parent="MaterialNavigationDrawerTheme.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/light_blue_500</item>
         <item name="colorAccent">@color/grey_1000</item>
@@ -68,7 +74,7 @@ repositories {
 }
 
 dependencies {
-    compile 'it.neokree:MaterialNavigationDrawer:1.1.9'
+    compile 'it.neokree:MaterialNavigationDrawer:1.2'
 }
 ```
 
