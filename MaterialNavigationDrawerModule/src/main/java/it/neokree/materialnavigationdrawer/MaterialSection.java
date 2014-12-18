@@ -45,7 +45,7 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
     private Fragment targetFragment;
     private Intent targetIntent;
 
-    public MaterialSection(Context ctx, int position, boolean hasIcon, boolean target ) {
+    public MaterialSection(Context ctx, boolean hasIcon, boolean target ) {
 
         if(!hasIcon) {
             view = LayoutInflater.from(ctx).inflate(R.layout.layout_material_section,null);
@@ -68,7 +68,6 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
         colorUnpressed = Color.parseColor("#00FFFFFF");
         colorSelected = Color.parseColor("#0A000000");
         iconColor = Color.rgb(98,98,98);
-        this.position = position;
         isSelected = false;
         sectionColor = false;
         targetType = target;
@@ -126,6 +125,10 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
         if (sectionColor) {
             text.setTextColor(Color.BLACK);
         }
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public int getPosition() {

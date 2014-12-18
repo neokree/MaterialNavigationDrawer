@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base application theme. -->
-    <style name="MaterialNavigationDrawerTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="MaterialNavigationDrawerTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="MaterialNavigationDrawerTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 

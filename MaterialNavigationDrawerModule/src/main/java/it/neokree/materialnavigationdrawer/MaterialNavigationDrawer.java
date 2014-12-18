@@ -52,6 +52,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     private ImageView userSecondPhoto;
     private ImageView userThirdPhoto;
     private ImageView usercover;
+    private ImageView userTransition;
     private TextView username;
     private TextView usermail;
     private LinearLayout sections;
@@ -147,6 +148,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         userSecondPhoto = (ImageView) this.findViewById(R.id.user_photo_2);
         userThirdPhoto = (ImageView) this.findViewById(R.id.user_photo_3);
         usercover = (ImageView) this.findViewById(R.id.user_cover);
+        userTransition = (ImageView) this.findViewById(R.id.user_transition);
         sections = (LinearLayout) this.findViewById(R.id.sections);
         bottomSections = (LinearLayout) this.findViewById(R.id.bottom_sections);
 
@@ -298,6 +300,9 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     private void switchAccounts( MaterialAccount newAccount ) {
         // new account will be currentAccount
 
+        // animate
+        //zoomUserImage(newAccount);
+
         // switch numbers
         currentAccount.setAccountNumber(newAccount.getAccountNumber());
         newAccount.setAccountNumber(MaterialAccount.FIRST_ACCOUNT);
@@ -307,7 +312,61 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
         // refresh views
         notifyAccountDataChanged();
+
+
     }
+
+    /*
+    private void zoomUserImage(MaterialAccount newAccount) {
+
+        // si calcolano i rettangoli di inizio e fine
+        Rect start = new Rect();
+        Rect finish = new Rect();
+        Point offset  = new Point();
+
+        if(newAccount.getAccountNumber() == MaterialAccount.SECOND_ACCOUNT) {
+            userSecondPhoto.getGlobalVisibleRect(start);
+        }
+        else {
+            userThirdPhoto.getGlobalVisibleRect(start);
+        }
+        userTransition.getGlobalVisibleRect(finish,offset);
+        start.offset(offset.x, offset.y);
+        finish.offset(offset.x, offset.y);
+
+
+        float startScale;
+        if ((float) finish.width() / finish.height()
+                > (float) start.width() / start.height()) {
+            // Extend start bounds horizontally
+            startScale = (float) start.height() / finish.height();
+            float startWidth = startScale * finish.width();
+            float deltaWidth = (startWidth - start.width()) / 2;
+            start.left -= deltaWidth;
+            start.right += deltaWidth;
+        } else {
+            // Extend start bounds vertically
+            startScale = (float) start.width() / finish.width();
+            float startHeight = startScale * finish.height();
+            float deltaHeight = (startHeight - start.height()) / 2;
+            start.top -= deltaHeight;
+            start.bottom += deltaHeight;
+        }
+
+
+        // si animano le viste
+        AnimatorSet set = new AnimatorSet();
+       set
+               .play(ObjectAnimator.ofFloat(userSecondPhoto,View.X,start.left,finish.left))
+               .with(ObjectAnimator.ofFloat(userSecondPhoto,View.X,start.top,finish.top))
+               .with(ObjectAnimator.ofFloat(userSecondPhoto,View.SCALE_X,startScale,1f))
+               .with(ObjectAnimator.ofFloat(userSecondPhoto, View.SCALE_Y, startScale, 1f));
+        set.setDuration(3000);
+        set.setInterpolator(new DecelerateInterpolator());
+
+        set.start();
+
+    }*/
 
     private void setUserEmail(String email) {
         this.usermail.setText(email);
@@ -333,7 +392,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         usercover.setImageBitmap(background);
     }
 
-    private int darkenColor(int color) {
+    protected int darkenColor(int color) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
         hsv[2] *= 0.8f; // value component
@@ -388,12 +447,14 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     // Method used for customize layout
 
     public void addSection(MaterialSection section) {
+        section.setPosition(sectionList.size());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)(48 * density));
         sectionList.add(section);
         sections.addView(section.getView(),params);
     }
 
     public void addBottomSection(MaterialSection section) {
+        section.setPosition(BOTTOM_SECTION_START + bottomSectionList.size());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)(48 * density));
         bottomSectionList.add(section);
         bottomSections.addView(section.getView(),params);
@@ -439,7 +500,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     // create sections
 
     public MaterialSection newSection(String title, Drawable icon, Fragment target) {
-        MaterialSection section = new MaterialSection<Fragment>(this,sectionList.size(),true,MaterialSection.TARGET_FRAGMENT);
+        MaterialSection section = new MaterialSection<Fragment>(this,true,MaterialSection.TARGET_FRAGMENT);
         section.setOnClickListener(this);
         section.setIcon(icon);
         section.setTitle(title);
@@ -449,7 +510,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     }
 
     public MaterialSection newSection(String title, Drawable icon, Intent target) {
-        MaterialSection section = new MaterialSection<Fragment>(this,sectionList.size(),true,MaterialSection.TARGET_ACTIVITY);
+        MaterialSection section = new MaterialSection<Fragment>(this,true,MaterialSection.TARGET_ACTIVITY);
         section.setOnClickListener(this);
         section.setIcon(icon);
         section.setTitle(title);
@@ -459,7 +520,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     }
 
     public MaterialSection newSection(String title, Bitmap icon,Fragment target) {
-        MaterialSection section = new MaterialSection<Fragment>(this,sectionList.size(),true,MaterialSection.TARGET_FRAGMENT);
+        MaterialSection section = new MaterialSection<Fragment>(this,true,MaterialSection.TARGET_FRAGMENT);
         section.setOnClickListener(this);
         section.setIcon(icon);
         section.setTitle(title);
@@ -469,7 +530,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     }
 
     public MaterialSection newSection(String title, Bitmap icon,Intent target) {
-        MaterialSection section = new MaterialSection<Fragment>(this,sectionList.size(),true,MaterialSection.TARGET_ACTIVITY);
+        MaterialSection section = new MaterialSection<Fragment>(this,true,MaterialSection.TARGET_ACTIVITY);
         section.setOnClickListener(this);
         section.setIcon(icon);
         section.setTitle(title);
@@ -479,7 +540,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     }
 
     public MaterialSection newSection(String title,Fragment target) {
-        MaterialSection section = new MaterialSection<Fragment>(this,sectionList.size(),false,MaterialSection.TARGET_FRAGMENT);
+        MaterialSection section = new MaterialSection<Fragment>(this,false,MaterialSection.TARGET_FRAGMENT);
         section.setOnClickListener(this);
         section.setTitle(title);
         section.setTarget(target);
@@ -488,65 +549,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     }
 
     public MaterialSection newSection(String title,Intent target) {
-        MaterialSection section = new MaterialSection<Fragment>(this,sectionList.size(),false,MaterialSection.TARGET_ACTIVITY);
-        section.setOnClickListener(this);
-        section.setTitle(title);
-        section.setTarget(target);
-
-        return section;
-    }
-
-    public MaterialSection newBottomSection(String title, Drawable icon,Fragment target) {
-        MaterialSection section = new MaterialSection<Fragment>(this,BOTTOM_SECTION_START + bottomSectionList.size(),true,MaterialSection.TARGET_FRAGMENT);
-        section.setOnClickListener(this);
-        section.setIcon(icon);
-        section.setTitle(title);
-        section.setTarget(target);
-
-        return section;
-    }
-
-    public MaterialSection newBottomSection(String title, Drawable icon,Intent target) {
-        MaterialSection section = new MaterialSection<Fragment>(this,BOTTOM_SECTION_START + bottomSectionList.size(),true,MaterialSection.TARGET_ACTIVITY);
-        section.setOnClickListener(this);
-        section.setIcon(icon);
-        section.setTitle(title);
-        section.setTarget(target);
-
-        return section;
-    }
-
-    public MaterialSection newBottomSection(String title, Bitmap icon,Fragment target) {
-        MaterialSection section = new MaterialSection<Fragment>(this,BOTTOM_SECTION_START + bottomSectionList.size(),true,MaterialSection.TARGET_FRAGMENT);
-        section.setOnClickListener(this);
-        section.setIcon(icon);
-        section.setTitle(title);
-        section.setTarget(target);
-
-        return section;
-    }
-
-    public MaterialSection newBottomSection(String title, Bitmap icon,Intent target) {
-        MaterialSection section = new MaterialSection<Fragment>(this,BOTTOM_SECTION_START + bottomSectionList.size(),true,MaterialSection.TARGET_ACTIVITY);
-        section.setOnClickListener(this);
-        section.setIcon(icon);
-        section.setTitle(title);
-        section.setTarget(target);
-
-        return section;
-    }
-
-    public MaterialSection newBottomSection(String title, Fragment target) {
-        MaterialSection section = new MaterialSection<Fragment>(this,BOTTOM_SECTION_START + bottomSectionList.size(),false,MaterialSection.TARGET_FRAGMENT);
-        section.setOnClickListener(this);
-        section.setTitle(title);
-        section.setTarget(target);
-
-        return section;
-    }
-
-    public MaterialSection newBottomSection(String title, Intent target) {
-        MaterialSection section = new MaterialSection<Fragment>(this,BOTTOM_SECTION_START + bottomSectionList.size(),false,MaterialSection.TARGET_ACTIVITY);
+        MaterialSection section = new MaterialSection<Fragment>(this,false,MaterialSection.TARGET_ACTIVITY);
         section.setOnClickListener(this);
         section.setTitle(title);
         section.setTarget(target);
@@ -570,5 +573,13 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
     public MaterialAccount getCurrentAccount() {
         return currentAccount;
+    }
+
+    public  MaterialAccount getAccountAtCurrentPosition(int position) {
+
+        if (position < 0 || position >= accountManager.size())
+            throw  new RuntimeException("Account Index Overflow");
+
+        return findAccountNumber(position);
     }
 }
