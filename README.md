@@ -38,13 +38,13 @@ public class MyActivity extends MaterialNavigationDrawer implements MaterialAcco
         this.addSection(this.newSection("Last Section", new FragmentIndex()).setSectionColor((Color.parseColor("#ff9800")))); // material orange 500
 
         Intent i = new Intent(this,Settings.class);
-        this.addBottomSection(this.newSection("Settings",this.getResources().getDrawable(R.drawable.ic_settings_black_24dp),i));
+        this.addSection(this.newSection("Settings",this.getResources().getDrawable(R.drawable.ic_settings_black_24dp),i));
 
     }
 
 }
 ```
-In your styles.xml
+In your styles.xml choose your version:
 ```xml
 <resources>
 
