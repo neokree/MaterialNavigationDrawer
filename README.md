@@ -60,7 +60,13 @@ In your styles.xml
         <item name="colorPrimary">@color/light_blue_500</item>
         <item name="colorAccent">@color/grey_1000</item>
     </style>
-
+    <!-- Light version with Black actionbar -->
+    <style name="AppTheme" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/light_blue_500</item>
+        <item name="colorAccent">@color/grey_1000</item>
+    </style>
+    
 </resources>
 ```
 N.B. Not override <code>OnCreate</code> method! Use <code>init</code> method instead.<br>
