@@ -92,3 +92,4 @@ You don't know how to do something? Visit the [wiki](https://github.com/neokree/
 <img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen2.png" alt="screenshot" width="300px" height="auto" />
 <img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen3.png" alt="screenshot" width="300px" height="auto" />
 <img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen4.png" alt="screenshot" width="300px" height="auto" />
+<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen5.png" alt="screenshot" width="600px" height="auto" />
