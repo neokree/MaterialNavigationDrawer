@@ -82,7 +82,7 @@ repositories {
 }
 
 dependencies {
-    compile 'it.neokree:MaterialNavigationDrawer:1.2.4'
+    compile 'it.neokree:MaterialNavigationDrawer:1.2.5'
 }
 ```
 
