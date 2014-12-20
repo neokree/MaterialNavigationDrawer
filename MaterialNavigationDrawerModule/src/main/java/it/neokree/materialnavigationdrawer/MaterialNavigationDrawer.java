@@ -15,6 +15,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -27,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
@@ -61,6 +63,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     private ImageView userSecondPhoto;
     private ImageView userThirdPhoto;
     private ImageView usercover;
+    private ImageView usercoverSwitcher;
     private TextView username;
     private TextView usermail;
     private LinearLayout sections;
@@ -73,7 +76,6 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     private MaterialAccount currentAccount;
 
     private CharSequence title;
-    private static int indexFragment = 0;
     private float density;
     private int primaryColor;
 
@@ -155,6 +157,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         userSecondPhoto = (ImageView) this.findViewById(R.id.user_photo_2);
         userThirdPhoto = (ImageView) this.findViewById(R.id.user_photo_3);
         usercover = (ImageView) this.findViewById(R.id.user_cover);
+        usercoverSwitcher = (ImageView) this.findViewById(R.id.user_cover_switcher);
         sections = (LinearLayout) this.findViewById(R.id.sections);
         bottomSections = (LinearLayout) this.findViewById(R.id.bottom_sections);
 
@@ -194,7 +197,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         }
 
         // Si preleva il titolo dell'activity
-        title = sectionList.get(indexFragment).getTitle();
+        title = sectionList.get(0).getTitle();
 
         // si collega il DrawerLayout al codice e gli si setta l'ombra all'apertura
         layout = (DrawerLayout) this.findViewById(R.id.drawer_layout);
@@ -213,6 +216,39 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
         layout.setDrawerListener(pulsante);
 
+        // si attacca alla usercover un listener
+        ViewTreeObserver vto = usercover.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                // quando l'immagine e' stata caricata
+
+                // change user space to 16:9
+                int width = drawer.getWidth();
+
+                int height = (9 * width) / 16;
+
+                // si toglie l'altezza in eccesso nelle versioni precenti a kitkat
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                    height -= (density * 25);
+                }
+
+                // set user space
+                usercover.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,height));
+                usercoverSwitcher.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,height));
+
+                ViewTreeObserver obs = usercover.getViewTreeObserver();
+                // si rimuove il listener
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    obs.removeOnGlobalLayoutListener(this);
+                } else {
+                    obs.removeGlobalOnLayoutListener(this);
+                }
+            }
+
+        });
+
         // init account views
         if(accountManager.size() > 0) {
             currentAccount = accountManager.get(0);
@@ -225,8 +261,6 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         section.select();
         setFragment((Fragment) section.getTargetFragment(),section.getTitle(),null);
     }
-
-
 
     // Gestione dei Menu -----------------------------------------------------------------------------------------------------------------------------
     @Override
@@ -319,7 +353,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
     private void switchAccounts(final MaterialAccount newAccount) {
 
-        final ImageView hoverImage = new ImageView(this);
+        final ImageView floatingImage = new ImageView(this);
 
         // si calcolano i rettangoli di inizio e fine
         Rect startingRect = new Rect();
@@ -329,8 +363,16 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         // 64dp primary user image / 40dp other user image = 1.6 scale
         float finalScale = 1.6f;
 
-        ImageView photoClicked;
+        final int statusBarHeight;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            statusBarHeight = (int) (25 * density);
+        }
+        else {
+            statusBarHeight = 0;
+        }
 
+        // si tiene traccia della foto cliccata
+        ImageView photoClicked;
         if(newAccount.getAccountNumber() == MaterialAccount.SECOND_ACCOUNT) {
             photoClicked = userSecondPhoto;
         }
@@ -338,31 +380,36 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             photoClicked = userThirdPhoto;
         }
         photoClicked.getGlobalVisibleRect(startingRect,offsetHover);
-        hoverImage.setImageDrawable(photoClicked.getDrawable());
+        floatingImage.setImageDrawable(photoClicked.getDrawable());
 
         // si aggiunge una view nell'esatta posizione dell'altra
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(photoClicked.getWidth(),photoClicked.getHeight());
-        params.setMargins(offsetHover.x,offsetHover.y,0,0);
-        drawer.addView(hoverImage,params);
+        params.setMargins(offsetHover.x,offsetHover.y - statusBarHeight,0,0);
+        drawer.addView(floatingImage,params);
 
-        // si setta la nuova foto al posto della vecchia
+        // si setta la nuova foto di profilo sopra alla vecchia
         photoClicked.setImageBitmap(currentAccount.getCircularPhoto());
+
+        // si setta la nuova immagine di background da visualizzare sotto la vecchia
+        usercoverSwitcher.setImageBitmap(newAccount.getBackground());
 
         userphoto.getGlobalVisibleRect(finalRect);
 
         // Si calcola l'offset finale (LARGHEZZA DEL CONTAINER GRANDE - LARGHEZZA DEL CONTAINER PICCOLO / 2) e lo si applica
-        int offset = (((finalRect.bottom - finalRect.top) - (startingRect.bottom = finalRect.top)) / 2);
-        finalRect.offset(offset,offset);
+        int offset = (((finalRect.bottom - finalRect.top) - (startingRect.bottom - finalRect.top)) / 2);
+        finalRect.offset(offset,offset - statusBarHeight);
+        startingRect.offset(0,-statusBarHeight);
 
         // si animano le viste
         AnimatorSet set = new AnimatorSet();
        set
                // si ingrandisce l'immagine e la si sposta a sinistra.
-               .play(ObjectAnimator.ofFloat(hoverImage, View.X,  startingRect.left,finalRect.left))
-               .with(ObjectAnimator.ofFloat(hoverImage, View.Y, startingRect.top, finalRect.top))
-               .with(ObjectAnimator.ofFloat(hoverImage, View.SCALE_X, 1f, finalScale))
-               .with(ObjectAnimator.ofFloat(hoverImage, View.SCALE_Y, 1f, finalScale))
+               .play(ObjectAnimator.ofFloat(floatingImage, View.X,  startingRect.left,finalRect.left))
+               .with(ObjectAnimator.ofFloat(floatingImage, View.Y, startingRect.top, finalRect.top))
+               .with(ObjectAnimator.ofFloat(floatingImage, View.SCALE_X, 1f, finalScale))
+               .with(ObjectAnimator.ofFloat(floatingImage, View.SCALE_Y, 1f, finalScale))
                .with(ObjectAnimator.ofFloat(userphoto, View.ALPHA,1f,0f))
+               .with(ObjectAnimator.ofFloat(usercover, View.ALPHA,1f,0f))
                .with(ObjectAnimator.ofFloat(photoClicked, View.SCALE_X, 0f, 1f))
                .with(ObjectAnimator.ofFloat(photoClicked, View.SCALE_Y, 0f, 1f));
         set.setDuration(USER_CHANGE_TRANSITION);
@@ -370,19 +417,22 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         set.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
+
                 // si carica la nuova immagine
                 ((View)userphoto).setAlpha(1);
                 setFirstAccountPhoto(newAccount.getCircularPhoto());
 
                 // si cancella l'imageview per l'effetto
-                drawer.removeView(hoverImage);
+                drawer.removeView(floatingImage);
 
                 // si cambiano i dati utente
                 setUserEmail(newAccount.getSubTitle());
                 setUsername(newAccount.getTitle());
 
-                // TODO andare a cambiarlo con un fade nell'animazione
+                // si cambia l'immagine soprastante
                 setDrawerBackground(newAccount.getBackground());
+                // si fa tornare il contenuto della cover visibile (ma l'utente non nota nulla)
+                ((View)usercover).setAlpha(1);
 
                 // switch numbers
                 currentAccount.setAccountNumber(newAccount.getAccountNumber());

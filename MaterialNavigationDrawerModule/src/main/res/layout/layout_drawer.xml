@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     android:id="@+id/drawer"
-    android:layout_width="match_parent"
+    android:layout_width="@dimen/drawerWidth"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:choiceMode="singleChoice"
-    android:divider="@android:color/transparent"
     android:background="@android:color/white"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -23,6 +21,16 @@
             android:orientation="vertical" >
 
             <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/userSpace"
+                android:id="@+id/user_cover_switcher"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentRight="true"
+                android:scaleType="fitXY"/>
+
+            <ImageView
                 android:id="@+id/user_cover"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/userSpace"
@@ -31,6 +39,11 @@
                 android:layout_alignParentTop="true"
                 android:src="#c6c6c6"
                 android:scaleType="fitXY" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView" />
 
             <ImageView
                 android:id="@+id/user_photo"
@@ -80,7 +93,7 @@
                 android:layout_alignParentRight="true"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:background="@drawable/black_gradient">
+                android:layout_marginBottom="8dp">
 
                 <TextView
                     android:id="@+id/user_nome"
