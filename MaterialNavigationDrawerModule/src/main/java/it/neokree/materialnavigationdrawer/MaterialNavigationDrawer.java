@@ -1,5 +1,9 @@
 package it.neokree.materialnavigationdrawer;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -7,6 +11,8 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -23,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -42,6 +49,7 @@ import java.util.List;
 public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivity implements MaterialSectionListener {
 
     public static final int BOTTOM_SECTION_START = 100;
+    public static final int USER_CHANGE_TRANSITION = 500;
 
     private DrawerLayout layout;
     private ActionBar actionBar;
@@ -53,7 +61,6 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     private ImageView userSecondPhoto;
     private ImageView userThirdPhoto;
     private ImageView usercover;
-    private ImageView userTransition;
     private TextView username;
     private TextView usermail;
     private LinearLayout sections;
@@ -96,12 +103,11 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
                 switchAccounts(account);
             }
-            else  // if there is no second account user clicked for open it
+            else {// if there is no second account user clicked for open it
                 accountListener.onAccountOpening(currentAccount);
+                layout.closeDrawer(drawer);
+            }
 
-
-            // close drawer
-            layout.closeDrawer(drawer);
         }
     };
     private View.OnClickListener thirdAccountListener = new View.OnClickListener() {
@@ -116,11 +122,11 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
                 switchAccounts(account);
             }
-            else  // if there is no second account user clicked for open it
+            else {// if there is no second account user clicked for open it
                 accountListener.onAccountOpening(currentAccount);
+                layout.closeDrawer(drawer);
+            }
 
-            // close drawer
-            layout.closeDrawer(drawer);
         }
     };
     private MaterialAccountListener accountListener;
@@ -149,7 +155,6 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         userSecondPhoto = (ImageView) this.findViewById(R.id.user_photo_2);
         userThirdPhoto = (ImageView) this.findViewById(R.id.user_photo_3);
         usercover = (ImageView) this.findViewById(R.id.user_cover);
-        userTransition = (ImageView) this.findViewById(R.id.user_transition);
         sections = (LinearLayout) this.findViewById(R.id.sections);
         bottomSections = (LinearLayout) this.findViewById(R.id.bottom_sections);
 
@@ -312,76 +317,95 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         return null;
     }
 
-    private void switchAccounts( MaterialAccount newAccount ) {
-        // new account will be currentAccount
+    private void switchAccounts(final MaterialAccount newAccount) {
 
-        // animate
-        //zoomUserImage(newAccount);
-
-        // switch numbers
-        currentAccount.setAccountNumber(newAccount.getAccountNumber());
-        newAccount.setAccountNumber(MaterialAccount.FIRST_ACCOUNT);
-
-        // change pointer to newAccount
-        currentAccount = newAccount;
-
-        // refresh views
-        notifyAccountDataChanged();
-
-
-    }
-
-    /*
-    private void zoomUserImage(MaterialAccount newAccount) {
+        final ImageView hoverImage = new ImageView(this);
 
         // si calcolano i rettangoli di inizio e fine
-        Rect start = new Rect();
-        Rect finish = new Rect();
-        Point offset  = new Point();
+        Rect startingRect = new Rect();
+        Rect finalRect = new Rect();
+        Point offsetHover = new Point();
+
+        // 64dp primary user image / 40dp other user image = 1.6 scale
+        float finalScale = 1.6f;
+
+        ImageView photoClicked;
 
         if(newAccount.getAccountNumber() == MaterialAccount.SECOND_ACCOUNT) {
-            userSecondPhoto.getGlobalVisibleRect(start);
+            photoClicked = userSecondPhoto;
         }
         else {
-            userThirdPhoto.getGlobalVisibleRect(start);
+            photoClicked = userThirdPhoto;
         }
-        userTransition.getGlobalVisibleRect(finish,offset);
-        start.offset(offset.x, offset.y);
-        finish.offset(offset.x, offset.y);
+        photoClicked.getGlobalVisibleRect(startingRect,offsetHover);
+        hoverImage.setImageDrawable(photoClicked.getDrawable());
 
+        // si aggiunge una view nell'esatta posizione dell'altra
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(photoClicked.getWidth(),photoClicked.getHeight());
+        params.setMargins(offsetHover.x,offsetHover.y,0,0);
+        drawer.addView(hoverImage,params);
 
-        float startScale;
-        if ((float) finish.width() / finish.height()
-                > (float) start.width() / start.height()) {
-            // Extend start bounds horizontally
-            startScale = (float) start.height() / finish.height();
-            float startWidth = startScale * finish.width();
-            float deltaWidth = (startWidth - start.width()) / 2;
-            start.left -= deltaWidth;
-            start.right += deltaWidth;
-        } else {
-            // Extend start bounds vertically
-            startScale = (float) start.width() / finish.width();
-            float startHeight = startScale * finish.height();
-            float deltaHeight = (startHeight - start.height()) / 2;
-            start.top -= deltaHeight;
-            start.bottom += deltaHeight;
-        }
+        // si setta la nuova foto al posto della vecchia
+        photoClicked.setImageBitmap(currentAccount.getCircularPhoto());
 
+        userphoto.getGlobalVisibleRect(finalRect);
+
+        // Si calcola l'offset finale (LARGHEZZA DEL CONTAINER GRANDE - LARGHEZZA DEL CONTAINER PICCOLO / 2) e lo si applica
+        int offset = (((finalRect.bottom - finalRect.top) - (startingRect.bottom = finalRect.top)) / 2);
+        finalRect.offset(offset,offset);
 
         // si animano le viste
         AnimatorSet set = new AnimatorSet();
        set
-               .play(ObjectAnimator.ofFloat(userSecondPhoto,View.X,start.left,finish.left))
-               .with(ObjectAnimator.ofFloat(userSecondPhoto,View.X,start.top,finish.top))
-               .with(ObjectAnimator.ofFloat(userSecondPhoto,View.SCALE_X,startScale,1f))
-               .with(ObjectAnimator.ofFloat(userSecondPhoto, View.SCALE_Y, startScale, 1f));
-        set.setDuration(3000);
+               // si ingrandisce l'immagine e la si sposta a sinistra.
+               .play(ObjectAnimator.ofFloat(hoverImage, View.X,  startingRect.left,finalRect.left))
+               .with(ObjectAnimator.ofFloat(hoverImage, View.Y, startingRect.top, finalRect.top))
+               .with(ObjectAnimator.ofFloat(hoverImage, View.SCALE_X, 1f, finalScale))
+               .with(ObjectAnimator.ofFloat(hoverImage, View.SCALE_Y, 1f, finalScale))
+               .with(ObjectAnimator.ofFloat(userphoto, View.ALPHA,1f,0f))
+               .with(ObjectAnimator.ofFloat(photoClicked, View.SCALE_X, 0f, 1f))
+               .with(ObjectAnimator.ofFloat(photoClicked, View.SCALE_Y, 0f, 1f));
+        set.setDuration(USER_CHANGE_TRANSITION);
         set.setInterpolator(new DecelerateInterpolator());
+        set.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                // si carica la nuova immagine
+                ((View)userphoto).setAlpha(1);
+                setFirstAccountPhoto(newAccount.getCircularPhoto());
+
+                // si cancella l'imageview per l'effetto
+                drawer.removeView(hoverImage);
+
+                // si cambiano i dati utente
+                setUserEmail(newAccount.getSubTitle());
+                setUsername(newAccount.getTitle());
+
+                // TODO andare a cambiarlo con un fade nell'animazione
+                setDrawerBackground(newAccount.getBackground());
+
+                // switch numbers
+                currentAccount.setAccountNumber(newAccount.getAccountNumber());
+                newAccount.setAccountNumber(MaterialAccount.FIRST_ACCOUNT);
+
+                // change pointer to newAccount
+                currentAccount = newAccount;
+
+                // si chiude il drawer
+                layout.closeDrawer(drawer);
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                // se si annulla l'animazione si conclude e basta.
+                onAnimationEnd(animation);
+            }
+        });
 
         set.start();
 
-    }*/
+    }
 
     private void setUserEmail(String email) {
         this.usermail.setText(email);

@@ -26,23 +26,28 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         account = new MaterialAccount("NeoKree","neokree@gmail.com",new ColorDrawable(Color.parseColor("#9e9e9e")),this.getResources().getDrawable(R.drawable.bamboo));
         this.addAccount(account);
 
-        MaterialAccount account2 = new MaterialAccount("NeoKree","neokree@gmail.com",getResources().getDrawable(R.drawable.photo2),this.getResources().getDrawable(R.drawable.bamboo));
+        MaterialAccount account2 = new MaterialAccount("Hatsune Miky","hatsune.miku@example.com",getResources().getDrawable(R.drawable.photo2),this.getResources().getDrawable(R.drawable.mat2));
         this.addAccount(account2);
+
+        MaterialAccount account3 = new MaterialAccount("Example","example@example.com",getResources().getDrawable(R.drawable.photo),this.getResources().getDrawable(R.drawable.mat3));
+        this.addAccount(account3);
 
         // set listener
         this.setAccountListener(this);
 
         // create sections
-        section1 = this.newSection("Section 1",new F1());
-        section2 = this.newSection("Section 2",new F2());
+        section1 = this.newSection("Section 1",new FragmentIndex());
+        section2 = this.newSection("Section 2",new FragmentIndex());
         // recorder section with icon and 10 notifications
-        recorder = this.newSection("Recorder",this.getResources().getDrawable(R.drawable.ic_mic_white_24dp),new F3()).setNotifications(10);
+        recorder = this.newSection("Recorder",this.getResources().getDrawable(R.drawable.ic_mic_white_24dp),new FragmentIndex()).setNotifications(10);
         // night section with icon, section color and notifications
         night = this.newSection("Night Section", this.getResources().getDrawable(R.drawable.ic_hotel_grey600_24dp), new FragmentIndex())
                 .setSectionColor(Color.parseColor("#2196f3")).setNotifications(150);
         // night section with section color
         last = this.newSection("Last Section", new FragmentIndex()).setSectionColor((Color.parseColor("#ff9800")));
-        settingsSection = this.newSection("Settings",this.getResources().getDrawable(R.drawable.ic_settings_black_24dp),new FragmentIndex());
+
+        Intent i = new Intent(this,Profile.class);
+        settingsSection = this.newSection("Settings",this.getResources().getDrawable(R.drawable.ic_settings_black_24dp),i);
 
         // add your sections to the drawer
         this.addSection(section1);
