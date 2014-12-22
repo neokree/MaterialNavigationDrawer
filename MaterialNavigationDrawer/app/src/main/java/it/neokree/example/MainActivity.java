@@ -44,7 +44,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         night = this.newSection("Night Section", this.getResources().getDrawable(R.drawable.ic_hotel_grey600_24dp), new FragmentIndex())
                 .setSectionColor(Color.parseColor("#2196f3")).setNotifications(150);
         // night section with section color
-        last = this.newSection("Last Section", new FragmentIndex()).setSectionColor((Color.parseColor("#ff9800")));
+        last = this.newSection("Last Section", new FragmentIndex()).setSectionColor(Color.parseColor("#ff9800"),Color.parseColor("#ef6c00"));
 
         Intent i = new Intent(this,Profile.class);
         settingsSection = this.newSection("Settings",this.getResources().getDrawable(R.drawable.ic_settings_black_24dp),i);
@@ -58,6 +58,8 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         this.addDivisor();
         this.addSection(last);
         this.addBottomSection(settingsSection);
+
+        this.addMultiPaneSupport();
 
         // start thread
         t.start();

@@ -32,11 +32,13 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
     private boolean isSelected;
     private boolean targetType;
     private boolean sectionColor;
+    private boolean hasColorDark;
 
     private int colorPressed;
     private int colorUnpressed;
     private int colorSelected;
     private int iconColor;
+    private int colorDark;
 
     private int numberNotifications;
 
@@ -70,6 +72,7 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
         iconColor = Color.rgb(98,98,98);
         isSelected = false;
         sectionColor = false;
+        hasColorDark = false;
         targetType = target;
         numberNotifications = 0;
     }
@@ -191,12 +194,28 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
         return this;
     }
 
+    public MaterialSection setSectionColor(int color,int colorDark) {
+        setSectionColor(color);
+        hasColorDark = true;
+        this.colorDark = colorDark;
+
+        return this;
+    }
+
     public boolean hasSectionColor() {
         return sectionColor;
     }
 
+    public boolean hasSectionColorDark() {
+        return hasColorDark;
+    }
+
     public int getSectionColor() {
         return iconColor;
+    }
+
+    public int getSectionColorDark() {
+        return colorDark;
     }
 
     /**

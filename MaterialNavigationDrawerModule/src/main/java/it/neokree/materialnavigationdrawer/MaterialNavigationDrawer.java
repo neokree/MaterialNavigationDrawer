@@ -15,7 +15,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -58,6 +57,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     private ActionBarDrawerToggle pulsante;
     private ImageView statusBar;
     private Toolbar toolbar;
+    private RelativeLayout content;
     private RelativeLayout drawer;
     private ImageView userphoto;
     private ImageView userSecondPhoto;
@@ -69,6 +69,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     private LinearLayout sections;
     private LinearLayout bottomSections;
 
+
     private List<MaterialSection> sectionList;
     private List<MaterialSection> bottomSectionList;
     private List<MaterialAccount> accountManager;
@@ -78,6 +79,10 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     private CharSequence title;
     private float density;
     private int primaryColor;
+    private int primaryDarkColor;
+    private boolean slidingDrawerEffect = false;
+    private boolean multiPaneSupport = false;
+    private Resources resources;
 
     private View.OnClickListener currentAccountListener = new View.OnClickListener() {
 
@@ -90,7 +95,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             }
 
             // close drawer
-            layout.closeDrawer(drawer);
+            if(!deviceSupportMultiPane())
+                layout.closeDrawer(drawer);
 
         }
     };
@@ -107,7 +113,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             }
             else {// if there is no second account user clicked for open it
                 accountListener.onAccountOpening(currentAccount);
-                layout.closeDrawer(drawer);
+                if(!deviceSupportMultiPane())
+                    layout.closeDrawer(drawer);
             }
 
         }
@@ -126,7 +133,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             }
             else {// if there is no second account user clicked for open it
                 accountListener.onAccountOpening(currentAccount);
-                layout.closeDrawer(drawer);
+                if(!deviceSupportMultiPane())
+                    layout.closeDrawer(drawer);
             }
 
         }
@@ -150,6 +158,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         // init drawer components
+        layout = (DrawerLayout) this.findViewById(R.id.drawer_layout);
+        content = (RelativeLayout) this.findViewById(R.id.content);
         drawer = (RelativeLayout) this.findViewById(R.id.drawer);
         username = (TextView) this.findViewById(R.id.user_nome);
         usermail = (TextView) this.findViewById(R.id.user_email);
@@ -172,14 +182,18 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         userSecondPhoto.setOnClickListener(secondAccountListener);
         userThirdPhoto.setOnClickListener(thirdAccountListener);
 
-        //get density
-        density = this.getResources().getDisplayMetrics().density;
+        //get resources and density
+        resources = this.getResources();
+        density = resources.getDisplayMetrics().density;
 
         // get primary color
         Resources.Theme theme = this.getTheme();
         TypedValue typedValue = new TypedValue();
         theme.resolveAttribute(R.attr.colorPrimary, typedValue, true);
         primaryColor = typedValue.data;
+        theme.resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
+        primaryDarkColor = typedValue.data;
+
         // set darker status bar if device is kitkat
         if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT)
             this.statusBar.setImageDrawable(new ColorDrawable(darkenColor(primaryColor)));
@@ -187,8 +201,9 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         // INIT ACTION BAR
         this.setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+
+        if(layout.isDrawerOpen(drawer))
+            layout.closeDrawer(drawer);
 
         init(savedInstanceState);
 
@@ -199,22 +214,44 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         // Si preleva il titolo dell'activity
         title = sectionList.get(0).getTitle();
 
-        // si collega il DrawerLayout al codice e gli si setta l'ombra all'apertura
-        layout = (DrawerLayout) this.findViewById(R.id.drawer_layout);
 
-        pulsante = new ActionBarDrawerToggle(this,layout,toolbar,R.string.nothing,R.string.nothing) {
+        Configuration configuration = this.getResources().getConfiguration();
+        if(deviceSupportMultiPane()) {
+            // se il multipane e' attivo, si e' in landscape e si e' un tablet allora si passa in multipane mode
+            layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN,drawer);
+            DrawerLayout.LayoutParams params = new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            params.setMargins((int) (320 * density),0,0,0);
+            content.setLayoutParams(params);
+            layout.setScrimColor(Color.TRANSPARENT);
+            layout.openDrawer(drawer);
+        }
+        else {
+            // se non si sta lavorando in multiPane allora si inserisce il pulsante per aprire/chiudere
 
-            public void onDrawerClosed(View view) {
-                invalidateOptionsMenu(); // termina il comando
-            }
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
 
-            public void onDrawerOpened(View drawerView) {
-                invalidateOptionsMenu(); // termina il comando
-            }
+            pulsante = new ActionBarDrawerToggle(this,layout,toolbar,R.string.nothing,R.string.nothing) {
 
-        };
+                public void onDrawerClosed(View view) {
+                    invalidateOptionsMenu(); // termina il comando
+                }
 
-        layout.setDrawerListener(pulsante);
+                public void onDrawerOpened(View drawerView) {
+                    invalidateOptionsMenu(); // termina il comando
+                }
+
+                @Override
+                public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                    // if user wants the sliding arrow it compare
+                    if(slidingDrawerEffect)
+                        super.onDrawerSlide(drawerView, slideOffset);
+                }
+            };
+
+            layout.setDrawerListener(pulsante);
+        }
 
         // si attacca alla usercover un listener
         ViewTreeObserver vto = usercover.getViewTreeObserver();
@@ -227,16 +264,34 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                 // change user space to 16:9
                 int width = drawer.getWidth();
 
-                int height = (9 * width) / 16;
+                int heightCover = (9 * width) / 16;
 
                 // si toglie l'altezza in eccesso nelle versioni precenti a kitkat
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                    height -= (density * 25);
+                    heightCover -= (density * 25);
                 }
 
                 // set user space
-                usercover.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,height));
-                usercoverSwitcher.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,height));
+                usercover.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,heightCover));
+                usercoverSwitcher.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,heightCover));
+
+                // si aggiungono nella posizione corretta le bottom section
+                Point size = new Point();
+                getWindowManager().getDefaultDisplay().getSize(size);
+                int heightDrawer = (int) (( (25 + 8 + 1) * density ) + heightCover + sections.getHeight() + ((density * 48) * bottomSectionList.size()));
+
+                if(heightDrawer >= size.y) {
+                    addDivisor();
+                    for (MaterialSection section : bottomSectionList) {
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (48 * density));
+                        sections.addView(section.getView(), params);
+                    }
+                }
+                else
+                    for (MaterialSection section : bottomSectionList) {
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (48 * density));
+                        bottomSections.addView(section.getView(), params);
+                    }
 
                 ViewTreeObserver obs = usercover.getViewTreeObserver();
                 // si rimuove il listener
@@ -280,9 +335,10 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Se dal drawer si seleziona un oggetto
-        if (pulsante.onOptionsItemSelected(item)) {
-            return true;
-        }
+        if(!deviceSupportMultiPane())
+            if (pulsante.onOptionsItemSelected(item)) {
+                return true;
+            }
         return super.onOptionsItemSelected(item);
     }
     //------------------------------------------------------------------------------------------------------------------------------------------------
@@ -291,7 +347,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
-        pulsante.syncState();
+        if(!deviceSupportMultiPane())
+            pulsante.syncState();
     }
 
     @Override
@@ -299,8 +356,9 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         super.onConfigurationChanged(newConfig);
 
         // Passa tutte le configurazioni al drawer
-        pulsante.onConfigurationChanged(newConfig);
-
+        if(!deviceSupportMultiPane()) {
+            pulsante.onConfigurationChanged(newConfig);
+        }
     }
 
     @Override
@@ -339,7 +397,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             throw new RuntimeException("Fragment must be android.app.Fragment or android.support.v4.app.Fragment");
         
         // si chiude il drawer
-        layout.closeDrawer(drawer);
+        if(!deviceSupportMultiPane())
+            layout.closeDrawer(drawer);
     }
 
     private MaterialAccount findAccountNumber(int number) {
@@ -442,7 +501,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                 currentAccount = newAccount;
 
                 // si chiude il drawer
-                layout.closeDrawer(drawer);
+                if(!deviceSupportMultiPane())
+                    layout.closeDrawer(drawer);
 
             }
 
@@ -481,7 +541,17 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         usercover.setImageBitmap(background);
     }
 
+    private boolean deviceSupportMultiPane() {
+        if(multiPaneSupport && resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && resources.getConfiguration().smallestScreenWidthDp >= 600)
+            return true;
+        else
+            return false;
+    }
+
     protected int darkenColor(int color) {
+        if(color == primaryColor)
+            return primaryDarkColor;
+
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
         hsv[2] *= 0.8f; // value component
@@ -497,8 +567,12 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
             // setting toolbar color if is setted
             if(section.hasSectionColor()) {
-                if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT)
-                    this.statusBar.setImageDrawable(new ColorDrawable(darkenColor(section.getSectionColor())));
+                if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+                    if(!section.hasSectionColorDark())
+                        this.statusBar.setImageDrawable(new ColorDrawable(darkenColor(section.getSectionColor())));
+                    else
+                        this.statusBar.setImageDrawable(new ColorDrawable(section.getSectionColorDark()));
+                }
                 else
                     this.statusBar.setImageDrawable(new ColorDrawable(section.getSectionColor()));
                 this.getToolbar().setBackgroundColor(section.getSectionColor());
@@ -533,6 +607,14 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         this.accountListener = listener;
     }
 
+    public void addMultiPaneSupport() {
+        this.multiPaneSupport = true;
+    }
+
+    public void allowArrowAnimation() {
+        slidingDrawerEffect = true;
+    }
+
     // Method used for customize layout
 
     public void addSection(MaterialSection section) {
@@ -544,9 +626,9 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
     public void addBottomSection(MaterialSection section) {
         section.setPosition(BOTTOM_SECTION_START + bottomSectionList.size());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)(48 * density));
+        //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)(48 * density));
         bottomSectionList.add(section);
-        bottomSections.addView(section.getView(),params);
+        //bottomSections.addView(section.getView(),params);
     }
 
     public void addDivisor() {
@@ -671,4 +753,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
         return findAccountNumber(position);
     }
+
+
+
 }

@@ -13,7 +13,8 @@
         android:layout_above="@+id/separator"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true"
+        android:overScrollMode="never">
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="it.neokree.example" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    package="it.neokree.example">
 
     <application
         android:allowBackup="true"
@@ -15,6 +16,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity android:name="it.neokree.example.Settings" >
 
@@ -22,6 +24,9 @@
         <activity android:name="it.neokree.example.Profile" >
 
         </activity>
+
+        <meta-data android:name="MaterialNavigationDrawer.multiPaneSupport" android:value="true" />
+
     </application>
 
 </manifest>
