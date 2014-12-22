@@ -53,19 +53,22 @@ In your styles.xml choose your version:
     <!-- Base application theme. -->
     <style name="AppTheme" parent="MaterialNavigationDrawerTheme">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/light_blue_500</item>
+        <item name="colorPrimary">#8bc34a</item>
+        <item name="colorPrimaryDark">#558b2f</item>
         <item name="colorAccent">@color/grey_1000</item>
     </style>
     <!-- Light version theme. -->
     <style name="AppTheme" parent="MaterialNavigationDrawerTheme.Light">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/light_blue_500</item>
+        <item name="colorPrimary">#8bc34a</item>
+        <item name="colorPrimaryDark">#558b2f</item>
         <item name="colorAccent">@color/grey_1000</item>
     </style>
     <!-- Light version with Black actionbar -->
     <style name="AppTheme" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/light_blue_500</item>
+        <item name="colorPrimary">#8bc34a</item>
+        <item name="colorPrimaryDark">#558b2f</item>
         <item name="colorAccent">@color/grey_1000</item>
     </style>
     
@@ -82,7 +85,7 @@ repositories {
 }
 
 dependencies {
-    compile 'it.neokree:MaterialNavigationDrawer:1.2.5'
+    compile 'it.neokree:MaterialNavigationDrawer:1.2.6'
 }
 ```
 
