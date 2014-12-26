@@ -85,7 +85,7 @@ repositories {
 }
 
 dependencies {
-    compile 'it.neokree:MaterialNavigationDrawer:1.2.6'
+    compile 'it.neokree:MaterialNavigationDrawer:1.2.7'
 }
 ```
 
