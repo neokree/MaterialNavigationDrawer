@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="48dp">
+    android:layout_height="48dp"
+    tools:ignore="MissingPrefix">
 
     <ImageView
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:id="@+id/section_icon"
+        android:alpha="0.54"
         android:layout_marginLeft="16dp"
         android:layout_centerVertical="true" />
 
@@ -17,11 +20,12 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="72dp"
         android:textSize="14sp"
-        android:textColor="@android:color/black"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="#000000"
+        android:alpha="0.87"
         android:layout_toLeftOf="@+id/section_notification"
         android:layout_toStartOf="@+id/section_notification"
-        android:layout_marginRight="8dp" />
+        android:layout_marginRight="8dp"
+        fontPath="fonts/Roboto-Medium.ttf"/>
 
     <TextView
         android:layout_width="40dp"

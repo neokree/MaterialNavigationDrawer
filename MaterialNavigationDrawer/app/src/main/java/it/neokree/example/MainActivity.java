@@ -13,6 +13,7 @@ import it.neokree.materialnavigationdrawer.MaterialAccount;
 import it.neokree.materialnavigationdrawer.MaterialAccountListener;
 import it.neokree.materialnavigationdrawer.MaterialNavigationDrawer;
 import it.neokree.materialnavigationdrawer.MaterialSection;
+import it.neokree.materialnavigationdrawer.MaterialSectionListener;
 
 public class MainActivity extends MaterialNavigationDrawer implements MaterialAccountListener{
 
@@ -22,6 +23,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
     @Override
     public void init(Bundle savedInstanceState) {
 
+        /*
         // add first account
         account = new MaterialAccount("NeoKree","neokree@gmail.com",new ColorDrawable(Color.parseColor("#9e9e9e")),this.getResources().getDrawable(R.drawable.bamboo));
         this.addAccount(account);
@@ -34,10 +36,17 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
 
         // set listener
         this.setAccountListener(this);
+        */
+        this.replaceDrawerHeader(this.getResources().getDrawable(R.drawable.mat2));
 
         // create sections
         section1 = this.newSection("Section 1",new FragmentIndex());
-        section2 = this.newSection("Section 2",new FragmentIndex());
+        section2 = this.newSection("Section 2",new MaterialSectionListener() {
+            @Override
+            public void onClick(MaterialSection section) {
+                Toast.makeText(MainActivity.this,"Section 2 Clicked",Toast.LENGTH_SHORT).show();
+            }
+        });
         // recorder section with icon and 10 notifications
         recorder = this.newSection("Recorder",this.getResources().getDrawable(R.drawable.ic_mic_white_24dp),new FragmentIndex()).setNotifications(10);
         // night section with icon, section color and notifications
@@ -52,7 +61,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         // add your sections to the drawer
         this.addSection(section1);
         this.addSection(section2);
-        this.addDivisor();
+        this.addSuheader("Subheader");
         this.addSection(recorder);
         this.addSection(night);
         this.addDivisor();
@@ -62,7 +71,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         this.addMultiPaneSupport();
 
         // start thread
-        t.start();
+        //t.start();
 
     }
 

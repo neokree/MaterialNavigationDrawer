@@ -20,17 +20,18 @@ import org.w3c.dom.Text;
  */
 public class MaterialSection<Fragment> implements View.OnTouchListener {
 
-    public static final boolean TARGET_FRAGMENT = true;
-    public static final boolean TARGET_ACTIVITY = false;
+    public static final int TARGET_FRAGMENT = 0;
+    public static final int TARGET_ACTIVITY = 1;
+    public static final int TARGET_LISTENER = 2;
 
     private int position;
+    private int targetType;
     private View view;
     private TextView text;
     private TextView notifications;
     private ImageView icon;
     private MaterialSectionListener listener;
     private boolean isSelected;
-    private boolean targetType;
     private boolean sectionColor;
     private boolean hasColorDark;
 
@@ -46,8 +47,9 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
 
     private Fragment targetFragment;
     private Intent targetIntent;
+    private MaterialSectionListener targetListener;
 
-    public MaterialSection(Context ctx, boolean hasIcon, boolean target ) {
+    public MaterialSection(Context ctx, boolean hasIcon, int target ) {
 
         if(!hasIcon) {
             view = LayoutInflater.from(ctx).inflate(R.layout.layout_material_section,null);
@@ -69,7 +71,7 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
         colorPressed = Color.parseColor("#16000000");
         colorUnpressed = Color.parseColor("#00FFFFFF");
         colorSelected = Color.parseColor("#0A000000");
-        iconColor = Color.rgb(98,98,98);
+        iconColor = Color.BLACK;
         isSelected = false;
         sectionColor = false;
         hasColorDark = false;
@@ -101,10 +103,19 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
 
             if (sectionColor) {
                 text.setTextColor(iconColor);
+
+                if(icon != null){
+                    icon.setColorFilter(iconColor);
+                    icon.setAlpha(1f);
+                }
             }
 
             if(listener != null)
                 listener.onClick(this);
+
+            // si fa arrivare il click anche allo sviluppatore
+            if(this.getTarget() == TARGET_LISTENER && targetListener != null)
+                this.targetListener.onClick(this);
 
             return true;
         }
@@ -118,6 +129,11 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
 
         if(sectionColor) {
             text.setTextColor(iconColor);
+
+            if(icon != null) {
+                icon.setColorFilter(iconColor);
+                icon.setAlpha(1f);
+            }
         }
     }
 
@@ -127,6 +143,11 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
 
         if (sectionColor) {
             text.setTextColor(Color.BLACK);
+
+            if(icon != null) {
+                icon.setColorFilter(Color.BLACK);
+                icon.setAlpha(0.54f);
+            }
         }
     }
 
@@ -169,11 +190,15 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
         this.targetFragment = target;
     }
 
-    public void setTarget(Intent intent) {
-        this.targetIntent = intent;
+    public void setTarget(Intent target) {
+        this.targetIntent = target;
     }
 
-    public boolean getTarget() {
+    public void setTarget(MaterialSectionListener target) {
+        this.targetListener = target;
+    }
+
+    public int getTarget() {
         return targetType;
     }
 
@@ -184,12 +209,17 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
     public Intent getTargetIntent() {
         return targetIntent;
     }
-    
+
+    public MaterialSectionListener getTargetListener() {
+        return targetListener;
+    }
+
+    @Deprecated
     public MaterialSection setSectionColor(int color) {
         sectionColor = true;
         iconColor = color;
-        if(icon != null)
-            this.icon.setColorFilter(color);
+        //if(icon != null)
+        //    this.icon.setColorFilter(color);
         
         return this;
     }

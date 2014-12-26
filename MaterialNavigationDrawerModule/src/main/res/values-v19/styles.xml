@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="MaterialNavigationDrawerTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
+    <style name="MaterialNavigationDrawerTheme.Light" parent="Theme.AppCompat.Light.NoActionBar" />
 
-    <style name="MaterialNavigationDrawerTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
+    <style name="MaterialNavigationDrawerTheme" parent="Theme.AppCompat.NoActionBar" />
 
     <style name="MaterialNavigationDrawerTheme.Light.DarkActionBar" parent="Theme.AppCompat.Light.NoActionBar" >
-        <item name="android:windowTranslucentStatus">true</item>
         <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="popupTheme">@style/Base.V21.Theme.AppCompat.Light.Dialog</item>
+    </style>
+
+    <style name="MaterialNavigationDrawerTheme.Light.TranslucentKitKatStatusBar" parent="MaterialNavigationDrawerTheme.Light" >
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="MaterialNavigationDrawerTheme.TranslucentKitKatStatusBar" parent="MaterialNavigationDrawerTheme" >
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="MaterialNavigationDrawerTheme.Light.DarkActionBar.TranslucentKitKatStatusBar" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar" >
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
 </resources>

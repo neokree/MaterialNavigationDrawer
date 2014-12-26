@@ -15,4 +15,10 @@
         <item name="popupTheme">@style/Base.V21.Theme.AppCompat.Light.Dialog</item>
     </style>
 
+    <style name="MaterialNavigationDrawerTheme.Light.TranslucentKitKatStatusBar" parent="MaterialNavigationDrawerTheme.Light" />
+
+    <style name="MaterialNavigationDrawerTheme.TranslucentKitKatStatusBar" parent="MaterialNavigationDrawerTheme" />
+
+    <style name="MaterialNavigationDrawerTheme.Light.DarkActionBar.TranslucentKitKatStatusBar" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar" />
+
 </resources>

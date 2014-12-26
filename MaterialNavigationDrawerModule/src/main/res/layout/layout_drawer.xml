@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer"
     android:layout_width="@dimen/drawerWidth"
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:background="@android:color/white"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    tools:ignore="MissingPrefix">
 
     <ScrollView
         android:layout_width="wrap_content"
@@ -42,11 +44,6 @@
                 android:scaleType="fitXY" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView" />
-
-            <ImageView
                 android:id="@+id/user_photo"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
@@ -59,9 +56,8 @@
                 android:id="@+id/user_photo_2"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="@dimen/photoMarginTop"
+                android:layout_alignTop="@+id/user_photo"
                 android:layout_marginRight="16dp"/>
 
             <ImageView
@@ -101,10 +97,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
-                    android:textSize="16sp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/white"/>
+                    android:textSize="14sp"
+                    android:textColor="#FFFFFF"
+                    fontPath="fonts/Roboto-Medium.ttf" />
 
                 <TextView
                     android:id="@+id/user_email"
@@ -112,8 +107,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:textSize="14sp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@android:color/white"/>
+                    android:textColor="#FFFFFF"
+                    fontPath="fonts/Roboto-Regular.ttf"/>
 
             </LinearLayout>
 

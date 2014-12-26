@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="MyTheme" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar">
+    <style name="MyTheme" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar.TranslucentKitKatStatusBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#8bc34a</item>
         <item name="colorPrimaryDark">#558b2f</item>

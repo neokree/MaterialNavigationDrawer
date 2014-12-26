@@ -1,5 +1,7 @@
 package it.neokree.example;
 
+import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -19,11 +21,11 @@ public class FragmentIndex extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         TextView text = new TextView(this.getActivity());
         text.setText("Section");
         text.setGravity(Gravity.CENTER);
         return text;
 
     }
+
 }
