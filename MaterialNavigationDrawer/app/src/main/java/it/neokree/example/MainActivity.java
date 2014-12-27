@@ -23,7 +23,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
     @Override
     public void init(Bundle savedInstanceState) {
 
-        /*
+
         // add first account
         account = new MaterialAccount("NeoKree","neokree@gmail.com",new ColorDrawable(Color.parseColor("#9e9e9e")),this.getResources().getDrawable(R.drawable.bamboo));
         this.addAccount(account);
@@ -36,8 +36,8 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
 
         // set listener
         this.setAccountListener(this);
-        */
-        this.replaceDrawerHeader(this.getResources().getDrawable(R.drawable.mat2));
+
+        //this.replaceDrawerHeader(this.getResources().getDrawable(R.drawable.mat2));
 
         // create sections
         section1 = this.newSection("Section 1",new FragmentIndex());
@@ -61,7 +61,7 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
         // add your sections to the drawer
         this.addSection(section1);
         this.addSection(section2);
-        this.addSuheader("Subheader");
+        this.addSubheader("Subheader");
         this.addSection(recorder);
         this.addSection(night);
         this.addDivisor();
@@ -70,8 +70,10 @@ public class MainActivity extends MaterialNavigationDrawer implements MaterialAc
 
         this.addMultiPaneSupport();
 
+        this.setBackPattern(MaterialNavigationDrawer.BACKPATTERN_BACK_TO_FIRST);
+
         // start thread
-        //t.start();
+        t.start();
 
     }
 

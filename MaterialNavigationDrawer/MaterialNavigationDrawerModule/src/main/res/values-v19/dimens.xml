@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="statusMargin">0dp</dimen>
+    <dimen name="userSpace">189dp</dimen>
+    <dimen name="photoMarginTop">16dp</dimen>
+
+    <dimen name="traslucentStatusMargin">25dp</dimen>
+    <dimen name="traslucentPhotoMarginTop">41dp</dimen>
+
+</resources>
