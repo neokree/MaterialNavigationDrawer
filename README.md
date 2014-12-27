@@ -85,14 +85,15 @@ repositories {
 }
 
 dependencies {
-    compile 'it.neokree:MaterialNavigationDrawer:1.2.7'
+    compile 'it.neokree:MaterialNavigationDrawer:1.2.8'
 }
 ```
 
 You don't know how to do something? Visit the [wiki](https://github.com/neokree/MaterialNavigationDrawer/wiki)!
 
-### External libraries
+### External libraries used
 [Calligraphy](https://github.com/chrisjenx/Calligraphy)
+[Android-UI](https://github.com/markushi/android-ui)
 
 <img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen1.png" alt="screenshot" width="300px" height="auto" />
 <img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen2.png" alt="screenshot" width="300px" height="auto" />
