@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="neokree:fontPath" format="string"/>
+
+    <declare-styleable name="MaterialNavigationDrawer">
+        <attr name="rippleBackport" format="boolean" />
+        <attr name="drawerType" format="integer" />
+    </declare-styleable>
+
+</resources>
