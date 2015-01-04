@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:appcompat-v7:21.0.2'
     compile 'uk.co.chrisjenx:calligraphy:1.2.0'
     compile 'com.github.markushi:android-ui:1.2'
 }

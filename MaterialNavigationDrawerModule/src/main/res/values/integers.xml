@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="DRAWERTYPE_ACCOUNTS">0</integer>
+    <integer name="DRAWERTYPE_IMAGE">1</integer>
+    <integer name="DRAWERTYPE_CUSTOM">2</integer>
+    <integer name="DRAWERTYPE_NO_HEADER">3</integer>
+
+</resources>

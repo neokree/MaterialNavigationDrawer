@@ -8,4 +8,36 @@
         <item name="colorAccent">#FFFFFF</item>
     </style>
 
+    <style name="RippleTheme" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar.TranslucentKitKatStatusBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#8bc34a</item>
+        <item name="colorPrimaryDark">#558b2f</item>
+        <item name="colorAccent">#FFFFFF</item>
+        <item name="rippleBackport">true</item>
+    </style>
+
+    <style name="NoHeaderTheme" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#8bc34a</item>
+        <item name="colorPrimaryDark">#558b2f</item>
+        <item name="colorAccent">#FFFFFF</item>
+        <item name="drawerType">@integer/DRAWERTYPE_NO_HEADER</item>
+    </style>
+
+    <style name="ImageHeaderTheme" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#8bc34a</item>
+        <item name="colorPrimaryDark">#558b2f</item>
+        <item name="colorAccent">#FFFFFF</item>
+        <item name="drawerType">@integer/DRAWERTYPE_IMAGE</item>
+    </style>
+
+    <style name="CustomHeader" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar.TranslucentKitKatStatusBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#8bc34a</item>
+        <item name="colorPrimaryDark">#558b2f</item>
+        <item name="colorAccent">#FFFFFF</item>
+        <item name="drawerType">@integer/DRAWERTYPE_CUSTOM</item>
+    </style>
+
 </resources>

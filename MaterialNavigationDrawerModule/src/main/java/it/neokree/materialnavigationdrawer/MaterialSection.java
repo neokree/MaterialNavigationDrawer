@@ -1,6 +1,7 @@
 package it.neokree.materialnavigationdrawer;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,8 +16,6 @@ import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import at.markushi.ui.RevealColorView;
 
 /**
@@ -30,7 +29,7 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
     public static final int TARGET_ACTIVITY = 1;
     public static final int TARGET_LISTENER = 2;
 
-    private static final int REVEAL_DURATION = 400;
+    private static final int REVEAL_DURATION = 300;
 
     private int position;
     private int targetType;
@@ -43,6 +42,8 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
     private boolean isSelected;
     private boolean sectionColor;
     private boolean hasColorDark;
+    private boolean rippleSupport = false;
+    private boolean touchable;
 
     private Point lastTouchedPoint;
 
@@ -62,9 +63,15 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
     private Intent targetIntent;
     private MaterialSectionListener targetListener;
 
+    @Deprecated
     public MaterialSection(Context ctx, boolean hasIcon, int target ) {
+        this(ctx,hasIcon,false,target);
+    }
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+    public MaterialSection(Context ctx, boolean hasIcon,boolean hasRippleSupport, int target ) {
+        rippleSupport = hasRippleSupport;
+
+        if(rippleAnimationSupport()) {
             // section with ripple effect
 
             if (!hasIcon) {
@@ -108,63 +115,68 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
         isSelected = false;
         sectionColor = false;
         hasColorDark = false;
+        touchable = true;
         targetType = target;
         numberNotifications = 0;
     }
 
     @Override
+    @SuppressLint("NewApi")
     public boolean onTouch(View v, MotionEvent event) {
+        if(touchable) {
 
-        if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-                view.setBackgroundColor(colorPressed);
-            return true;
-        }
-
-        if( event.getAction() == MotionEvent.ACTION_CANCEL) {
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-                if(isSelected)
-                    view.setBackgroundColor(colorSelected);
-                else
-                    view.setBackgroundColor(colorUnpressed);
-
-            return true;
-        }
-
-
-        if( event.getAction() == MotionEvent.ACTION_UP) {
-
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                view.setBackgroundColor(colorSelected);
-                actionUp();
+                if (!rippleAnimationSupport())
+                    view.setBackgroundColor(colorPressed);
+                return true;
             }
-            else {
-                // get the point
-                lastTouchedPoint = new Point();
-                lastTouchedPoint.x = (int) event.getX();
-                lastTouchedPoint.y = (int) event.getY();
 
-                this.ripple.reveal(lastTouchedPoint.x, lastTouchedPoint.y, colorPressed ,0,REVEAL_DURATION, new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {}
+            if (event.getAction() == MotionEvent.ACTION_CANCEL) {
+                if (!rippleAnimationSupport())
+                    if (isSelected)
+                        view.setBackgroundColor(colorSelected);
+                    else
+                        view.setBackgroundColor(colorUnpressed);
 
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        ripple.reveal(lastTouchedPoint.x, lastTouchedPoint.y, colorSelected, 0, REVEAL_DURATION, null);
-                        actionUp();
-                    }
+                return true;
+            }
 
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                        onAnimationEnd(animation);
-                    }
 
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {}
-                });
-        }
-            return true;
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+
+                if (!rippleAnimationSupport()) {
+                    view.setBackgroundColor(colorSelected);
+                    afterClick();
+                } else {
+                    // get the point
+                    lastTouchedPoint = new Point();
+                    lastTouchedPoint.x = (int) event.getX();
+                    lastTouchedPoint.y = (int) event.getY();
+
+                    this.ripple.reveal(lastTouchedPoint.x, lastTouchedPoint.y, colorPressed, 0, REVEAL_DURATION, new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            ripple.reveal(lastTouchedPoint.x, lastTouchedPoint.y, colorSelected, 0, REVEAL_DURATION, null);
+                            afterClick();
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+                            onAnimationEnd(animation);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+                        }
+                    });
+                }
+                return true;
+            }
         }
 
         return false;
@@ -172,7 +184,7 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
 
     public void select() {
         isSelected = true;
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+        if(!rippleAnimationSupport())
             view.setBackgroundColor(colorSelected);
         else
             ripple.reveal(0,0,colorSelected,0,0,null);
@@ -189,7 +201,7 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
 
     public void unSelect() {
         isSelected = false;
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+        if(!rippleAnimationSupport()) {
             view.setBackgroundColor(colorUnpressed);
         }
         else {
@@ -204,6 +216,10 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
                 setAlpha(icon, 0.54f);
             }
         }
+    }
+
+    public boolean isSelected() {
+        return isSelected;
     }
 
     public void setPosition(int position) {
@@ -325,10 +341,22 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
         return this;
     }
 
+    public MaterialSection setNotificationsText(String text) {
+        this.notifications.setText(text);
+        return this;
+    }
+
     public int getNotifications() {
         return numberNotifications;
     }
 
+    public String getNotificationsText() {
+        return this.notifications.getText().toString();
+    }
+
+    public void setTouchable(boolean isTouchable) {
+        touchable = isTouchable;
+    }
 
     // private methods
 
@@ -343,7 +371,7 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
        }
     }
 
-    private void actionUp() {
+    private void afterClick() {
         isSelected = true;
 
         if (sectionColor) {
@@ -358,9 +386,20 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
         if (listener != null)
             listener.onClick(this);
 
+        // se la sezione ha come target l'activity, dopo che questa viene avviata si deseleziona.
+        if(this.getTarget() == TARGET_ACTIVITY)
+            this.unSelect();
+
         // si fa arrivare il click anche allo sviluppatore
         if (this.getTarget() == TARGET_LISTENER && targetListener != null)
             this.targetListener.onClick(this);
+    }
+
+    private boolean rippleAnimationSupport() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && rippleSupport)
+            return true;
+        else
+            return false;
     }
 
 }

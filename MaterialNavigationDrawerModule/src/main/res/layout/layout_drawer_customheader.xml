@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer"
+    android:layout_width="@dimen/drawerWidth"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="#fafafa"
+    tools:ignore="MissingPrefix">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/separator"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:overScrollMode="never">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/drawer_header"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sections"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/drawer_header"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical" >
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_above="@+id/bottom_sections"
+        android:background="#e0e0e0" />
+
+    <LinearLayout
+        android:id="@+id/bottom_sections"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical" >
+
+    </LinearLayout>
+
+</RelativeLayout>

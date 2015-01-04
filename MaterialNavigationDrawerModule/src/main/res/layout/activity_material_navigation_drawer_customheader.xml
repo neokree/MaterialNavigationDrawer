@@ -34,6 +34,6 @@
     </RelativeLayout>
 
     <!-- RelativeLayout per il drawer da visualizzare -->
-    <include layout="@layout/layout_drawer" />
+    <include layout="@layout/layout_drawer_customheader" />
 
 </android.support.v4.widget.DrawerLayout>

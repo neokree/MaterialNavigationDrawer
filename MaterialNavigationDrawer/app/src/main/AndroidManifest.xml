@@ -7,10 +7,10 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/MyTheme"
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
         android:supportsRtl="true">
         <activity
-            android:name="it.neokree.example.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,14 +19,20 @@
             </intent-filter>
 
         </activity>
+        <activity
+            android:name=".NavigationDrawerWithAccountActivity"
+            android:theme="@style/MyTheme"/>
+        <activity android:name=".NavigationDrawerTest" android:theme="@style/MyTheme" />
+        <activity android:name=".NavigationDrawerActivityMultipane" android:theme="@style/MyTheme" />
+        <activity android:name=".NavigationDrawerActivityRipple" android:theme="@style/RippleTheme" />
+        <activity android:name=".NavigationDrawerImageHeaderActivity" android:theme="@style/ImageHeaderTheme" />
+        <activity android:name=".NavigationDrawerNoHeaderActivity" android:theme="@style/NoHeaderTheme" />
+        <activity android:name=".NavigationDrawerCustomHeaderActivity" android:theme="@style/CustomHeader" />
         <activity android:name="it.neokree.example.Settings" >
 
         </activity>
-        <activity android:name="it.neokree.example.Profile" >
+        <activity android:name="it.neokree.example.Profile" />
 
-        </activity>
-
-        <meta-data android:name="MaterialNavigationDrawer.multiPaneSupport" android:value="true" />
 
     </application>
 
