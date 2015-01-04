@@ -7,19 +7,21 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 /**
  * Created by neokree on 31/12/14.
  */
-public class FragmentTextEdit extends Fragment{
+public class FragmentButton extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        EditText text = new EditText(this.getActivity());
-        text.setGravity(Gravity.CENTER);
-        return text;
+        Button button = new Button(this.getActivity());
+        button.setText("Click Me");
+        button.setGravity(Gravity.CENTER);
+        return button;
 
     }
 }

@@ -14,7 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/separator"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:overScrollMode="never">
 
@@ -26,7 +28,10 @@
             <LinearLayout
                 android:id="@+id/drawer_header"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:orientation="vertical">
@@ -38,6 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_below="@+id/drawer_header"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
@@ -62,7 +68,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:orientation="vertical" >
 
     </LinearLayout>

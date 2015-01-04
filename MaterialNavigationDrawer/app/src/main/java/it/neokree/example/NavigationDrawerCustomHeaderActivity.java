@@ -41,7 +41,7 @@ public class NavigationDrawerCustomHeaderActivity extends MaterialNavigationDraw
         night = this.newSection("Night Section", this.getResources().getDrawable(R.drawable.ic_hotel_grey600_24dp), new FragmentIndex())
                 .setSectionColor(Color.parseColor("#2196f3"),Color.parseColor("#1565c0")).setNotifications(150);
         // night section with section color
-        last = this.newSection("Last Section", new FragmentTextEdit()).setSectionColor(Color.parseColor("#ff9800"),Color.parseColor("#ef6c00"));
+        last = this.newSection("Last Section", new FragmentButton()).setSectionColor(Color.parseColor("#ff9800"),Color.parseColor("#ef6c00"));
 
         Intent i = new Intent(this,Profile.class);
         settingsSection = this.newSection("Settings",this.getResources().getDrawable(R.drawable.ic_settings_black_24dp),i);

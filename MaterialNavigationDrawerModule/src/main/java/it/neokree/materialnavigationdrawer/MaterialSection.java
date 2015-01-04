@@ -29,7 +29,7 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
     public static final int TARGET_ACTIVITY = 1;
     public static final int TARGET_LISTENER = 2;
 
-    private static final int REVEAL_DURATION = 300;
+    private static final int REVEAL_DURATION = 250;
 
     private int position;
     private int targetType;

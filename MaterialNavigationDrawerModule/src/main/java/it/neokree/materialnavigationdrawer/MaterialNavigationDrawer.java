@@ -70,7 +70,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     private static final String STATE_SECTION = "section";
     private static final String STATE_ACCOUNT = "account";
 
-    private DrawerLayout layout;
+    private MaterialDrawerLayout layout;
     private ActionBar actionBar;
     private ActionBarDrawerToggle pulsante;
     private ImageView statusBar;
@@ -203,7 +203,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         // init drawer components
-        layout = (DrawerLayout) this.findViewById(R.id.drawer_layout);
+        layout = (MaterialDrawerLayout) this.findViewById(R.id.drawer_layout);
         content = (RelativeLayout) this.findViewById(R.id.content);
         drawer = (RelativeLayout) this.findViewById(R.id.drawer);
         if(drawerHeaderType == DRAWERHEADER_ACCOUNTS) {
@@ -285,6 +285,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             content.setLayoutParams(params);
             layout.setScrimColor(Color.TRANSPARENT);
             layout.openDrawer(drawer);
+            layout.requestDisallowInterceptTouchEvent(true);
         }
         else {
             // se non si sta lavorando in multiPane allora si inserisce il pulsante per aprire/chiudere
@@ -847,8 +848,10 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                 mySection.unSelect();
         }
 
-        drawerTouchLocked = true;
-        setSectionsTouch(!drawerTouchLocked);
+        if(!deviceSupportMultiPane()) {
+            drawerTouchLocked = true;
+            setSectionsTouch(!drawerTouchLocked);
+        }
     }
 
     // method used for change supports
