@@ -1,5 +1,6 @@
 package it.neokree.materialnavigationdrawer;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -13,60 +14,66 @@ import android.graphics.drawable.Drawable;
  * Created by neokree on 11/12/14.
  */
 public class MaterialAccount {
-    private Bitmap photo;
-    private Bitmap background;
+    private Drawable photo;
+    private Drawable background;
+    private Drawable circularPhoto;
     private String title;
     private String subTitle;
     private int accountNumber;
+    private Resources resources;
 
     public static final int FIRST_ACCOUNT = 0;
     public static final int SECOND_ACCOUNT = 1;
     public static final int THIRD_ACCOUNT = 2;
 
-    public MaterialAccount(String title, String subTitle, Drawable photo,Bitmap background) {
-        this.photo = convertToBitmap(photo);
-        this.title = title;
-        this.subTitle = subTitle;
-        this.background = background;
-    }
-
-    public MaterialAccount(String title, String subTitle, Drawable photo,Drawable background) {
-        this.photo = convertToBitmap(photo);
-        this.title = title;
-        this.subTitle = subTitle;
-        this.background = convertToBitmap(background);
-    }
-
-    public MaterialAccount(String title, String subTitle, Bitmap photo, Drawable background) {
+    public MaterialAccount(Resources res,String title, String subTitle, Drawable photo,Bitmap background) {
         this.photo = photo;
         this.title = title;
         this.subTitle = subTitle;
-        this.background = convertToBitmap(background);
+        this.background = new BitmapDrawable(res,background);
+        resources = res;
     }
 
-    public MaterialAccount(String title, String subTitle, Bitmap photo, Bitmap background) {
+    public MaterialAccount(Resources res,String title, String subTitle, Drawable photo,Drawable background) {
         this.photo = photo;
         this.title = title;
         this.subTitle = subTitle;
         this.background = background;
+        resources = res;
+    }
+
+    public MaterialAccount(Resources res,String title, String subTitle, Bitmap photo, Drawable background) {
+        this.photo = new BitmapDrawable(res,photo);;
+        this.title = title;
+        this.subTitle = subTitle;
+        this.background = background;
+        resources = res;
+    }
+
+    public MaterialAccount(Resources res,String title, String subTitle, Bitmap photo, Bitmap background) {
+        this.photo = new BitmapDrawable(res,photo);
+        this.title = title;
+        this.subTitle = subTitle;
+        this.background = new BitmapDrawable(res,background);
+        resources = res;
     }
 
     // setter
 
     public void setPhoto(Drawable photo){
-        this.photo = convertToBitmap(photo);
-    }
-
-    public void setPhoto(Bitmap photo) {
         this.photo = photo;
     }
 
-    public void setBackground(Bitmap background) {
-        this.background = background;
+    public void setPhoto(Resources res,Bitmap photo) {
+        this.photo = new BitmapDrawable(res,photo);
+    }
+
+    public void setBackground(Resources res,Bitmap background) {
+        this.background = new BitmapDrawable(res,background);
     }
 
     public void setBackground(Drawable background) {
-        this.background = convertToBitmap(background);
+        this.background = background;
     }
 
     public void setTitle(String title) {
@@ -83,16 +90,20 @@ public class MaterialAccount {
 
     // getter
 
-    public Bitmap getPhoto() {
+    public Drawable getPhoto() {
         return photo;
     }
 
-    public Bitmap getBackground() {
+    public Drawable getBackground() {
         return background;
     }
 
-    public Bitmap getCircularPhoto() {
-        return getCroppedBitmap(photo);
+    public Drawable getCircularPhoto() {
+        if (circularPhoto != null) {
+            return circularPhoto;
+        }
+        circularPhoto = getCroppedBitmapDrawable(photo);
+        return circularPhoto;
     }
 
     public String getTitle() {
@@ -120,7 +131,8 @@ public class MaterialAccount {
         return mutableBitmap;
     }
 
-    private Bitmap getCroppedBitmap(Bitmap bitmap) {
+    private BitmapDrawable getCroppedBitmapDrawable(Drawable drawable) {
+        Bitmap bitmap = convertToBitmap(drawable);
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
                 bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
@@ -139,7 +151,7 @@ public class MaterialAccount {
         canvas.drawBitmap(bitmap, rect, rect, paint);
         //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
         //return _bmp;
-        return output;
+        return new BitmapDrawable(resources,output);
     }
 
 

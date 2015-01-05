@@ -174,7 +174,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     @Override
     protected void attachBaseContext(Context newBase) {
         // init the Calligraphy library
-        super.attachBaseContext(new CalligraphyContextWrapper(newBase,R.attr.neokree_fontPath));
+        super.attachBaseContext(new CalligraphyContextWrapper(newBase,R.attr.fontPath));
     }
 
     @Override
@@ -184,7 +184,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CalligraphyConfig.initDefault("fonts/Roboto-Regular.ttf", R.attr.neokree_fontPath);
+        CalligraphyConfig.initDefault("fonts/Roboto-Regular.ttf", R.attr.fontPath);
 
         Resources.Theme theme = this.getTheme();
         TypedValue typedValue = new TypedValue();
@@ -666,10 +666,10 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             drawer.addView(floatingImage, params);
 
             // si setta la nuova foto di profilo sopra alla vecchia
-            photoClicked.setImageBitmap(currentAccount.getCircularPhoto());
+            photoClicked.setImageDrawable(currentAccount.getCircularPhoto());
 
             // si setta la nuova immagine di background da visualizzare sotto la vecchia
-            usercoverSwitcher.setImageBitmap(newAccount.getBackground());
+            usercoverSwitcher.setImageDrawable(newAccount.getBackground());
 
             userphoto.getGlobalVisibleRect(finalRect);
 
@@ -772,20 +772,20 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         this.username.setText(username);
     }
 
-    private void setFirstAccountPhoto(Bitmap photo) {
-        userphoto.setImageBitmap(photo);
+    private void setFirstAccountPhoto(Drawable photo) {
+        userphoto.setImageDrawable(photo);
     }
 
-    private void setSecondAccountPhoto(Bitmap photo) {
-        userSecondPhoto.setImageBitmap(photo);
+    private void setSecondAccountPhoto(Drawable photo) {
+        userSecondPhoto.setImageDrawable(photo);
     }
 
-    private void setThirdAccountPhoto(Bitmap photo) {
-        userThirdPhoto.setImageBitmap(photo);
+    private void setThirdAccountPhoto(Drawable photo) {
+        userThirdPhoto.setImageDrawable(photo);
     }
 
-    private void setDrawerBackground(Bitmap background) {
-        usercover.setImageBitmap(background);
+    private void setDrawerBackground(Drawable background) {
+        usercover.setImageDrawable(background);
     }
 
     private boolean deviceSupportMultiPane() {
