@@ -108,7 +108,10 @@ public class MyActivity extends MaterialNavigationDrawer implements MaterialAcco
     }
 }
 ```
-N.B. Not override <code>OnCreate</code> method! Use <code>init</code> method instead.<br>
+#### Do NOT
+
+- Override <code>OnCreate</code> method! Use <code>init</code> method instead.
+- Call <code>setContentView</code> in the activity since the library will do it with its own layout (move the call into the fragment).
 
 <h3>How to import </h3>
 <h6>Android Studio</h6>
