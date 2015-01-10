@@ -1,4 +1,4 @@
-<it.neokree.materialnavigationdrawer.MaterialDrawerLayout
+<it.neokree.materialnavigationdrawer.util.MaterialDrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
@@ -36,4 +36,4 @@
     <!-- RelativeLayout per il drawer da visualizzare -->
     <include layout="@layout/layout_drawer_customheader" />
 
-</it.neokree.materialnavigationdrawer.MaterialDrawerLayout>
+</it.neokree.materialnavigationdrawer.util.MaterialDrawerLayout>

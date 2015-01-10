@@ -1,4 +1,4 @@
-package it.neokree.materialnavigationdrawer;
+package it.neokree.materialnavigationdrawer.util;
 
 import android.content.Context;
 import android.support.v4.widget.DrawerLayout;

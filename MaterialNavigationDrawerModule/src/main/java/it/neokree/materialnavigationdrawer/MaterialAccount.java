@@ -4,76 +4,100 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+
+import it.neokree.materialnavigationdrawer.util.Utils;
 
 /**
  * Created by neokree on 11/12/14.
  */
 public class MaterialAccount {
+
+    // datas
+
     private Drawable photo;
     private Drawable background;
     private Drawable circularPhoto;
     private String title;
     private String subTitle;
     private int accountNumber;
+
     private Resources resources;
+    private OnAccountDataLoaded listener;
 
     public static final int FIRST_ACCOUNT = 0;
     public static final int SECOND_ACCOUNT = 1;
     public static final int THIRD_ACCOUNT = 2;
 
-    public MaterialAccount(Resources res,String title, String subTitle, Drawable photo,Bitmap background) {
-        this.photo = photo;
+    // constructors
+
+    public MaterialAccount(Resources res,String title, String subTitle, int photo,Bitmap background) {
         this.title = title;
         this.subTitle = subTitle;
-        this.background = new BitmapDrawable(res,background);
         resources = res;
+
+        // resize and caching bitmap
+        resizePhotoResource.execute(photo);
+        if(background != null)
+            resizeBackgroundBitmap.execute(background);
+
     }
 
-    public MaterialAccount(Resources res,String title, String subTitle, Drawable photo,Drawable background) {
-        this.photo = photo;
+    public MaterialAccount(Resources res,String title, String subTitle, int photo,int background) {
         this.title = title;
         this.subTitle = subTitle;
-        this.background = background;
         resources = res;
+
+        // resize and caching bitmap
+        resizePhotoResource.execute(photo);
+        resizeBackgroundResource.execute(background);
     }
 
-    public MaterialAccount(Resources res,String title, String subTitle, Bitmap photo, Drawable background) {
-        this.photo = new BitmapDrawable(res,photo);;
+    public MaterialAccount(Resources res,String title, String subTitle, Bitmap photo, int background) {
         this.title = title;
         this.subTitle = subTitle;
-        this.background = background;
         resources = res;
+
+        // resize and caching bitmap
+        if(photo != null)
+            resizePhotoBitmap.execute(photo);
+        resizeBackgroundResource.execute(background);
     }
 
     public MaterialAccount(Resources res,String title, String subTitle, Bitmap photo, Bitmap background) {
-        this.photo = new BitmapDrawable(res,photo);
         this.title = title;
         this.subTitle = subTitle;
-        this.background = new BitmapDrawable(res,background);
         resources = res;
+
+        // resize and caching bitmap
+        if(photo != null)
+            resizePhotoBitmap.execute(photo);
+        if (background != null)
+            resizeBackgroundBitmap.execute(background);
     }
 
     // setter
 
-    public void setPhoto(Drawable photo){
-        this.photo = photo;
+    public void setPhoto(int photo){
+        resizePhotoResource.execute(photo);
     }
 
-    public void setPhoto(Resources res,Bitmap photo) {
-        this.photo = new BitmapDrawable(res,photo);
+    public void setPhoto(Bitmap photo) {
+        resizePhotoBitmap.execute(photo);
     }
 
-    public void setBackground(Resources res,Bitmap background) {
-        this.background = new BitmapDrawable(res,background);
+    public void setBackground(Bitmap background) {
+        resizeBackgroundBitmap.execute(background);
     }
 
-    public void setBackground(Drawable background) {
-        this.background = background;
+    public void setBackground(int background) {
+        resizeBackgroundResource.execute(background);
     }
 
     public void setTitle(String title) {
@@ -88,6 +112,10 @@ public class MaterialAccount {
         this.accountNumber = number;
     }
 
+    public void setAccountListener(OnAccountDataLoaded listener) {
+        this.listener = listener;
+    }
+
     // getter
 
     public Drawable getPhoto() {
@@ -99,10 +127,6 @@ public class MaterialAccount {
     }
 
     public Drawable getCircularPhoto() {
-        if (circularPhoto != null) {
-            return circularPhoto;
-        }
-        circularPhoto = getCroppedBitmapDrawable(photo);
         return circularPhoto;
     }
 
@@ -118,41 +142,98 @@ public class MaterialAccount {
         return accountNumber;
     }
 
-    private Bitmap convertToBitmap(Drawable drawable) {
-        Bitmap mutableBitmap;
-        if(drawable.getMinimumHeight() == 0 || drawable.getMinimumWidth() == 0)
-            mutableBitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
-        else
-            mutableBitmap = Bitmap.createBitmap(drawable.getMinimumWidth(), drawable.getMinimumHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(mutableBitmap);
-        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-        drawable.draw(canvas);
+    // custom
 
-        return mutableBitmap;
+    public void recycle() {
+        Utils.recycleDrawable(photo);
+        Utils.recycleDrawable(circularPhoto);
+        Utils.recycleDrawable(background);
     }
 
-    private BitmapDrawable getCroppedBitmapDrawable(Drawable drawable) {
-        Bitmap bitmap = convertToBitmap(drawable);
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
+    public interface OnAccountDataLoaded {
 
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        public void onUserPhotoLoaded(MaterialAccount account);
 
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
-                bitmap.getWidth() / 2, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-        //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
-        //return _bmp;
-        return new BitmapDrawable(resources,output);
+        public void onBackgroundLoaded(MaterialAccount account);
     }
 
+    // asynctasks
 
+    private AsyncTask<Integer,Void, BitmapDrawable> resizePhotoResource = new AsyncTask<Integer, Void, BitmapDrawable>() {
+        @Override
+        protected BitmapDrawable doInBackground(Integer... params) {
+            Point photoSize = Utils.getUserPhotoSize(resources);
+
+            Bitmap photo = Utils.resizeBitmapFromResource(resources,params[0],photoSize.x,photoSize.y);
+
+            circularPhoto = new BitmapDrawable(resources,Utils.getCroppedBitmapDrawable(photo));
+            return new BitmapDrawable(resources,photo);
+        }
+
+        @Override
+        protected void onPostExecute(BitmapDrawable drawable) {
+            photo = drawable;
+
+            if(listener != null)
+                listener.onUserPhotoLoaded(MaterialAccount.this);
+        }
+    };
+    private AsyncTask<Bitmap,Void, BitmapDrawable> resizePhotoBitmap = new AsyncTask<Bitmap, Void, BitmapDrawable>() {
+        @Override
+        protected BitmapDrawable doInBackground(Bitmap... params) {
+            Point photoSize = Utils.getUserPhotoSize(resources);
+
+
+            Bitmap photo = Utils.resizeBitmap(params[0],photoSize.x,photoSize.y);
+            params[0].recycle();
+
+            circularPhoto = new BitmapDrawable(resources,Utils.getCroppedBitmapDrawable(photo));
+            return new BitmapDrawable(resources,photo);
+        }
+
+        @Override
+        protected void onPostExecute(BitmapDrawable drawable) {
+            photo = drawable;
+
+            if(listener != null)
+                listener.onUserPhotoLoaded(MaterialAccount.this);
+        }
+    };
+    private AsyncTask<Integer,Void, BitmapDrawable> resizeBackgroundResource = new AsyncTask<Integer, Void, BitmapDrawable>() {
+        @Override
+        protected BitmapDrawable doInBackground(Integer... params) {
+            Point backSize = Utils.getBackgroundSize(resources);
+
+            Bitmap back = Utils.resizeBitmapFromResource(resources,params[0],backSize.x,backSize.y);
+
+            return new BitmapDrawable(resources,back);
+        }
+
+        @Override
+        protected void onPostExecute(BitmapDrawable drawable) {
+            background = drawable;
+
+            if(listener != null)
+                listener.onBackgroundLoaded(MaterialAccount.this);
+        }
+    };
+    private AsyncTask<Bitmap,Void, BitmapDrawable> resizeBackgroundBitmap = new AsyncTask<Bitmap, Void, BitmapDrawable>() {
+        @Override
+        protected BitmapDrawable doInBackground(Bitmap... params) {
+            Point backSize = Utils.getBackgroundSize(resources);
+
+            Bitmap back = Utils.resizeBitmap(params[0],backSize.x,backSize.y);
+            params[0].recycle();
+
+            return new BitmapDrawable(resources,back);
+        }
+
+        @Override
+        protected void onPostExecute(BitmapDrawable drawable) {
+            background = drawable;
+
+            if(listener != null)
+                listener.onBackgroundLoaded(MaterialAccount.this);
+        }
+    };
 }

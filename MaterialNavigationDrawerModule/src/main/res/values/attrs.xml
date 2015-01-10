@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="fontPath" format="string"/>
+    <attr name="materialFontPath" format="string"/>
 
     <declare-styleable name="MaterialNavigationDrawer">
         <attr name="rippleBackport" format="boolean" />

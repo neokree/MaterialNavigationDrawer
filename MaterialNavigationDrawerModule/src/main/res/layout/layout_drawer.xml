@@ -14,7 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/separator"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:overScrollMode="never">
 
@@ -29,8 +31,10 @@
                 android:id="@+id/user_cover_switcher"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentBottom="false"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:scaleType="fitXY"/>
 
             <ImageView
@@ -38,7 +42,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/userSpace"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
                 android:src="#c6c6c6"
                 android:scaleType="fitXY" />
@@ -48,8 +54,10 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="@dimen/photoMarginTop" />
 
             <ImageView
@@ -57,8 +65,10 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_alignTop="@+id/user_photo"
-                android:layout_marginRight="16dp"/>
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"/>
 
             <ImageView
                 android:id="@+id/user_photo_3"
@@ -67,13 +77,15 @@
                 android:layout_alignTop="@+id/user_photo_2"
                 android:layout_toLeftOf="@+id/user_photo_2"
                 android:layout_toStartOf="@+id/user_photo_2"
-                android:layout_marginRight="16dp" />
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"/>
 
             <LinearLayout
                 android:id="@+id/sections"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_below="@+id/user_cover"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
@@ -87,7 +99,9 @@
                 android:layout_height="56dp"
                 android:layout_alignBottom="@+id/user_cover"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
                 android:layout_marginBottom="8dp">
@@ -97,18 +111,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
                     android:textSize="14sp"
                     android:textColor="#FFFFFF"
-                    fontPath="fonts/Roboto-Medium.ttf" />
+                    materialFontPath="fonts/Roboto-Medium.ttf" />
 
                 <TextView
                     android:id="@+id/user_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
                     android:textSize="14sp"
                     android:textColor="#FFFFFF"
-                    fontPath="fonts/Roboto-Regular.ttf"/>
+                    materialFontPath="fonts/Roboto-Regular.ttf"/>
 
             </LinearLayout>
 
@@ -128,7 +144,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:orientation="vertical" >
 
     </LinearLayout>
