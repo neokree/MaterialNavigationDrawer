@@ -476,7 +476,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         title = section.getTitle();
         currentSection = section;
         section.select();
-        setFragment((Fragment) section.getTargetFragment(), section.getTitle(), null);
+        setFragment((Fragment) section.getTargetFragment(), section.getTitle(), null, savedInstanceState);
 
         // learning pattern
         if(learningPattern) {
@@ -613,7 +613,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
      * @param title
      * @param oldFragment
      */
-    public void setFragment(Fragment fragment,String title,Fragment oldFragment) {
+    public void setFragment(Fragment fragment,String title,Fragment oldFragment, Bundle savedInstanceState) {
         // si setta il titolo
         setTitle(title);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
@@ -622,7 +622,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             if(oldFragment != null && oldFragment != fragment)
                 ft.remove((android.support.v4.app.Fragment) oldFragment);
 
-            ft.replace(R.id.frame_container, (android.support.v4.app.Fragment) fragment).commit();
+            if(savedInstanceState == null)
+                ft.replace(R.id.frame_container, (android.support.v4.app.Fragment) fragment).commit();
         }
         else if (fragment instanceof android.app.Fragment) {
             if (oldFragment instanceof android.support.v4.app.Fragment)
@@ -633,7 +634,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             if (oldFragment != null && fragment != oldFragment)
                 ft.remove((android.app.Fragment) oldFragment);
 
-            ft.replace(R.id.frame_container, (android.app.Fragment) fragment).commit();
+            if(savedInstanceState == null)
+                ft.replace(R.id.frame_container, (android.app.Fragment) fragment).commit();
         }
         else if(fragment instanceof android.support.v4.app.Fragment) {
             if(oldFragment instanceof android.app.Fragment)
@@ -643,7 +645,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             if(oldFragment != null && oldFragment != fragment)
                 ft.remove((android.support.v4.app.Fragment) oldFragment);
 
-            ft.replace(R.id.frame_container, (android.support.v4.app.Fragment) fragment).commit();
+            if(savedInstanceState == null)
+                ft.replace(R.id.frame_container, (android.support.v4.app.Fragment) fragment).commit();
         }
         else
             throw new RuntimeException("Fragment must be android.app.Fragment or android.support.v4.app.Fragment");
@@ -832,7 +835,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
         switch (section.getTarget()) {
             case MaterialSection.TARGET_FRAGMENT:
-                setFragment((Fragment) section.getTargetFragment(), section.getTitle(), (Fragment) currentSection.getTargetFragment());
+                setFragment((Fragment) section.getTargetFragment(), section.getTitle(), (Fragment) currentSection.getTargetFragment(), null);
 
                 changeToolbarColor(section);
                 break;
