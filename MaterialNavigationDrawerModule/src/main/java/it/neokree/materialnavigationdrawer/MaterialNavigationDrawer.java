@@ -470,13 +470,13 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                 section = sectionList.get(0);
             }
 
-
-            changeToolbarColor(section);
         }
         title = section.getTitle();
         currentSection = section;
         section.select();
         setFragment((Fragment) section.getTargetFragment(), section.getTitle(), null);
+
+        changeToolbarColor(section);
 
         // learning pattern
         if(learningPattern) {
