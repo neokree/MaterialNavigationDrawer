@@ -10,6 +10,8 @@ buildscript {
  }
 
 android {
+    signingConfigs {
+    }
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
     defaultConfig {
@@ -24,6 +26,8 @@ android {
         }
     }
     productFlavors {
+    }
+    compileOptions {
     }
 }
 
