@@ -1186,4 +1186,33 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
         return findAccountNumber(position);
     }
+
+    /**
+     * Get all sections that matches the argument
+     * @param title
+     * @return
+     */
+    public List<MaterialSection> getSections(String title) {
+        return getSections(sectionList, title);
+    }
+
+    /**
+     * Get all sections that matches the argument
+     * @param title
+     * @return
+     */
+    public List<MaterialSection> getBottomSections(String title) {
+        return getSections(bottomSectionList, title);
+    }
+
+    private List<MaterialSection> getSections(List<MaterialSection> sections, String title) {
+        List<MaterialSection> zections = new ArrayList<>();
+        for (MaterialSection materialSection : sections) {
+            if (materialSection.getTitle().equalsIgnoreCase(title)) {
+                zections.add(materialSection);
+            }
+        }
+
+        return zections;
+    }
 }
