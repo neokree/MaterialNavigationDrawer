@@ -1,10 +1,12 @@
 package it.neokree.materialnavigationdrawer.util;
 
+import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
@@ -13,6 +15,12 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
+import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.widget.ImageView;
+
+import java.util.Locale;
 
 /**
  * Class containing some static utility methods.
@@ -118,4 +126,23 @@ public class Utils {
             bitmapDrawable.getBitmap().recycle();
         }
     }
+
+    public static boolean isRTL() {
+        Locale defLocale = Locale.getDefault();
+        final int directionality = Character.getDirectionality(defLocale.getDisplayName().charAt(0));
+        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT ||
+                directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
+    }
+
+    public static void setAlpha(View v, float alpha) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            v.setAlpha(alpha);
+        } else {
+            AlphaAnimation animation = new AlphaAnimation(alpha, alpha);
+            animation.setDuration(0);
+            animation.setFillAfter(true);
+            v.startAnimation(animation);
+        }
+    }
+
 }

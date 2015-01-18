@@ -1,17 +1,16 @@
-package it.neokree.materialnavigationdrawer;
+package it.neokree.materialnavigationdrawer.elements;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.view.View;
 
+import it.neokree.materialnavigationdrawer.elements.listeners.MaterialSectionListener;
 import it.neokree.materialnavigationdrawer.util.Utils;
 
 /**
@@ -27,9 +26,13 @@ public class MaterialAccount {
     private String title;
     private String subTitle;
     private int accountNumber;
+    private String notifications;
+
+    private boolean hasNotifications;
 
     private Resources resources;
     private OnAccountDataLoaded listener;
+    private MaterialSection sectionView;
 
     public static final int FIRST_ACCOUNT = 0;
     public static final int SECOND_ACCOUNT = 1;
@@ -37,10 +40,10 @@ public class MaterialAccount {
 
     // constructors
 
-    public MaterialAccount(Resources res,String title, String subTitle, int photo,Bitmap background) {
+    public MaterialAccount(Resources resources,String title, String subTitle, int photo,Bitmap background) {
         this.title = title;
         this.subTitle = subTitle;
-        resources = res;
+        this.resources = resources;
 
         // resize and caching bitmap
         resizePhotoResource.execute(photo);
@@ -49,20 +52,20 @@ public class MaterialAccount {
 
     }
 
-    public MaterialAccount(Resources res,String title, String subTitle, int photo,int background) {
+    public MaterialAccount(Resources resources,String title, String subTitle, int photo,int background) {
         this.title = title;
         this.subTitle = subTitle;
-        resources = res;
+        this.resources = resources;
 
         // resize and caching bitmap
         resizePhotoResource.execute(photo);
         resizeBackgroundResource.execute(background);
     }
 
-    public MaterialAccount(Resources res,String title, String subTitle, Bitmap photo, int background) {
+    public MaterialAccount(Resources resources,String title, String subTitle, Bitmap photo, int background) {
         this.title = title;
         this.subTitle = subTitle;
-        resources = res;
+        this.resources = resources;
 
         // resize and caching bitmap
         if(photo != null)
@@ -70,10 +73,10 @@ public class MaterialAccount {
         resizeBackgroundResource.execute(background);
     }
 
-    public MaterialAccount(Resources res,String title, String subTitle, Bitmap photo, Bitmap background) {
+    public MaterialAccount(Resources resources,String title, String subTitle, Bitmap photo, Bitmap background) {
         this.title = title;
         this.subTitle = subTitle;
-        resources = res;
+        this.resources = resources;
 
         // resize and caching bitmap
         if(photo != null)
@@ -116,6 +119,21 @@ public class MaterialAccount {
         this.listener = listener;
     }
 
+    public MaterialAccount setNotifications(int number) {
+        hasNotifications = true;
+        notifications = String.valueOf(number);
+
+        if(number >= 100) {
+            notifications = "99+";
+        }
+        if(number < 0) {
+            notifications = "0";
+        }
+
+        return this;
+
+    }
+
     // getter
 
     public Drawable getPhoto() {
@@ -140,6 +158,27 @@ public class MaterialAccount {
 
     public int getAccountNumber() {
         return accountNumber;
+    }
+
+    public View getSectionView(Context ctx, Typeface font, MaterialSectionListener listener, boolean rippleSupport,int position) {
+        if(sectionView == null) {
+            sectionView = new MaterialSection(ctx,MaterialSection.ICON_40DP,rippleSupport,MaterialSection.TARGET_LISTENER);
+            sectionView.useRealColor();
+        }
+
+        // set dei dati passati
+        sectionView.setTypeface(font);
+        sectionView.setOnClickListener(listener);
+
+        // set dei dati dell'account
+        sectionView.setIcon(getCircularPhoto());
+        sectionView.setTitle(getTitle());
+        if(hasNotifications) {
+            sectionView.setNotificationsText(notifications);
+        }
+        sectionView.setPosition(position);
+
+        return sectionView.getView();
     }
 
     // custom

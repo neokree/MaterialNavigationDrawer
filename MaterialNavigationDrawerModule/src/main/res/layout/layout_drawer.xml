@@ -113,8 +113,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginStart="16dp"
                     android:textSize="14sp"
-                    android:textColor="#FFFFFF"
-                    materialFontPath="fonts/Roboto-Medium.ttf" />
+                    android:textColor="#FFFFFF" />
 
                 <TextView
                     android:id="@+id/user_email"
@@ -123,20 +122,22 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginStart="16dp"
                     android:textSize="14sp"
-                    android:textColor="#FFFFFF"
-                    materialFontPath="fonts/Roboto-Regular.ttf"/>
+                    android:textColor="#FFFFFF" />
 
             </LinearLayout>
 
+            <ImageButton
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:id="@+id/user_switcher"
+                android:background="@null"
+                android:layout_alignBottom="@+id/user_cover"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="8dp" />
+
         </RelativeLayout>
     </ScrollView>
-
-    <View
-        android:id="@+id/separator"
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:layout_above="@+id/bottom_sections"
-        android:background="#e0e0e0" />
 
     <LinearLayout
         android:id="@+id/bottom_sections"

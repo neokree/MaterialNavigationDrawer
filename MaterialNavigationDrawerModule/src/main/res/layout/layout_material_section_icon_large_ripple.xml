@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="48dp">
+    android:layout_height="48dp"
+    tools:ignore="MissingPrefix">
+
+    <at.markushi.ui.RevealColorView
+        android:id="@+id/section_ripple"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fafafa" />
 
     <ImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:id="@+id/section_icon"
         android:alpha="0.54"
         android:layout_marginLeft="16dp"

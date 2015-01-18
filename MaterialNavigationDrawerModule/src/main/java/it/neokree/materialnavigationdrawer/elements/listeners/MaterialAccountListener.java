@@ -1,4 +1,6 @@
-package it.neokree.materialnavigationdrawer;
+package it.neokree.materialnavigationdrawer.elements.listeners;
+
+import it.neokree.materialnavigationdrawer.elements.MaterialAccount;
 
 /**
  * Created by neokree on 11/12/14.
