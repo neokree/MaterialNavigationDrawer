@@ -24,6 +24,7 @@ public class MaterialAccount {
     private Drawable photo;
     private Drawable background;
     private Drawable circularPhoto;
+    private int backgroundColor;
     private String title;
     private String subTitle;
     private int accountNumber;
@@ -49,14 +50,27 @@ public class MaterialAccount {
 
     }
 
-    public MaterialAccount(Resources res,String title, String subTitle, int photo,int background) {
+    /**
+     * Create an account
+     * @param res
+     * @param title
+     * @param subTitle
+     * @param photo
+     * @param background Background, may be a Resource or a Color
+     * @param useBackgroundHasColor True if the background parameter is a Color. Default is false.
+     */
+    public MaterialAccount(Resources res, String title, String subTitle, int photo, int background, boolean useBackgroundHasColor) {
         this.title = title;
         this.subTitle = subTitle;
         resources = res;
 
         // resize and caching bitmap
         resizePhotoResource.execute(photo);
-        resizeBackgroundResource.execute(background);
+        if (useBackgroundHasColor) {
+            this.backgroundColor = background;
+        } else {
+            resizeBackgroundResource.execute(background);
+        }
     }
 
     public MaterialAccount(Resources res,String title, String subTitle, Bitmap photo, int background) {
@@ -92,12 +106,20 @@ public class MaterialAccount {
         resizePhotoBitmap.execute(photo);
     }
 
+    public void setPhoto(Drawable photo) {
+        this.photo = photo;
+    }
+
     public void setBackground(Bitmap background) {
         resizeBackgroundBitmap.execute(background);
     }
 
     public void setBackground(int background) {
         resizeBackgroundResource.execute(background);
+    }
+
+    public void setBackground(Drawable background) {
+        this.background = background;
     }
 
     public void setTitle(String title) {
@@ -124,6 +146,14 @@ public class MaterialAccount {
 
     public Drawable getBackground() {
         return background;
+    }
+
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public boolean hasBackgroundColor() {
+        return this.backgroundColor != 0;
     }
 
     public Drawable getCircularPhoto() {

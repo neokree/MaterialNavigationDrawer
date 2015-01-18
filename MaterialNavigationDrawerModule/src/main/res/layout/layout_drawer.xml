@@ -46,7 +46,6 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
-                android:src="#c6c6c6"
                 android:scaleType="fitXY" />
 
             <ImageView

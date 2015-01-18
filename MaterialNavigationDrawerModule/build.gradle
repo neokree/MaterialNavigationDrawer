@@ -1,6 +1,17 @@
 apply plugin: 'com.android.library'
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.0.0'
+    }
+ }
+
 android {
+    signingConfigs {
+    }
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
     defaultConfig {
@@ -16,6 +27,8 @@ android {
     }
     productFlavors {
     }
+    compileOptions {
+    }
 }
 
 dependencies {
@@ -23,3 +36,10 @@ dependencies {
     compile 'uk.co.chrisjenx:calligraphy:1.2.0'
     compile 'com.github.markushi:android-ui:1.2'
 }
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+

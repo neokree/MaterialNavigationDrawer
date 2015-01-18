@@ -470,13 +470,13 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                 section = sectionList.get(0);
             }
 
-
-            changeToolbarColor(section);
         }
         title = section.getTitle();
         currentSection = section;
         section.select();
         setFragment((Fragment) section.getTargetFragment(), section.getTitle(), null, savedInstanceState);
+
+        changeToolbarColor(section);
 
         // learning pattern
         if(learningPattern) {
@@ -993,6 +993,19 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         usercover.setImageDrawable(background);
     }
 
+    public void setDrawerBackground(int background) {
+        usercover.setBackgroundColor(background);
+    }
+
+    public void setSectionDrawerBackgroungColor(int background) {
+        drawer.setBackgroundColor(background);
+    }
+
+    public void setBottomSeparatorColor(int color) {
+        View separator = (View) this.findViewById(R.id.separator);
+        separator.setBackgroundColor(color);
+    }
+
     public void addSection(MaterialSection section) {
         section.setPosition(sectionList.size());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)(48 * density));
@@ -1008,8 +1021,12 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     }
 
     public void addDivisor() {
+        addDivisor(Color.parseColor("#e0e0e0"));
+    }
+
+    public void addDivisor(int color) {
         View view = new View(this);
-        view.setBackgroundColor(Color.parseColor("#e0e0e0"));
+        view.setBackgroundColor(color);
         // height 1 px
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,1);
         params.setMargins(0,(int) (8 * density), 0 , (int) (8 * density));
@@ -1056,9 +1073,13 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                 this.setSecondAccountPhoto(findAccountNumber(MaterialAccount.SECOND_ACCOUNT).getCircularPhoto());
             case 1:
                 this.setFirstAccountPhoto(currentAccount.getCircularPhoto());
-                this.setDrawerBackground(currentAccount.getBackground());
                 this.setUsername(currentAccount.getTitle());
                 this.setUserEmail(currentAccount.getSubTitle());
+                if (currentAccount.hasBackgroundColor()) {
+                    this.setDrawerBackground(currentAccount.getBackgroundColor());
+                } else {
+                    this.setDrawerBackground(currentAccount.getBackground());
+                }
             default:
         }
     }
@@ -1188,5 +1209,34 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             throw  new RuntimeException("Account Index Overflow");
 
         return findAccountNumber(position);
+    }
+
+    /**
+     * Get all sections that matches the argument
+     * @param title
+     * @return
+     */
+    public List<MaterialSection> getSections(String title) {
+        return getSections(sectionList, title);
+    }
+
+    /**
+     * Get all sections that matches the argument
+     * @param title
+     * @return
+     */
+    public List<MaterialSection> getBottomSections(String title) {
+        return getSections(bottomSectionList, title);
+    }
+
+    private List<MaterialSection> getSections(List<MaterialSection> sections, String title) {
+        List<MaterialSection> zections = new ArrayList<>();
+        for (MaterialSection materialSection : sections) {
+            if (materialSection.getTitle().equalsIgnoreCase(title)) {
+                zections.add(materialSection);
+            }
+        }
+
+        return zections;
     }
 }
