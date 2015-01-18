@@ -301,7 +301,6 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                         }
                     }
 
-
                     accountSwitcher = false;
                 }
 
