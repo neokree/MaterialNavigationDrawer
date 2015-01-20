@@ -1,12 +1,12 @@
-package it.neokree.example;
+package it.neokree.example.mockedActivity;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import it.neokree.example.R;
+
 
 /**
  * Created by neokree on 12/12/14.

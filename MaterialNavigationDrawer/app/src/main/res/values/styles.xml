@@ -1,43 +1,143 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="MyTheme" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar.TranslucentKitKatStatusBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">#8bc34a</item>
-        <item name="colorPrimaryDark">#558b2f</item>
-        <item name="colorAccent">#FFFFFF</item>
-    </style>
+    <!-- Light Themes-->
 
-    <style name="RippleTheme" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar.TranslucentKitKatStatusBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">#8bc34a</item>
-        <item name="colorPrimaryDark">#558b2f</item>
-        <item name="colorAccent">#FFFFFF</item>
-        <item name="rippleBackport">true</item>
-    </style>
+        <!-- Mocked Account -->
+        <style name="MockedAccountLight" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar">
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="singleAccount">true</item><!-- Remove the change account button -->
+        </style>
 
-    <style name="NoHeaderTheme" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">#8bc34a</item>
-        <item name="colorPrimaryDark">#558b2f</item>
-        <item name="colorAccent">#FFFFFF</item>
-        <item name="drawerType">@integer/DRAWERTYPE_NO_HEADER</item>
-    </style>
+        <!-- Accounts -->
+        <style name="AccountsLight" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar">
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+        </style>
 
-    <style name="ImageHeaderTheme" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">#8bc34a</item>
-        <item name="colorPrimaryDark">#558b2f</item>
-        <item name="colorAccent">#FFFFFF</item>
-        <item name="drawerType">@integer/DRAWERTYPE_IMAGE</item>
-    </style>
+        <!-- Drawer Header Image -->
+        <style name="ImageHeaderLight" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar">
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="drawerType">@integer/DRAWERTYPE_IMAGE</item>
+        </style>
 
-    <style name="CustomHeader" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar.TranslucentKitKatStatusBar">
-        <!-- Customize your theme here. -->
+        <!-- No Drawer Header -->
+        <style name="NoHeaderLight" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar">
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="drawerType">@integer/DRAWERTYPE_NO_HEADER</item>
+        </style>
+
+        <!-- Custom Drawer Header -->
+        <style name="CustomHeaderLight" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar">
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="drawerType">@integer/DRAWERTYPE_CUSTOM</item>
+        </style>
+
+    <!-- Dark Themes-->
+
+        <!-- Mocked Account -->
+        <style name="MockedAccountDark" parent="MaterialNavigationDrawerTheme">
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="singleAccount">true</item><!-- Remove the change account button -->
+        </style>
+
+        <!-- Accounts -->
+        <style name="AccountsDark" parent="MaterialNavigationDrawerTheme">
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+        </style>
+
+        <!-- Drawer Header Image -->
+        <style name="ImageHeaderDark" parent="MaterialNavigationDrawerTheme">
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="drawerType">@integer/DRAWERTYPE_IMAGE</item>
+        </style>
+
+        <!-- No Drawer Header -->
+        <style name="NoHeaderDark" parent="MaterialNavigationDrawerTheme">
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="drawerType">@integer/DRAWERTYPE_NO_HEADER</item>
+        </style>
+
+        <!-- Custom Drawer Header -->
+        <style name="CustomHeaderDark" parent="MaterialNavigationDrawerTheme">
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="drawerType">@integer/DRAWERTYPE_CUSTOM</item>
+        </style>
+
+    <!-- Functionality Themes-->
+    <!-- I used DRAWERTYPE_NO_HEADER only for get a simple tutorial, you can use any type of drawer obviously -->
+
+        <!-- Unique Toolbar Color -->
+        <style name="UniqueToolbarColor" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar" >
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="drawerType">@integer/DRAWERTYPE_NO_HEADER</item>
+            <item name="uniqueToolbarColor">true</item>
+        </style>
+
+        <!-- Ripple Backport support -->
+        <style name="RippleBackport" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar" >
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="drawerType">@integer/DRAWERTYPE_NO_HEADER</item>
+            <item name="rippleBackport">true</item>
+        </style>
+
+        <!-- Multipane Support for tablets -->
+        <style name="MultiPane" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar" >
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="multipaneSupport">true</item>
+        </style>
+
+        <!-- custom section under account list -->
+        <style name="CustomAccountSection" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar">
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+        </style>
+
+        <!-- Kitkat Traslucent Status bar -->
+        <style name="KitkatStatusBar" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar.TranslucentKitKatStatusBar">
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+        </style>
+
+        <!-- Master / Child Example -->
+        <style name="MasterChild" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar">
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="drawerType">@integer/DRAWERTYPE_IMAGE</item>
+        </style>
+
+    <!-- Test Theme -->
+    <style name="TestTheme" parent="MaterialNavigationDrawerTheme">
         <item name="colorPrimary">#8bc34a</item>
         <item name="colorPrimaryDark">#558b2f</item>
         <item name="colorAccent">#FFFFFF</item>
-        <item name="drawerType">@integer/DRAWERTYPE_CUSTOM</item>
     </style>
 
 </resources>

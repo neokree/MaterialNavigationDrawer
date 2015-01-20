@@ -44,6 +44,9 @@ public class MaterialDrawerLayout extends DrawerLayout {
     public void requestDisallowInterceptTouchEvent(final boolean disallowIntercept) {
         super.requestDisallowInterceptTouchEvent(disallowIntercept);
 
-        multipaneSupport = disallowIntercept;
+        if(Utils.isTablet(this.getResources())) {
+            // custom implementation only for tablets
+            multipaneSupport = disallowIntercept;
+        }
     }
 }

@@ -15,6 +15,7 @@
         <attr name="drawerType" format="integer" /><!-- Tipologia del drawer -->
         <attr name="uniqueToolbarColor" format="boolean" /><!-- La toolbar non cambia mai di colore -->
         <attr name="singleAccount" format="boolean" /><!-- utente singolo (senza pulsante di cambio) -->
+        <attr name="multipaneSupport" format="boolean" />
         <attr name="drawerColor" format="color" /><!-- Colore del drawer -->
         <attr name="sectionStyle" format="reference" />
         <attr name="subheaderStyle" format="reference"/>

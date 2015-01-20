@@ -276,7 +276,6 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
 
                         @Override
                         public void onAnimationCancel(Animator animation) {
-                            onAnimationEnd(animation);
                         }
 
                         @Override

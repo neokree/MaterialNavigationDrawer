@@ -41,6 +41,10 @@ public class Utils {
 
     }
 
+    public static boolean isTablet(Resources res) {
+        return res.getConfiguration().smallestScreenWidthDp >= 600;
+    }
+
     public static Point getUserPhotoSize(Resources res) {
         int size = (int) (64 * res.getDisplayMetrics().density);
 

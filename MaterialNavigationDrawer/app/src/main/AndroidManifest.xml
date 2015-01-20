@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     package="it.neokree.example">
 
     <application
@@ -19,20 +18,28 @@
             </intent-filter>
 
         </activity>
-        <activity
-            android:name=".NavigationDrawerWithAccountActivity"
-            android:theme="@style/MyTheme"/>
-        <activity android:name=".NavigationDrawerTest" android:theme="@style/MyTheme" />
-        <activity android:name=".NavigationDrawerActivityMultipane" android:theme="@style/MyTheme" />
-        <activity android:name=".NavigationDrawerActivityRipple" android:theme="@style/RippleTheme" />
-        <activity android:name=".NavigationDrawerImageHeaderActivity" android:theme="@style/ImageHeaderTheme" />
-        <activity android:name=".NavigationDrawerNoHeaderActivity" android:theme="@style/NoHeaderTheme" />
-        <activity android:name=".NavigationDrawerCustomHeaderActivity" android:theme="@style/CustomHeader" />
-        <activity android:name="it.neokree.example.Settings" >
 
-        </activity>
-        <activity android:name="it.neokree.example.Profile" />
+        <activity android:name=".mockedActivity.Settings" />
+        <activity android:name=".mockedActivity.Profile" />
 
+        <activity android:name=".dark.Accounts" android:theme="@style/AccountsDark" />
+        <activity android:name=".dark.MockedAccount" android:theme="@style/MockedAccountDark" />
+        <activity android:name=".dark.ImageDrawerHeader" android:theme="@style/ImageHeaderDark" />
+        <activity android:name=".dark.NoDrawerHeader" android:theme="@style/NoHeaderDark" />
+        <activity android:name=".dark.CustomDrawerHeader" android:theme="@style/CustomHeaderDark" />
+
+        <activity android:name=".light.Accounts" android:theme="@style/AccountsLight" />
+        <activity android:name=".light.MockedAccount" android:theme="@style/MockedAccountLight" />
+        <activity android:name=".light.ImageDrawerHeader" android:theme="@style/ImageHeaderLight" />
+        <activity android:name=".light.NoDrawerHeader" android:theme="@style/NoHeaderLight" />
+        <activity android:name=".light.CustomDrawerHeader" android:theme="@style/CustomHeaderLight" />
+
+        <activity android:name=".functionalities.CustomAccountSection" android:theme="@style/CustomAccountSection" />
+        <activity android:name=".functionalities.KitkatStatusBar" android:theme="@style/KitkatStatusBar" />
+        <activity android:name=".functionalities.MultiPane" android:theme="@style/MultiPane" />
+        <activity android:name=".functionalities.RippleBackport" android:theme="@style/RippleBackport" />
+        <activity android:name=".functionalities.UniqueToolbarColor" android:theme="@style/UniqueToolbarColor" />
+        <activity android:name=".functionalities.master_child.MasterChildActivity" android:theme="@style/MasterChild" />
 
     </application>
 

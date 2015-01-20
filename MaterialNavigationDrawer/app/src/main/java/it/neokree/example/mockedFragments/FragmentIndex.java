@@ -1,7 +1,5 @@
-package it.neokree.example;
+package it.neokree.example.mockedFragments;
 
-import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -12,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import it.neokree.materialnavigationdrawer.MaterialNavigationDrawer;
 
 /**
  * Created by neokree on 24/11/14.
@@ -25,7 +22,6 @@ public class FragmentIndex extends Fragment {
         text.setText("Section");
         text.setGravity(Gravity.CENTER);
         return text;
-
     }
 
 }

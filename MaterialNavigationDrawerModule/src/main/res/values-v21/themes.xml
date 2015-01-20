@@ -8,6 +8,7 @@
         <item name="rippleBackport">true</item>
         <item name="uniqueToolbarColor">false</item>
         <item name="singleAccount">false</item>
+        <item name="multipaneSupport">false</item>
         <item name="sectionStyle">@style/MaterialSectionTheme</item>
         <item name="subheaderStyle">@style/MaterialSubheaderTheme</item>
     </style>
@@ -19,6 +20,7 @@
         <item name="rippleBackport">true</item>
         <item name="uniqueToolbarColor">false</item>
         <item name="singleAccount">false</item>
+        <item name="multipaneSupport">false</item>
         <item name="sectionStyle">@style/MaterialSectionTheme.Light</item>
         <item name="subheaderStyle">@style/MaterialSubheaderTheme.Light</item>
     </style>
@@ -32,6 +34,7 @@
         <item name="rippleBackport">true</item>
         <item name="uniqueToolbarColor">false</item>
         <item name="singleAccount">false</item>
+        <item name="multipaneSupport">false</item>
         <item name="sectionStyle">@style/MaterialSectionTheme.Light</item>
         <item name="subheaderStyle">@style/MaterialSubheaderTheme.Light</item>
     </style>

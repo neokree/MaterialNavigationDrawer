@@ -1,8 +1,10 @@
-package it.neokree.example;
+package it.neokree.example.mockedActivity;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.ActionBarActivity;
+
+import it.neokree.example.R;
 
 /**
  * Created by neokree on 24/11/14.
