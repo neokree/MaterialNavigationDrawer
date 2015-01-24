@@ -133,11 +133,11 @@ You need some examples? See the [example project](https://github.com/neokree/Mat
 [Calligraphy](https://github.com/chrisjenx/Calligraphy) <br>
 [Android-UI](https://github.com/markushi/android-ui)
 
-<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen1.jpg" alt="screenshot" width="300px" height="auto" />
-<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen2.jpg" alt="screenshot" width="300px" height="auto" />
-<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen3.jpg" alt="screenshot" width="300px" height="auto" />
-<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen4.jpg" alt="screenshot" width="300px" height="auto" />
-<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen6.jpg" alt="screenshot" width="300px" height="auto" />
-<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen7.jpg" alt="screenshot" width="300px" height="auto" />
-<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen8.jpg" alt="screenshot" width="300px" height="auto" />
-<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/screen5.jpg" alt="screenshot" width="600px" height="auto" />
+<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/art/screen1.jpg" alt="screenshot" width="300px" height="auto" />
+<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/art/screen2.jpg" alt="screenshot" width="300px" height="auto" />
+<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/art/screen3.jpg" alt="screenshot" width="300px" height="auto" />
+<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/art/screen4.jpg" alt="screenshot" width="300px" height="auto" />
+<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/art/screen6.jpg" alt="screenshot" width="300px" height="auto" />
+<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/art/screen7.jpg" alt="screenshot" width="300px" height="auto" />
+<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/art/screen8.jpg" alt="screenshot" width="300px" height="auto" />
+<img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/art/screen5.jpg" alt="screenshot" width="600px" height="auto" />
