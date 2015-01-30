@@ -1577,6 +1577,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
     public abstract void init(Bundle savedInstanceState);
 
+
     public void onHomeAsUpSelected() {
 
     }

@@ -152,12 +152,20 @@ public class MaterialSection<Fragment> implements View.OnTouchListener {
             textColor = values.getColor(R.styleable.MaterialSection_sectionColorText,0x000);
             notificationColor = values.getColor(R.styleable.MaterialSection_sectionColorNotification,0x000);
 
+            // set text color into the view
             if(textColor != 0x000) {
                 text.setTextColor(textColor);
             }
             if(notificationColor != 0x000) {
                 notifications.setTextColor(notificationColor);
             }
+
+            // set background color into the view
+            if(!rippleAnimationSupport())
+                view.setBackgroundColor(colorUnpressed);
+            else
+                ripple.reveal(0,0,colorUnpressed,0,0,null);
+
         }
         finally {
             values.recycle();
