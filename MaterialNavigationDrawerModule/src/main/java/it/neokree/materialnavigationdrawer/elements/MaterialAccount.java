@@ -46,9 +46,9 @@ public class MaterialAccount {
         this.resources = resources;
 
         // resize and caching bitmap
-        resizePhotoResource.execute(photo);
+        new ResizePhotoResource().execute(photo);
         if(background != null)
-            resizeBackgroundBitmap.execute(background);
+            new ResizeBackgroundBitmap().execute(background);
 
     }
 
@@ -58,8 +58,8 @@ public class MaterialAccount {
         this.resources = resources;
 
         // resize and caching bitmap
-        resizePhotoResource.execute(photo);
-        resizeBackgroundResource.execute(background);
+        new ResizePhotoResource().execute(photo);
+        new ResizeBackgroundResource().execute(background);
     }
 
     public MaterialAccount(Resources resources,String title, String subTitle, Bitmap photo, int background) {
@@ -69,8 +69,8 @@ public class MaterialAccount {
 
         // resize and caching bitmap
         if(photo != null)
-            resizePhotoBitmap.execute(photo);
-        resizeBackgroundResource.execute(background);
+            new ResizePhotoBitmap().execute(photo);
+        new ResizeBackgroundResource().execute(background);
     }
 
     public MaterialAccount(Resources resources,String title, String subTitle, Bitmap photo, Bitmap background) {
@@ -80,27 +80,27 @@ public class MaterialAccount {
 
         // resize and caching bitmap
         if(photo != null)
-            resizePhotoBitmap.execute(photo);
+            new ResizePhotoBitmap().execute(photo);
         if (background != null)
-            resizeBackgroundBitmap.execute(background);
+            new ResizeBackgroundBitmap().execute(background);
     }
 
     // setter
 
     public void setPhoto(int photo){
-        resizePhotoResource.execute(photo);
+        new ResizePhotoResource().execute(photo);
     }
 
     public void setPhoto(Bitmap photo) {
-        resizePhotoBitmap.execute(photo);
+        new ResizePhotoBitmap().execute(photo);
     }
 
     public void setBackground(Bitmap background) {
-        resizeBackgroundBitmap.execute(background);
+        new ResizeBackgroundBitmap().execute(background);
     }
 
     public void setBackground(int background) {
-        resizeBackgroundResource.execute(background);
+        new ResizeBackgroundResource().execute(background);
     }
 
     public void setTitle(String title) {
@@ -198,6 +198,92 @@ public class MaterialAccount {
 
     // asynctasks
 
+    private class ResizePhotoResource extends  AsyncTask<Integer, Void, BitmapDrawable> {
+
+        @Override
+        protected BitmapDrawable doInBackground(Integer... params) {
+            Point photoSize = Utils.getUserPhotoSize(resources);
+
+            Bitmap photo = Utils.resizeBitmapFromResource(resources,params[0],photoSize.x,photoSize.y);
+
+            circularPhoto = new BitmapDrawable(resources,Utils.getCroppedBitmapDrawable(photo));
+            return new BitmapDrawable(resources,photo);
+        }
+
+        @Override
+        protected void onPostExecute(BitmapDrawable drawable) {
+            photo = drawable;
+
+            if(listener != null)
+                listener.onUserPhotoLoaded(MaterialAccount.this);
+        }
+    }
+
+    private class ResizePhotoBitmap extends AsyncTask<Bitmap, Void, BitmapDrawable> {
+
+        @Override
+        protected BitmapDrawable doInBackground(Bitmap... params) {
+            Point photoSize = Utils.getUserPhotoSize(resources);
+
+
+            Bitmap photo = Utils.resizeBitmap(params[0],photoSize.x,photoSize.y);
+            params[0].recycle();
+
+            circularPhoto = new BitmapDrawable(resources,Utils.getCroppedBitmapDrawable(photo));
+            return new BitmapDrawable(resources,photo);
+        }
+
+        @Override
+        protected void onPostExecute(BitmapDrawable drawable) {
+            photo = drawable;
+
+            if(listener != null)
+                listener.onUserPhotoLoaded(MaterialAccount.this);
+        }
+    }
+
+    private class ResizeBackgroundResource extends AsyncTask<Integer, Void, BitmapDrawable> {
+        @Override
+        protected BitmapDrawable doInBackground(Integer... params) {
+            Point backSize = Utils.getBackgroundSize(resources);
+
+            Bitmap back = Utils.resizeBitmapFromResource(resources,params[0],backSize.x,backSize.y);
+
+            return new BitmapDrawable(resources,back);
+        }
+
+        @Override
+        protected void onPostExecute(BitmapDrawable drawable) {
+            background = drawable;
+
+            if(listener != null)
+                listener.onBackgroundLoaded(MaterialAccount.this);
+        }
+    }
+
+    private class ResizeBackgroundBitmap extends AsyncTask<Bitmap, Void, BitmapDrawable> {
+
+        @Override
+        protected BitmapDrawable doInBackground(Bitmap... params) {
+            Point backSize = Utils.getBackgroundSize(resources);
+
+            Bitmap back = Utils.resizeBitmap(params[0],backSize.x,backSize.y);
+            params[0].recycle();
+
+            return new BitmapDrawable(resources,back);
+        }
+
+        @Override
+        protected void onPostExecute(BitmapDrawable drawable) {
+            background = drawable;
+
+            if(listener != null)
+                listener.onBackgroundLoaded(MaterialAccount.this);
+        }
+    }
+    /*
+        Old tasks
+
     private AsyncTask<Integer,Void, BitmapDrawable> resizePhotoResource = new AsyncTask<Integer, Void, BitmapDrawable>() {
         @Override
         protected BitmapDrawable doInBackground(Integer... params) {
@@ -274,5 +360,5 @@ public class MaterialAccount {
             if(listener != null)
                 listener.onBackgroundLoaded(MaterialAccount.this);
         }
-    };
+    };*/
 }

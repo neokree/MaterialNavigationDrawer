@@ -24,5 +24,10 @@
     <declare-styleable name="MaterialSubheader">
         <attr name="subheaderTitleColor" format="color"/>
     </declare-styleable>
+    
+    <declare-styleable name="MaterialAccount">
+        <attr name="titleColor" format="color" />
+        <attr name="subtitleColor" format="color" />
+    </declare-styleable>
 
 </resources>

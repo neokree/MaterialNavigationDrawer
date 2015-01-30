@@ -1195,21 +1195,25 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             default:
                 break;
         }
-        currentSection = section;
 
-        int position = section.getPosition();
+        // se il target e' un activity la sezione corrente rimane quella precedente
+        if(section.getTarget() != MaterialSection.TARGET_ACTIVITY ) {
+            currentSection = section;
 
-        for (MaterialSection mySection : sectionList) {
-            if (position != mySection.getPosition())
-                mySection.unSelect();
-        }
-        for (MaterialSection mySection : bottomSectionList) {
-            if (position != mySection.getPosition())
-                mySection.unSelect();
-        }
+            int position = section.getPosition();
 
-        if(!deviceSupportMultiPane()) {
-            setDrawerTouchable(false);
+            for (MaterialSection mySection : sectionList) {
+                if (position != mySection.getPosition())
+                    mySection.unSelect();
+            }
+            for (MaterialSection mySection : bottomSectionList) {
+                if (position != mySection.getPosition())
+                    mySection.unSelect();
+            }
+
+            if (!deviceSupportMultiPane()) {
+                setDrawerTouchable(false);
+            }
         }
     }
 
