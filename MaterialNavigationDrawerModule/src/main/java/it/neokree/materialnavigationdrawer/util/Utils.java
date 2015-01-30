@@ -1,6 +1,8 @@
 package it.neokree.materialnavigationdrawer.util;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -16,6 +18,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.view.Display;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
@@ -43,6 +46,19 @@ public class Utils {
 
     public static boolean isTablet(Resources res) {
         return res.getConfiguration().smallestScreenWidthDp >= 600;
+    }
+
+    public static int getScreenHeight(Activity act) {
+        int height = 0;
+        Display display = act.getWindowManager().getDefaultDisplay();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            Point size = new Point();
+            display.getSize(size);
+            height = size.y;
+        } else {
+            height = display.getHeight();  // deprecated
+        }
+        return height;
     }
 
     public static Point getUserPhotoSize(Resources res) {

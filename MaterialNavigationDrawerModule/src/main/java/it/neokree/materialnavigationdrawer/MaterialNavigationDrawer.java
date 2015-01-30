@@ -62,7 +62,7 @@ import it.neokree.materialnavigationdrawer.util.Utils;
 @SuppressLint("InflateParams")
 public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivity implements MaterialSectionListener,MaterialAccount.OnAccountDataLoaded {
 
-    public static final int BOTTOM_SECTION_START = 100;
+    public static final int BOTTOM_SECTION_START = 10000;
     private static final int USER_CHANGE_TRANSITION = 500;
 
     public static final int BACKPATTERN_BACK_ANYWHERE = 0;
@@ -167,7 +167,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
                     switchAccounts(account);
                 } else {// if there is no second account user clicked for open it
-                    accountListener.onAccountOpening(currentAccount);
+                    if(accountListener != null)
+                        accountListener.onAccountOpening(currentAccount);
                     if (!deviceSupportMultiPane())
                         layout.closeDrawer(drawer);
                 }
@@ -189,7 +190,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
                     switchAccounts(account);
                 } else {// if there is no second account user clicked for open it
-                    accountListener.onAccountOpening(currentAccount);
+                    if(accountListener != null)
+                        accountListener.onAccountOpening(currentAccount);
                     if (!deviceSupportMultiPane())
                         layout.closeDrawer(drawer);
                 }
@@ -283,7 +285,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                     divisor.setBackgroundColor(Color.parseColor("#e0e0e0"));
 
                     // si aggiungono le bottom sections
-                    if (heightDrawer >= getHeight()) {
+                    if (heightDrawer >= Utils.getScreenHeight(MaterialNavigationDrawer.this)) {
 
                         LinearLayout.LayoutParams paramDivisor = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,1);
                         paramDivisor.setMargins(0,(int) (8 * density), 0 , (int) (8 * density));
@@ -511,8 +513,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                     invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 
                     // abilita il touch del drawer
-                    drawerTouchLocked = false;
-                    setSectionsTouch(true);
+                    setDrawerTouchable(true);
 
                     if(drawerListener != null)
                         drawerListener.onDrawerClosed(view);
@@ -617,7 +618,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                 divisor.setBackgroundColor(Color.parseColor("#e0e0e0"));
 
                 // si aggiungono le bottom sections
-                if(heightDrawer >= getHeight()) {
+                if(heightDrawer >= Utils.getScreenHeight(MaterialNavigationDrawer.this)) {
 
                     // add the divisor to the section view
                     LinearLayout.LayoutParams paramDivisor = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,1);
@@ -864,13 +865,38 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
     /**
      * Method used with BACKPATTERN_CUSTOM to retrieve the section which is restored
-     * @param currentSection
+     * @param currentSection the section used at this time
      * @return the Section to restore that has Fragment as target (or currentSection for exit from activity)
      */
     protected MaterialSection backToSection(MaterialSection currentSection) {
         return currentSection;
     }
 
+    /**
+     * Set the section informations.<br />
+     * In short:
+     * <ul>
+     *     <li>set the section title into the toolbar</li>
+     *     <li>set the section color to the toolbar</li>
+     *     <li>open/call the target</li>
+     * </ul>
+     *
+     * This method is equal to a user tap on a drawer section.
+     * @param section the section which is replaced
+     */
+    public void setSection(MaterialSection section) {
+        this.onClick(section);
+
+        setDrawerTouchable(true);
+    }
+
+    /**
+     * Set the fragment to the activity content.<br />
+     * N.B. If you want to support the master/child flow, please consider to use setFragmentChild instead
+     *
+     * @param fragment to replace into the main content
+     * @param title to set into Toolbar
+     */
     public void setFragment(Fragment fragment,String title) {
         setFragment(fragment,title,null);
 
@@ -894,12 +920,6 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         setFragment(fragment,title,oldFragment,false);
     }
 
-    /**
-     * TODO
-     * @param fragment
-     * @param title
-     * @param oldFragment
-     */
     private void setFragment(Fragment fragment,String title,Fragment oldFragment,boolean hasSavedInstanceState) {
         // si setta il titolo
         setTitle(title);
@@ -943,6 +963,13 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             layout.closeDrawer(drawer);
     }
 
+    /**
+     * Set a child to the activity content<br />
+     * This method also add the fragment to the child stack.
+     *
+     * @param fragment to replace into the main content
+     * @param title to set into Toolbar
+     */
     public void setFragmentChild(Fragment fragment,String title) {
         isCurrentFragmentChild = true;
 
@@ -956,6 +983,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         // sync the toolbar toggle state
         pulsante.setDrawerIndicatorEnabled(false);
     }
+
+    // private methods
 
     private MaterialAccount findAccountNumber(int number) {
         for(MaterialAccount account : accountManager)
@@ -1096,19 +1125,6 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         }
     }
 
-    private int getHeight() {
-        int height = 0;
-        Display display = getWindowManager().getDefaultDisplay();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            Point size = new Point();
-            display.getSize(size);
-            height = size.y;
-        } else {
-            height = display.getHeight();  // deprecated
-        }
-        return height;
-    }
-
     private boolean deviceSupportMultiPane() {
         if(multiPaneSupport && resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && resources.getConfiguration().smallestScreenWidthDp >= 600)
             return true;
@@ -1116,7 +1132,9 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             return false;
     }
 
-    private void setSectionsTouch(boolean isTouchable) {
+    private void setDrawerTouchable(boolean isTouchable) {
+        drawerTouchLocked = !isTouchable;
+
         for(MaterialSection section : sectionList) {
             section.setTouchable(isTouchable);
         }
@@ -1191,8 +1209,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         }
 
         if(!deviceSupportMultiPane()) {
-            drawerTouchLocked = true;
-            setSectionsTouch(!drawerTouchLocked);
+            setDrawerTouchable(false);
         }
     }
 
@@ -1303,7 +1320,6 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         customDrawerHeader.addView(view,params);
-
     }
 
     public void setDrawerHeaderImage(Bitmap background) {
@@ -1571,14 +1587,77 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         return toolbar;
     }
 
+    /**
+     * Get the section which the user see
+     * @return the current section
+     */
     public MaterialSection getCurrentSection() {
         return currentSection;
     }
 
+    /**
+     * Get a setted section knowing his position
+     *
+     * N.B. this search only into section list and bottom section list.
+     * @param position is the position of the section
+     * @return the section at position or null if the section is not found
+     */
+    public MaterialSection getSectionAtCurrentPosition(int position) {
+
+        MaterialSection sectionAtPosition = null;
+
+        for(MaterialSection section : sectionList) {
+            if(section.getPosition() == position)
+                sectionAtPosition = section;
+        }
+
+        for(MaterialSection section : bottomSectionList) {
+            if(section.getPosition() == position)
+                sectionAtPosition = section;
+        }
+
+        return sectionAtPosition;
+    }
+
+    /**
+     * Get the section list
+     *
+     * N.B. The section list contains the bottom sections
+     * @return the list of sections setted
+     */
+    public List<MaterialSection> getSectionList() {
+        List<MaterialSection> list = new LinkedList<>();
+
+        for(MaterialSection section : sectionList)
+            list.add(section);
+
+        for(MaterialSection section : bottomSectionList)
+            list.add(section);
+
+        return list;
+    }
+
+    /**
+     * Get current account
+     * @return the account at first position
+     */
     public MaterialAccount getCurrentAccount() {
         return currentAccount;
     }
 
+    /**
+     * Get the account list
+     * @return
+     */
+    public List<MaterialAccount> getAccountList() {
+        return accountManager;
+    }
+
+    /**
+     * Get the account knowing his position
+     * @param position the position of the account (it can change at runtime!)
+     * @return the account
+     */
     public  MaterialAccount getAccountAtCurrentPosition(int position) {
 
         if (position < 0 || position >= accountManager.size())
@@ -1586,4 +1665,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
         return findAccountNumber(position);
     }
+
+
+
 }
