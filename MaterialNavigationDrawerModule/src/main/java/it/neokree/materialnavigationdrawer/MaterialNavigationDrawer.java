@@ -1456,6 +1456,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
      */
     public void notifyAccountDataChanged() {
         switch(accountManager.size()) {
+            default:
             case 3:
                 this.setThirdAccountPhoto(findAccountNumber(MaterialAccount.THIRD_ACCOUNT).getCircularPhoto());
             case 2:
@@ -1465,7 +1466,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                 this.setDrawerHeaderImage(currentAccount.getBackground());
                 this.setUsername(currentAccount.getTitle());
                 this.setUserEmail(currentAccount.getSubTitle());
-            default:
+            case 0:
         }
     }
 
