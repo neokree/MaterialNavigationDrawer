@@ -11,6 +11,7 @@
         <item name="multipaneSupport">false</item>
         <item name="sectionStyle">@style/MaterialSectionTheme</item>
         <item name="subheaderStyle">@style/MaterialSubheaderTheme</item>
+        <item name="accountStyle">@style/MaterialAccountTheme</item>
     </style>
 
     <style name="MaterialNavigationDrawerTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
@@ -23,6 +24,7 @@
         <item name="multipaneSupport">false</item>
         <item name="sectionStyle">@style/MaterialSectionTheme.Light</item>
         <item name="subheaderStyle">@style/MaterialSubheaderTheme.Light</item>
+        <item name="accountStyle">@style/MaterialAccountTheme</item>
     </style>
 
     <style name="MaterialNavigationDrawerTheme.Light.DarkActionBar" parent="Theme.AppCompat.Light.NoActionBar" >
@@ -37,6 +39,7 @@
         <item name="multipaneSupport">false</item>
         <item name="sectionStyle">@style/MaterialSectionTheme.Light</item>
         <item name="subheaderStyle">@style/MaterialSubheaderTheme.Light</item>
+        <item name="accountStyle">@style/MaterialAccountTheme</item>
     </style>
 
     <style name="MaterialNavigationDrawerTheme.Light.TranslucentKitKatStatusBar" parent="MaterialNavigationDrawerTheme.Light" />

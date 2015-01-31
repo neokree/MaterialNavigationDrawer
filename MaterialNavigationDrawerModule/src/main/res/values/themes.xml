@@ -9,6 +9,7 @@
         <item name="singleAccount">false</item>
         <item name="sectionStyle">@style/MaterialSectionTheme</item>
         <item name="subheaderStyle">@style/MaterialSubheaderTheme</item>
+        <item name="accountStyle">@style/MaterialAccountTheme</item>
         <item name="multipaneSupport">false</item>
     </style>
 
@@ -20,6 +21,7 @@
         <item name="singleAccount">false</item>
         <item name="sectionStyle">@style/MaterialSectionTheme.Light</item>
         <item name="subheaderStyle">@style/MaterialSubheaderTheme.Light</item>
+        <item name="accountStyle">@style/MaterialAccountTheme</item>
         <item name="multipaneSupport">false</item>
     </style>
 
@@ -33,6 +35,7 @@
         <item name="singleAccount">false</item>
         <item name="sectionStyle">@style/MaterialSectionTheme.Light</item>
         <item name="subheaderStyle">@style/MaterialSubheaderTheme.Light</item>
+        <item name="accountStyle">@style/MaterialAccountTheme</item>
         <item name="multipaneSupport">false</item>
     </style>
 
@@ -66,6 +69,11 @@
 
     <style name="MaterialSubheaderTheme.Light">
         <item name="subheaderTitleColor">#000</item>
+    </style>
+
+    <style name="MaterialAccountTheme">
+        <item name="titleColor">#FFF</item>
+        <item name="subtitleColor">#FFF</item>
     </style>
 
 </resources>

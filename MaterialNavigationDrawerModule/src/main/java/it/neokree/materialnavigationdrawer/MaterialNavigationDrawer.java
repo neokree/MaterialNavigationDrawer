@@ -407,7 +407,19 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             username.setTypeface(fontManager.getRobotoMedium());
             usermail.setTypeface(fontManager.getRobotoRegular());
 
-            // set the image
+            // get and set username and mail text colors
+            theme.resolveAttribute(R.attr.accountStyle,typedValue,true);
+            TypedArray attributes = theme.obtainStyledAttributes(typedValue.resourceId,R.styleable.MaterialAccount);
+            try {
+                username.setTextColor(attributes.getColor(R.styleable.MaterialAccount_titleColor,0xFFF));
+                usermail.setTextColor(attributes.getColor(R.styleable.MaterialAccount_subtitleColor,0xFFF));
+            }
+            finally {
+                attributes.recycle();
+            }
+
+
+            // set the button image
             if(!singleAccount) {
                 userButtonSwitcher.setImageResource(R.drawable.ic_arrow_drop_down_white_24dp);
                 userButtonSwitcher.setOnClickListener(accountSwitcherListener);
@@ -963,13 +975,6 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             layout.closeDrawer(drawer);
     }
 
-    /**
-     * Set a child to the activity content<br />
-     * This method also add the fragment to the child stack.
-     *
-     * @param fragment to replace into the main content
-     * @param title to set into Toolbar
-     */
     public void setFragmentChild(Fragment fragment,String title) {
         isCurrentFragmentChild = true;
 
@@ -1370,22 +1375,58 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     // Method used for customize layout
 
     public void setUserEmail(String email) {
+        if(DRAWERHEADER_ACCOUNTS != drawerHeaderType) {
+            throw new RuntimeException("Your header is not setted to Accounts, check in your styles.xml");
+        }
+
         usermail.setText(email);
     }
 
+    public void setUserEmailTextColor(int color) {
+        if(DRAWERHEADER_ACCOUNTS != drawerHeaderType) {
+            throw new RuntimeException("Your header is not setted to Accounts, check in your styles.xml");
+        }
+
+        usermail.setTextColor(color);
+    }
+
     public void setUsername(String username) {
+        if(DRAWERHEADER_ACCOUNTS != drawerHeaderType) {
+            throw new RuntimeException("Your header is not setted to Accounts, check in your styles.xml");
+        }
+
         this.username.setText(username);
     }
 
+    public void setUsernameTextColor(int color) {
+        if(DRAWERHEADER_ACCOUNTS != drawerHeaderType) {
+            throw new RuntimeException("Your header is not setted to Accounts, check in your styles.xml");
+        }
+
+        this.username.setTextColor(color);
+    }
+
     public void setFirstAccountPhoto(Drawable photo) {
+        if(DRAWERHEADER_ACCOUNTS != drawerHeaderType) {
+            throw new RuntimeException("Your header is not setted to Accounts, check in your styles.xml");
+        }
+
         userphoto.setImageDrawable(photo);
     }
 
     public void setSecondAccountPhoto(Drawable photo) {
+        if(DRAWERHEADER_ACCOUNTS != drawerHeaderType) {
+            throw new RuntimeException("Your header is not setted to Accounts, check in your styles.xml");
+        }
+
         userSecondPhoto.setImageDrawable(photo);
     }
 
     public void setThirdAccountPhoto(Drawable photo) {
+        if(DRAWERHEADER_ACCOUNTS != drawerHeaderType) {
+            throw new RuntimeException("Your header is not setted to Accounts, check in your styles.xml");
+        }
+
         userThirdPhoto.setImageDrawable(photo);
     }
 
