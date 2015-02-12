@@ -29,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
@@ -764,10 +765,22 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Se dal drawer si seleziona un oggetto
-        if(pulsante != null)
+        if(!deviceSupportMultiPane()) {
             if (pulsante.onOptionsItemSelected(item)) {
                 return true;
             }
+        }
+        else {
+            switch (item.getItemId()) {
+                // Respond to the action bar's Up/Home button
+                case android.R.id.home:
+                    toolbarToggleListener.onClick(null);
+                    return true;
+            }
+
+        }
+
+
         return super.onOptionsItemSelected(item);
     }
     //------------------------------------------------------------------------------------------------------------------------------------------------
@@ -847,7 +860,14 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                 if(childFragmentStack.size() == 1) {
                     // user comed back to master section
                     isCurrentFragmentChild = false;
-                    pulsante.setDrawerIndicatorEnabled(true);
+
+                    if(!deviceSupportMultiPane())
+                        pulsante.setDrawerIndicatorEnabled(true);
+                    else {
+                        actionBar.setDisplayHomeAsUpEnabled(false);
+                        actionBar.setHomeButtonEnabled(true);
+
+                    }
                 }
             }
         }
@@ -937,24 +957,27 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         setTitle(title);
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             // before honeycomb there is not android.app.Fragment
-            android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            if(oldFragment != null && oldFragment != fragment)
-                ft.remove((android.support.v4.app.Fragment) oldFragment);
 
-            if(!hasSavedInstanceState) // se non e' avvenuta una rotazione
+            if(!hasSavedInstanceState) {
+                android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                if (oldFragment != null && oldFragment != fragment)
+                    ft.remove((android.support.v4.app.Fragment) oldFragment);
+
                 ft.replace(R.id.frame_container, (android.support.v4.app.Fragment) fragment).commit();
+            }
         }
         else if (fragment instanceof android.app.Fragment) {
             if (oldFragment instanceof android.support.v4.app.Fragment)
                 throw new RuntimeException("You should use only one type of Fragment");
 
+            if(!hasSavedInstanceState) {// se non e' avvenuta una rotazione
 
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            if (oldFragment != null && fragment != oldFragment)
-                ft.remove((android.app.Fragment) oldFragment);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                if (oldFragment != null && fragment != oldFragment)
+                    ft.remove((android.app.Fragment) oldFragment);
 
-            if(!hasSavedInstanceState) // se non e' avvenuta una rotazione
                 ft.replace(R.id.frame_container, (android.app.Fragment) fragment).commit();
+            }
         }
         else if(fragment instanceof android.support.v4.app.Fragment) {
             if(oldFragment instanceof android.app.Fragment)
@@ -986,7 +1009,11 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         childTitleStack.add(title);
 
         // sync the toolbar toggle state
-        pulsante.setDrawerIndicatorEnabled(false);
+        if(!deviceSupportMultiPane())
+            pulsante.setDrawerIndicatorEnabled(false);
+        else {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     // private methods
@@ -1186,7 +1213,13 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                 childFragmentStack.add((Fragment)section.getTargetFragment());
                 childTitleStack.add(section.getTitle());
                 isCurrentFragmentChild = false;
-                pulsante.setDrawerIndicatorEnabled(true);
+                if(!deviceSupportMultiPane())
+                    pulsante.setDrawerIndicatorEnabled(true);
+                else {
+                    actionBar.setDisplayHomeAsUpEnabled(false);
+                    actionBar.setHomeButtonEnabled(true);
+                }
+
                 break;
             case MaterialSection.TARGET_ACTIVITY:
                 this.startActivity(section.getTargetIntent());
@@ -1260,23 +1293,22 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
      *
      * N.B. call this method AFTER the init() to leave the time to instantiate the ActionBarDrawerToggle
      * @param resId the id to resource drawable to use as indicator
-     * @return true if indicator is setted, false otherwise
      */
-    public boolean setHomeAsUpIndicator(int resId) {
-        return setHomeAsUpIndicator(resources.getDrawable(resId));
+    public void setHomeAsUpIndicator(int resId) {
+        setHomeAsUpIndicator(resources.getDrawable(resId));
     }
 
     /**
      * Set the HomeAsUpIndicator that is visible when user navigate to a fragment child
      * @param indicator the resource drawable to use as indicator
-     * @return true if indicator is setted, false otherwise
      */
-    public boolean setHomeAsUpIndicator(Drawable indicator) {
-        if(pulsante != null) { // if multipane support is enabled and device is a tablet this call do nothing
+    public void setHomeAsUpIndicator(Drawable indicator) {
+        if(!deviceSupportMultiPane()) {
             pulsante.setHomeAsUpIndicator(indicator);
-            return true;
         }
-        else return false;
+        else {
+            actionBar.setHomeAsUpIndicator(indicator);
+        }
     }
 
     public void changeToolbarColor(MaterialSection section) {
@@ -1439,6 +1471,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)(48 * density));
         section.setTypeface(fontManager.getRobotoMedium());
         sectionList.add(section);
+
+        ViewParent parent = section.getView().getParent();
         sections.addView(section.getView(),params);
 
         // add the element to the list
@@ -1515,11 +1549,30 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         }
     }
 
+    public void openDrawer() {
+        layout.openDrawer(drawer);
+    }
+
+    public void closeDrawer() {
+        layout.closeDrawer(drawer);
+    }
+
     // create sections
 
     public MaterialSection newSection(String title, Drawable icon, Fragment target) {
         MaterialSection section = new MaterialSection<Fragment>(this,MaterialSection.ICON_24DP,rippleSupport,MaterialSection.TARGET_FRAGMENT);
         section.setOnClickListener(this);
+        section.setIcon(icon);
+        section.setTitle(title);
+        section.setTarget(target);
+
+        return section;
+    }
+
+    public MaterialSection newSectionWithRealColor(String title,Drawable icon,Fragment target) {
+        MaterialSection section = new MaterialSection<Fragment>(this,MaterialSection.ICON_24DP,rippleSupport,MaterialSection.TARGET_FRAGMENT);
+        section.setOnClickListener(this);
+        section.useRealColor();
         section.setIcon(icon);
         section.setTitle(title);
         section.setTarget(target);
@@ -1537,9 +1590,31 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         return section;
     }
 
+    public MaterialSection newSectionWithRealColor(String title, Drawable icon, Intent target) {
+        MaterialSection section = new MaterialSection<Fragment>(this,MaterialSection.ICON_24DP,rippleSupport,MaterialSection.TARGET_ACTIVITY);
+        section.setOnClickListener(this);
+        section.useRealColor();
+        section.setIcon(icon);
+        section.setTitle(title);
+        section.setTarget(target);
+
+        return section;
+    }
+
     public MaterialSection newSection(String title, Drawable icon, MaterialSectionListener target) {
         MaterialSection section = new MaterialSection<Fragment>(this,MaterialSection.ICON_24DP,rippleSupport,MaterialSection.TARGET_LISTENER);
         section.setOnClickListener(this);
+        section.setIcon(icon);
+        section.setTitle(title);
+        section.setTarget(target);
+
+        return section;
+    }
+
+    public MaterialSection newSectionWithRealColor(String title, Drawable icon, MaterialSectionListener target) {
+        MaterialSection section = new MaterialSection<Fragment>(this,MaterialSection.ICON_24DP,rippleSupport,MaterialSection.TARGET_LISTENER);
+        section.setOnClickListener(this);
+        section.useRealColor();
         section.setIcon(icon);
         section.setTitle(title);
         section.setTarget(target);
@@ -1557,9 +1632,31 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         return section;
     }
 
+    public MaterialSection newSectionWithRealColor(String title, Bitmap icon,Fragment target) {
+        MaterialSection section = new MaterialSection<Fragment>(this,MaterialSection.ICON_24DP,rippleSupport,MaterialSection.TARGET_FRAGMENT);
+        section.setOnClickListener(this);
+        section.useRealColor();
+        section.setIcon(icon);
+        section.setTitle(title);
+        section.setTarget(target);
+
+        return section;
+    }
+
     public MaterialSection newSection(String title, Bitmap icon,Intent target) {
         MaterialSection section = new MaterialSection<Fragment>(this,MaterialSection.ICON_24DP,rippleSupport,MaterialSection.TARGET_ACTIVITY);
         section.setOnClickListener(this);
+        section.setIcon(icon);
+        section.setTitle(title);
+        section.setTarget(target);
+
+        return section;
+    }
+
+    public MaterialSection newSectionWithRealColor(String title, Bitmap icon,Intent target) {
+        MaterialSection section = new MaterialSection<Fragment>(this,MaterialSection.ICON_24DP,rippleSupport,MaterialSection.TARGET_ACTIVITY);
+        section.setOnClickListener(this);
+        section.useRealColor();
         section.setIcon(icon);
         section.setTitle(title);
         section.setTarget(target);
@@ -1577,16 +1674,39 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         return section;
     }
 
+    public MaterialSection newSectionWithRealColor(String title, Bitmap icon,MaterialSectionListener target) {
+        MaterialSection section = new MaterialSection<Fragment>(this,MaterialSection.ICON_24DP,rippleSupport,MaterialSection.TARGET_LISTENER);
+        section.setOnClickListener(this);
+        section.useRealColor();
+        section.setIcon(icon);
+        section.setTitle(title);
+        section.setTarget(target);
+
+        return section;
+    }
+
     public MaterialSection newSection(String title, int icon,Fragment target) {
         return newSection(title,resources.getDrawable(icon),target);
+    }
+
+    public MaterialSection newSectionWithRealColor(String title, int icon,Fragment target) {
+        return newSectionWithRealColor(title,resources.getDrawable(icon),target);
     }
 
     public MaterialSection newSection(String title, int icon,Intent target) {
         return newSection(title,resources.getDrawable(icon),target);
     }
 
+    public MaterialSection newSectionWithRealColor(String title, int icon,Intent target) {
+        return newSectionWithRealColor(title,resources.getDrawable(icon),target);
+    }
+
     public MaterialSection newSection(String title, int icon,MaterialSectionListener target) {
         return  newSection(title,resources.getDrawable(icon),target);
+    }
+
+    public MaterialSection newSectionWithRealColor(String title, int icon,MaterialSectionListener target) {
+        return  newSectionWithRealColor(title,resources.getDrawable(icon),target);
     }
 
     @SuppressWarnings("unchecked")
@@ -1623,10 +1743,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
     public abstract void init(Bundle savedInstanceState);
 
-
-    public void onHomeAsUpSelected() {
-
-    }
+    public void onHomeAsUpSelected() {}
 
     // get methods
 

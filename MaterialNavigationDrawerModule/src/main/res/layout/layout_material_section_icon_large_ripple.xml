@@ -1,55 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal" android:layout_width="match_parent"
+<com.balysv.materialripple.MaterialRippleLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/section_ripple"
+    android:layout_width="match_parent"
     android:layout_height="48dp"
-    tools:ignore="MissingPrefix">
+    app:rippleBackground="#fafafa"
+    app:rippleHover="true">
 
-    <at.markushi.ui.RevealColorView
-        android:id="@+id/section_ripple"
+    <RelativeLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#fafafa" />
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:id="@+id/section_icon"
-        android:alpha="0.54"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_centerVertical="true" />
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/section_icon"
+            android:alpha="0.54"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_centerVertical="true" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/section_text"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="72dp"
-        android:layout_marginStart="72dp"
-        android:textSize="14sp"
-        android:textColor="#000"
-        android:alpha="0.87"
-        android:layout_toLeftOf="@+id/section_notification"
-        android:layout_toStartOf="@+id/section_notification"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/section_text"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="72dp"
+            android:layout_marginStart="72dp"
+            android:textSize="14sp"
+            android:textColor="#000"
+            android:alpha="0.87"
+            android:layout_toLeftOf="@+id/section_notification"
+            android:layout_toStartOf="@+id/section_notification"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"/>
 
-    <TextView
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/section_notification"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp"
-        android:textColor="#000"
-        android:alpha="0.54"
-        android:lines="1"
-        android:maxLength="3"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:gravity="center_horizontal"
-        android:layout_centerVertical="true" />
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/section_notification"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="#000"
+            android:alpha="0.54"
+            android:lines="1"
+            android:maxLength="3"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:layout_centerVertical="true" />
 
-</RelativeLayout>
+    </RelativeLayout>
+</com.balysv.materialripple.MaterialRippleLayout>

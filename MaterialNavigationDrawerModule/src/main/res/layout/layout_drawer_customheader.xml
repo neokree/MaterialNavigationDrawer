@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer"
     android:layout_width="@dimen/drawerWidth"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:background="#fafafa"
-    tools:ignore="MissingPrefix">
+    android:background="#fafafa">
 
     <ScrollView
         android:layout_width="wrap_content"

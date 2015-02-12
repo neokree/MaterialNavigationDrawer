@@ -20,6 +20,7 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:21.0.3'
-    compile 'com.github.markushi:android-ui:1.2'
+    //compile 'com.github.markushi:android-ui:1.2'
+    compile 'com.balysv:material-ripple:1.0.0'
 
 }

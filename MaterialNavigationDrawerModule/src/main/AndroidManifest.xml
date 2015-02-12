@@ -10,7 +10,7 @@
     <uses-sdk
         android:minSdkVersion="10"
         android:targetSdkVersion="21"
-        tools:overrideLibrary="at.markushi.ui">
+        tools:overrideLibrary="com.balysv.materialripple">
     </uses-sdk>
 
 </manifest>

@@ -1,46 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<com.balysv.materialripple.MaterialRippleLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/section_ripple"
     android:layout_width="match_parent"
-    android:layout_height="48dp">
+    android:layout_height="48dp"
+    app:rippleBackground="#fafafa"
+    app:rippleHover="true">
 
-    <at.markushi.ui.RevealColorView
-        android:id="@+id/section_ripple"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#fafafa" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/section_text"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_centerVertical="true"
-        android:textSize="14sp"
-        android:textColor="#000"
-        android:alpha="0.87"
-        android:layout_toLeftOf="@+id/section_notification"
-        android:layout_toStartOf="@+id/section_notification"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp"/>
-
-    <TextView
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/section_notification"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp"
-        android:textColor="#000"
-        android:alpha="0.54"
-        android:lines="1"
-        android:maxLength="3"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:layout_centerVertical="true"
-        android:gravity="center_horizontal" />
+        android:layout_height="match_parent">
 
 
-</RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/section_text"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_centerVertical="true"
+            android:textSize="14sp"
+            android:textColor="#000"
+            android:alpha="0.87"
+            android:layout_toLeftOf="@+id/section_notification"
+            android:layout_toStartOf="@+id/section_notification"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/section_notification"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="#000"
+            android:alpha="0.54"
+            android:lines="1"
+            android:maxLength="3"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:gravity="center_horizontal" />
+
+
+    </RelativeLayout>
+</com.balysv.materialripple.MaterialRippleLayout>
