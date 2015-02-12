@@ -29,6 +29,7 @@ import it.neokree.materialnavigationdrawer.util.Utils;
  *
  * Created by neokree on 08/11/14.
  */
+@SuppressWarnings("unused")
 public class MaterialSection<Fragment> implements View.OnTouchListener, View.OnClickListener {
 
     public static final int TARGET_FRAGMENT = 0;
@@ -319,23 +320,14 @@ public class MaterialSection<Fragment> implements View.OnTouchListener, View.OnC
         return isSelected;
     }
 
+    // setter
+
     public void setPosition(int position) {
         this.position = position;
     }
 
-    public int getPosition() {
-        return position;
-    }
-
     public void setOnClickListener(MaterialSectionListener listener) {
         this.listener = listener;
-    }
-
-    public View getView() {return view;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public void setTitle(String title) {
@@ -370,6 +362,56 @@ public class MaterialSection<Fragment> implements View.OnTouchListener, View.OnC
     public void setTypeface(Typeface typeface) {
         this.text.setTypeface(typeface);
         this.notifications.setTypeface(typeface);
+    }
+
+    public void setTouchable(boolean isTouchable) {
+        touchable = isTouchable;
+    }
+
+    public void setPressingColor(int color) {
+        colorPressed = color;
+
+        if(rippleAnimationSupport())
+            ripple.setRippleColor(colorPressed);
+    }
+
+    // alias of setColorUnpressed
+    public void setBackgroundColor(int color) {
+        colorUnpressed = color;
+
+        if(!isSelected()) {
+            if (rippleAnimationSupport()) {
+                ripple.setRippleBackground(colorUnpressed);
+            }
+            else {
+                view.setBackgroundColor(colorUnpressed);
+            }
+        }
+    }
+
+    public void setColorSelected(int color) {
+        colorSelected = color;
+
+        if(isSelected()) {
+            if(rippleAnimationSupport())
+                ripple.setRippleBackground(colorSelected);
+            else
+                view.setBackgroundColor(colorSelected);
+        }
+    }
+
+    // getter
+
+    public View getView() {
+        return view;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getPosition() {
+        return position;
     }
 
     public int getTarget() {
@@ -412,10 +454,6 @@ public class MaterialSection<Fragment> implements View.OnTouchListener, View.OnC
         return this.notifications.getText().toString();
     }
 
-    public void setTouchable(boolean isTouchable) {
-        touchable = isTouchable;
-    }
-
     // private methods
 
     private void afterClick() {
@@ -443,10 +481,7 @@ public class MaterialSection<Fragment> implements View.OnTouchListener, View.OnC
     }
 
     private boolean rippleAnimationSupport() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && rippleSupport)
-            return true;
-        else
-            return false;
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && rippleSupport;
     }
 
 }
