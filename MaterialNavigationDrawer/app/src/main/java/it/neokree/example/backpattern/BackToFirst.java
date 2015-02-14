@@ -1,4 +1,4 @@
-package it.neokree.example.light;
+package it.neokree.example.backpattern;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,16 +11,12 @@ import it.neokree.example.mockedFragments.FragmentIndex;
 import it.neokree.materialnavigationdrawer.MaterialNavigationDrawer;
 
 /**
- * Created by neokree on 18/01/15.
+ * Created by neokree on 14/02/15.
  */
-public class ImageDrawerHeader extends MaterialNavigationDrawer {
+public class BackToFirst extends MaterialNavigationDrawer {
+
     @Override
     public void init(Bundle savedInstanceState) {
-
-        // set the header image
-this.setDrawerHeaderImage(R.drawable.mat2);
-
-        // create sections
         this.addSection(newSection("Section 1", new FragmentIndex()));
         this.addSection(newSection("Section 2",new FragmentIndex()));
         this.addSection(newSection("Section 3", R.drawable.ic_mic_white_24dp,new FragmentButton()).setSectionColor(Color.parseColor("#9c27b0")));
@@ -28,5 +24,8 @@ this.setDrawerHeaderImage(R.drawable.mat2);
 
         // create bottom section
         this.addBottomSection(newSection("Bottom Section",R.drawable.ic_settings_black_24dp,new Intent(this,Settings.class)));
+
+        // add pattern
+        this.setBackPattern(MaterialNavigationDrawer.BACKPATTERN_BACK_TO_FIRST);
     }
 }

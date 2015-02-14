@@ -24,7 +24,7 @@ public class FragmentList extends ListFragment{
         for (int i = 0;i< 50 ;i++) {
             list.add("Item "+ (i+1));
         }
-
+        setListAdapter(new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1, list));
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -32,6 +32,5 @@ public class FragmentList extends ListFragment{
     public void onResume() {
         super.onResume();
 
-        this.getListView().setAdapter(new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1, list));
     }
 }

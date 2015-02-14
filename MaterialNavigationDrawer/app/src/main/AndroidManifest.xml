@@ -40,6 +40,13 @@
         <activity android:name=".functionalities.RippleBackport" android:theme="@style/RippleBackport" />
         <activity android:name=".functionalities.UniqueToolbarColor" android:theme="@style/UniqueToolbarColor" />
         <activity android:name=".functionalities.master_child.MasterChildActivity" android:theme="@style/MasterChild" />
+        <activity android:name=".functionalities.RealColorSections" android:theme="@style/RealColorSections" />
+
+        <activity android:name=".backpattern.BackToFirst" android:theme="@style/BackPattern" />
+        <activity android:name=".backpattern.BackAnywhere" android:theme="@style/BackPattern" />
+        <activity android:name=".backpattern.BackPatternCustom" android:theme="@style/BackPattern" />
+
+        <activity android:name=".test.Test" android:theme="@style/TestTheme" />
 
     </application>
 

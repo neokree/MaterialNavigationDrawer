@@ -9,9 +9,13 @@ import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 
+import it.neokree.example.backpattern.BackAnywhere;
+import it.neokree.example.backpattern.BackPatternCustom;
+import it.neokree.example.backpattern.BackToFirst;
 import it.neokree.example.functionalities.CustomAccountSection;
 import it.neokree.example.functionalities.KitkatStatusBar;
 import it.neokree.example.functionalities.MultiPane;
+import it.neokree.example.functionalities.RealColorSections;
 import it.neokree.example.functionalities.RippleBackport;
 import it.neokree.example.functionalities.UniqueToolbarColor;
 import it.neokree.example.functionalities.master_child.MasterChildActivity;
@@ -20,6 +24,7 @@ import it.neokree.example.light.CustomDrawerHeader;
 import it.neokree.example.light.ImageDrawerHeader;
 import it.neokree.example.light.MockedAccount;
 import it.neokree.example.light.NoDrawerHeader;
+import it.neokree.example.test.Test;
 
 /**
  * Created by neokree on 30/12/14.
@@ -52,6 +57,13 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
         list.add("Functionality: custom section under account list");
         list.add("Functionality: Kitkat trasluncent status bar");
         list.add("Functionality: Master/Child example");
+        list.add("Functionality: section not pre-rendered");
+
+        list.add("Back Pattern: Back To first");
+        list.add("Back Pattern: Back Anywhere");
+        list.add("Back Pattern: Custom");
+
+        //list.add("Test");
 
         this.setListAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,list));
         this.getListView().setOnItemClickListener(this);
@@ -108,6 +120,21 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                 break;
             case 15:
                 intent = new Intent(this, MasterChildActivity.class);
+                break;
+            case 16:
+                intent = new Intent(this, RealColorSections.class);
+                break;
+            case 17:
+                intent = new Intent(this, BackToFirst.class);
+                break;
+            case 18:
+                intent = new Intent(this, BackAnywhere.class);
+                break;
+            case 19:
+                intent = new Intent(this, BackPatternCustom.class);
+                break;
+            case 20:
+                intent = new Intent(this, Test.class);
                 break;
             default:
                 intent = null;

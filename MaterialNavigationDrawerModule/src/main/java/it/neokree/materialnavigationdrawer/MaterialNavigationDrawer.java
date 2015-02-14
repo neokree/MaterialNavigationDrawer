@@ -50,6 +50,7 @@ import it.neokree.materialnavigationdrawer.elements.MaterialSection;
 import it.neokree.materialnavigationdrawer.elements.MaterialSubheader;
 import it.neokree.materialnavigationdrawer.elements.listeners.MaterialAccountListener;
 import it.neokree.materialnavigationdrawer.elements.listeners.MaterialSectionListener;
+import it.neokree.materialnavigationdrawer.util.MaterialActionBarDrawerToggle;
 import it.neokree.materialnavigationdrawer.util.MaterialDrawerLayout;
 import it.neokree.materialnavigationdrawer.util.TypefaceManager;
 import it.neokree.materialnavigationdrawer.util.Utils;
@@ -85,7 +86,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
     private MaterialDrawerLayout layout;
     private ActionBar actionBar;
-    private ActionBarDrawerToggle pulsante;
+    private MaterialActionBarDrawerToggle pulsante;
     private ImageView statusBar;
     private Toolbar toolbar;
     private RelativeLayout content;
@@ -134,10 +135,14 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     private int backPattern = BACKPATTERN_BACK_ANYWHERE;
     private int drawerHeaderType;
 
+    // fragment request
+
+
     // resources
     private Resources resources;
     private TypefaceManager fontManager;
 
+    // listeners
     private View.OnClickListener currentAccountListener = new View.OnClickListener() {
 
         @Override
@@ -512,7 +517,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             content.setLayoutParams(params);
             layout.setScrimColor(Color.TRANSPARENT);
             layout.openDrawer(drawer);
-            layout.requestDisallowInterceptTouchEvent(true);
+            layout.setMultipaneSupport(true);
         }
         else {
             // se non si sta lavorando in multiPane allora si inserisce il pulsante per aprire/chiudere
@@ -520,8 +525,9 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
 
-            pulsante = new ActionBarDrawerToggle(this,layout,toolbar,R.string.nothing,R.string.nothing) {
+            pulsante = new MaterialActionBarDrawerToggle<Fragment>(this,layout,toolbar,R.string.nothing,R.string.nothing) {
 
+                @Override
                 public void onDrawerClosed(View view) {
                     invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 
@@ -530,8 +536,15 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
                     if(drawerListener != null)
                         drawerListener.onDrawerClosed(view);
+
+                    if(isFragmentRequested()) {
+                        setFragment(this.getFragmentRequested(), this.getTitleRequested(), this.getOldFragment());
+                        afterFragmentSetted(this.getFragmentRequested(),this.getTitleRequested());
+                        this.removeFragmentRequest();
+                    }
                 }
 
+                @Override
                 public void onDrawerOpened(View drawerView) {
                     invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 
@@ -541,7 +554,6 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
                 @Override
                 public void onDrawerSlide(View drawerView, float slideOffset) {
-
 
                     if(!isCurrentFragmentChild) { // if user seeing a master fragment
 
@@ -570,16 +582,11 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             pulsante.setToolbarNavigationClickListener(toolbarToggleListener);
 
             layout.setDrawerListener(pulsante);
-            layout.requestDisallowInterceptTouchEvent(false);
+            layout.setMultipaneSupport(false);
         }
 
-        // si attacca alla usercover un listener
-        ViewTreeObserver vto;
-        if(drawerHeaderType == DRAWERHEADER_ACCOUNTS)
-            vto = usercover.getViewTreeObserver();
-        else
-            vto = customDrawerHeader.getViewTreeObserver();
-
+        // si procede con gli altri elementi dopo la creazioen delle viste
+        ViewTreeObserver vto = drawer.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
             @Override
@@ -656,11 +663,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                 }
 
 
-                ViewTreeObserver obs;
-                if(drawerHeaderType == DRAWERHEADER_ACCOUNTS)
-                    obs = usercover.getViewTreeObserver();
-                else
-                    obs = customDrawerHeader.getViewTreeObserver();
+                ViewTreeObserver obs = drawer.getViewTreeObserver();
 
                 // si rimuove il listener
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -823,7 +826,11 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                         super.onBackPressed();
                     else {
                         section.select();
-                        onClick(section);
+                        //onClick(section);
+
+                        setFragment((Fragment) section.getTargetFragment(), section.getTitle(), (Fragment) currentSection.getTargetFragment());
+                        afterFragmentSetted((Fragment) section.getTargetFragment(),section.getTitle());
+                        syncSectionsState(section);
                     }
                     break;
                 case BACKPATTERN_CUSTOM:
@@ -836,7 +843,11 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                             throw new RuntimeException("The restored section must have a fragment as target");
                         }
                         backedSection.select();
-                        onClick(backedSection);
+                        //onClick(backedSection);
+
+                        setFragment((Fragment) backedSection.getTargetFragment(), backedSection.getTitle(), (Fragment) currentSection.getTargetFragment());
+                        afterFragmentSetted((Fragment) backedSection.getTargetFragment(),backedSection.getTitle());
+                        syncSectionsState(backedSection);
                     }
                     break;
             }
@@ -855,6 +866,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                 Fragment currentFragment = childFragmentStack.remove(childFragmentStack.size() - 1);
                 childTitleStack.remove(childTitleStack.size() - 1);
 
+
                 setFragment(newFragment,newTitle,currentFragment);
 
                 if(childFragmentStack.size() == 1) {
@@ -863,11 +875,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
                     if(!deviceSupportMultiPane())
                         pulsante.setDrawerIndicatorEnabled(true);
-                    else {
+                    else
                         actionBar.setDisplayHomeAsUpEnabled(false);
-                        actionBar.setHomeButtonEnabled(true);
-
-                    }
                 }
             }
         }
@@ -993,9 +1002,28 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         else
             throw new RuntimeException("Fragment must be android.app.Fragment or android.support.v4.app.Fragment");
 
-        // si chiude il drawer
+    }
+
+    private void afterFragmentSetted(Fragment fragment,String title) {
+        // remove the last child from the stack
+        if(!isCurrentFragmentChild) {
+            childFragmentStack.remove(childFragmentStack.size() - 1);
+            childTitleStack.remove(childTitleStack.size() - 1);
+        }
+        else for(int i = childFragmentStack.size()-1;i >= 0;i--) { // if a section is clicked when user is into a child remove all childs from stack
+            childFragmentStack.remove(i);
+            childTitleStack.remove(i);
+        }
+
+        // add to the childStack the Fragment and title
+        childFragmentStack.add(fragment);
+        childTitleStack.add(title);
+        isCurrentFragmentChild = false;
         if(!deviceSupportMultiPane())
-            layout.closeDrawer(drawer);
+            pulsante.setDrawerIndicatorEnabled(true);
+        else {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
     }
 
     public void setFragmentChild(Fragment fragment,String title) {
@@ -1181,6 +1209,22 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         }
     }
 
+    private void syncSectionsState(MaterialSection section) {
+        currentSection = section;
+
+        int position = section.getPosition();
+
+        for (MaterialSection mySection : sectionList) {
+            if (position != mySection.getPosition())
+                mySection.unSelect();
+        }
+        for (MaterialSection mySection : bottomSectionList) {
+            if (position != mySection.getPosition())
+                mySection.unSelect();
+        }
+
+    }
+
     protected int darkenColor(int color) {
         if(color == primaryColor)
             return primaryDarkColor;
@@ -1196,30 +1240,19 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
         switch (section.getTarget()) {
             case MaterialSection.TARGET_FRAGMENT:
-                setFragment((Fragment) section.getTargetFragment(), section.getTitle(), (Fragment) currentSection.getTargetFragment());
                 changeToolbarColor(section);
-
-                // remove the last child from the stack
-                if(!isCurrentFragmentChild) {
-                    childFragmentStack.remove(childFragmentStack.size() - 1);
-                    childTitleStack.remove(childTitleStack.size() - 1);
+                if(deviceSupportMultiPane()) {
+                    setFragment((Fragment) section.getTargetFragment(), section.getTitle(), (Fragment) currentSection.getTargetFragment());
+                    afterFragmentSetted((Fragment) section.getTargetFragment(),section.getTitle());
                 }
-                else for(int i = childFragmentStack.size()-1;i >= 0;i--) { // if a section is clicked when user is into a child remove all childs from stack
-                        childFragmentStack.remove(i);
-                        childTitleStack.remove(i);
-                }
-
-                // add to the childStack the Fragment and title
-                childFragmentStack.add((Fragment)section.getTargetFragment());
-                childTitleStack.add(section.getTitle());
-                isCurrentFragmentChild = false;
-                if(!deviceSupportMultiPane())
-                    pulsante.setDrawerIndicatorEnabled(true);
                 else {
-                    actionBar.setDisplayHomeAsUpEnabled(false);
-                    actionBar.setHomeButtonEnabled(true);
-                }
+                    // si disattiva il touch sul drawer
+                    setDrawerTouchable(false);
+                    // la chiamata al fragment viene spostata dopo la chiusura del drawer
+                    pulsante.addFragmentRequest((Fragment) section.getTargetFragment(), section.getTitle(), (Fragment) currentSection.getTargetFragment());
+                    layout.closeDrawer(drawer);
 
+                }
                 break;
             case MaterialSection.TARGET_ACTIVITY:
                 this.startActivity(section.getTargetIntent());
@@ -1230,28 +1263,17 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             case MaterialSection.TARGET_LISTENER:
                 if (!deviceSupportMultiPane())
                     layout.closeDrawer(drawer);
+
+                if (!deviceSupportMultiPane()) {
+                    setDrawerTouchable(false);
+                }
             default:
                 break;
         }
 
         // se il target e' un activity la sezione corrente rimane quella precedente
         if(section.getTarget() != MaterialSection.TARGET_ACTIVITY ) {
-            currentSection = section;
-
-            int position = section.getPosition();
-
-            for (MaterialSection mySection : sectionList) {
-                if (position != mySection.getPosition())
-                    mySection.unSelect();
-            }
-            for (MaterialSection mySection : bottomSectionList) {
-                if (position != mySection.getPosition())
-                    mySection.unSelect();
-            }
-
-            if (!deviceSupportMultiPane()) {
-                setDrawerTouchable(false);
-            }
+            syncSectionsState(section);
         }
     }
 

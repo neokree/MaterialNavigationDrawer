@@ -3,6 +3,7 @@ package it.neokree.materialnavigationdrawer.util;
 import android.content.Context;
 import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 /**
@@ -40,13 +41,21 @@ public class MaterialDrawerLayout extends DrawerLayout {
         return super.onInterceptTouchEvent(ev);
     }
 
-    @Override
-    public void requestDisallowInterceptTouchEvent(final boolean disallowIntercept) {
-        super.requestDisallowInterceptTouchEvent(disallowIntercept);
-
+    public void setMultipaneSupport(boolean support) {
         if(Utils.isTablet(this.getResources())) {
             // custom implementation only for tablets
-            multipaneSupport = disallowIntercept;
+            multipaneSupport = support;
+        }
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+
+        if(multipaneSupport) {
+            return false;
+        }
+        else {
+            return super.onKeyUp(keyCode, event);
         }
     }
 }

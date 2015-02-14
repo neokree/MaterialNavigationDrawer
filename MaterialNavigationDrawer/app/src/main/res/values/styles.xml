@@ -133,11 +133,28 @@
             <item name="drawerType">@integer/DRAWERTYPE_IMAGE</item>
         </style>
 
-    <!-- Test Theme -->
-    <style name="TestTheme" parent="MaterialNavigationDrawerTheme">
+        <!-- Real Color Sections -->
+        <style name="RealColorSections" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar" >
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="drawerType">@integer/DRAWERTYPE_NO_HEADER</item>
+        </style>
+
+    <!-- Back Pattern -->
+    <style name="BackPattern" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar" >
         <item name="colorPrimary">#8bc34a</item>
         <item name="colorPrimaryDark">#558b2f</item>
         <item name="colorAccent">#FFFFFF</item>
+        <item name="drawerType">@integer/DRAWERTYPE_NO_HEADER</item>
+    </style>
+
+    <!-- Test Theme -->
+    <style name="TestTheme" parent="MaterialNavigationDrawerTheme.Light">
+        <item name="colorPrimary">#8bc34a</item>
+        <item name="colorPrimaryDark">#558b2f</item>
+        <item name="colorAccent">#FFFFFF</item>
+        <item name="multipaneSupport">true</item>
     </style>
 
 </resources>
