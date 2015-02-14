@@ -28,6 +28,12 @@ dependencies {
 You don't know how to do something? Visit the [wiki](https://github.com/neokree/MaterialNavigationDrawer/wiki)!<br>
 You need some examples? See the [example project](https://github.com/neokree/MaterialNavigationDrawer/tree/master/MaterialNavigationDrawer)!
 
+### Useful issues
+For open a useful issue, please follow this little guide:
+
+1. Check if your issue is not opened yet. This prevent to have different questions to the same problem.
+2. When you open an issue, please add the library version used, devices tested and related api. 
+
 ### External libraries used
 [Android-UI](https://github.com/markushi/android-ui)
 
