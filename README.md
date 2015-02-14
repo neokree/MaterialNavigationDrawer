@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    compile 'it.neokree:MaterialNavigationDrawer:1.3'
+    compile 'it.neokree:MaterialNavigationDrawer:1.3.1'
 }
 ```
 
@@ -35,7 +35,7 @@ For open a useful issue, please follow this little guide:
 2. When you open an issue, please add the library version used, devices tested and related api. 
 
 ### External libraries used
-[Android-UI](https://github.com/markushi/android-ui)
+[Material-Ripple](https://github.com/balysv/material-ripple)
 
 <img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/art/screen1.jpg" alt="screenshot" width="300px" height="auto" />
 <img src="https://raw.github.com/neokree/MaterialNavigationDrawer/master/art/screen2.jpg" alt="screenshot" width="300px" height="auto" />
