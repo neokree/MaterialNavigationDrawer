@@ -173,10 +173,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
                     switchAccounts(account);
                 } else {// if there is no second account user clicked for open it
-                    if(accountListener != null)
-                        accountListener.onAccountOpening(currentAccount);
-                    if (!deviceSupportMultiPane())
-                        layout.closeDrawer(drawer);
+                    if(accountSwitcherListener != null)
+                        accountSwitcherListener.onClick(null);
                 }
             }
 
@@ -196,10 +194,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
                     switchAccounts(account);
                 } else {// if there is no second account user clicked for open it
-                    if(accountListener != null)
-                        accountListener.onAccountOpening(currentAccount);
-                    if (!deviceSupportMultiPane())
-                        layout.closeDrawer(drawer);
+                    if(accountSwitcherListener != null)
+                        accountSwitcherListener.onClick(null);
                 }
             }
         }
@@ -1577,6 +1573,10 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
     public void closeDrawer() {
         layout.closeDrawer(drawer);
+    }
+
+    public boolean isDrawerOpen() {
+        return layout.isDrawerOpen(drawer);
     }
 
     // create sections
