@@ -217,7 +217,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                         // si inseriscono tutti gli account ma non quello attualmente in uso
                         if(account.getAccountNumber() != MaterialAccount.FIRST_ACCOUNT) {
                             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (56 * density));
-                            sections.addView(account.getSectionView(MaterialNavigationDrawer.this, fontManager.getRobotoMedium(),defaultSectionListener,rippleSupport,account.getAccountNumber()),params);
+                            sections.addView(account.getSectionView(MaterialNavigationDrawer.this, fontManager.getRobotoMedium(),accountSectionListener,rippleSupport,account.getAccountNumber()),params);
                         }
                     }
                     for (MaterialSection section : accountSectionList) {
@@ -313,7 +313,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             }
         }
     };
-    private MaterialSectionListener defaultSectionListener = new MaterialSectionListener() {
+    private MaterialSectionListener accountSectionListener = new MaterialSectionListener() {
         @Override
         public void onClick(MaterialSection section) {
             section.unSelect(); // remove the selected color
@@ -380,9 +380,9 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         drawerColor = typedValue.data;
 
         if(drawerHeaderType == DRAWERHEADER_ACCOUNTS)
-            setContentView(R.layout.activity_material_navigation_drawer);
+            super.setContentView(R.layout.activity_material_navigation_drawer);
         else
-            setContentView(R.layout.activity_material_navigation_drawer_customheader);
+            super.setContentView(R.layout.activity_material_navigation_drawer_customheader);
 
         // init Typeface
         fontManager = new TypefaceManager(this.getAssets());
@@ -741,6 +741,28 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN, drawer);
     }
 
+
+
+    @Override
+    public void setContentView(View view) {
+        throw new RuntimeException("The library have it's own content, please move all content inside section's fragments");
+
+        //super.setContentView(view);
+    }
+
+    @Override
+    public void setContentView(int layoutResID) {
+        throw new RuntimeException("The library have it's own content, please move all content inside section's fragments");
+
+        //super.setContentView(layoutResID);
+    }
+
+    @Override
+    public void setContentView(View view, ViewGroup.LayoutParams params) {
+        throw new RuntimeException("The library have it's own content, please move all content inside section's fragments");
+
+        //super.setContentView(view, params);
+    }
 
     // Gestione dei Menu -----------------------------------------------------------------------------------------------------------------------------
     @Override
@@ -1546,6 +1568,33 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         account.setAccountListener(this);
         account.setAccountNumber(accountManager.size());
         accountManager.add(account);
+    }
+
+    public void removeAccount(MaterialAccount account) {
+        int size = accountManager.size();
+        // si rimuovono le viste gia inserite che stanno per essere cambiate
+        if(size <= 3 && size > 0) {
+            this.setThirdAccountPhoto(null);
+            this.setSecondAccountPhoto(null);
+            this.setFirstAccountPhoto(null);
+        }
+
+        // si ricalcolano gli indici degli account
+        for(int i = 0; i < size; i++ ) {
+            MaterialAccount a = accountManager.get(i);
+
+            if(a.getAccountNumber() > account.getAccountNumber()) {
+                a.setAccountNumber(a.getAccountNumber() - 1);
+            }
+        }
+
+        // si rimuove dalla lista degli account e si esegue il recycle sulle sue view
+        accountManager.remove(account);
+        account.recycle();
+
+        if(account.getAccountNumber() == 0)
+            currentAccount = findAccountNumber(0);
+
     }
 
     /**
