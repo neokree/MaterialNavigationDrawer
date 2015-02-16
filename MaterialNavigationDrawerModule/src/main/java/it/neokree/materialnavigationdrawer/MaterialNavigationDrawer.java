@@ -846,6 +846,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                         section.select();
                         //onClick(section);
 
+                        changeToolbarColor(section);
                         setFragment((Fragment) section.getTargetFragment(), section.getTitle(), (Fragment) currentSection.getTargetFragment());
                         afterFragmentSetted((Fragment) section.getTargetFragment(),section.getTitle());
                         syncSectionsState(section);

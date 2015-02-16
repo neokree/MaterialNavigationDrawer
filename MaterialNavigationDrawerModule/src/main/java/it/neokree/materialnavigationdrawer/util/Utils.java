@@ -19,6 +19,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -177,6 +178,10 @@ public class Utils {
             animation.setFillAfter(true);
             v.startAnimation(animation);
         }
+    }
+
+    public static float dpToPx(Resources resources, float dp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.getDisplayMetrics());
     }
 
 }

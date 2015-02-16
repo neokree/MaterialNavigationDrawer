@@ -4,8 +4,8 @@
     android:id="@+id/section_ripple"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    app:rippleBackground="#fafafa"
-    app:rippleHover="true">
+    app:mrl_rippleBackground="#fafafa"
+    app:mrl_rippleHover="true">
 
     <RelativeLayout
         android:orientation="horizontal"
