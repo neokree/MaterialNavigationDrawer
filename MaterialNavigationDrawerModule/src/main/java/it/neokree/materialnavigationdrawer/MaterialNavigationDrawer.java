@@ -173,7 +173,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
                     switchAccounts(account);
                 } else {// if there is no second account user clicked for open it
-                    if(accountSwitcherListener != null)
+                    if(accountSwitcherListener != null && !singleAccount)
                         accountSwitcherListener.onClick(null);
                 }
             }
@@ -194,7 +194,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
                     switchAccounts(account);
                 } else {// if there is no second account user clicked for open it
-                    if(accountSwitcherListener != null)
+                    if(accountSwitcherListener != null && !singleAccount)
                         accountSwitcherListener.onClick(null);
                 }
             }
@@ -205,16 +205,16 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         public void onClick(View v) {
             if(!drawerTouchLocked) {
 
-                // si rimuovono le viste
+                // si rimuovono le viste  || Views are removed
                 sections.removeAllViews();
                 bottomSections.removeAllViews();
 
                 if (!accountSwitcher) {
-                    // si cambia l'icona del pulsante
+                    // si cambia l'icona del pulsante || Change the icon of the button
                     userButtonSwitcher.setImageResource(R.drawable.ic_arrow_drop_up_white_24dp);
 
                     for (MaterialAccount account : accountManager) {
-                        // si inseriscono tutti gli account ma non quello attualmente in uso
+                        // si inseriscono tutti gli account ma non quello attualmente in uso || Add all account without the current one
                         if(account.getAccountNumber() != MaterialAccount.FIRST_ACCOUNT) {
                             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (56 * density));
                             sections.addView(account.getSectionView(MaterialNavigationDrawer.this, fontManager.getRobotoMedium(),accountSectionListener,rippleSupport,account.getAccountNumber()),params);
@@ -225,7 +225,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                         sections.addView(section.getView(), params);
                     }
 
-                    accountSwitcher = true; // si attiva l'account switcher per annotare che si visualizzano gli account.
+                    // si attiva l'account switcher per annotare che si visualizzano gli account. || accountSwitcher is enabled for checking the account list is showed.
+                    accountSwitcher = true;
                 } else {
                     userButtonSwitcher.setImageResource(R.drawable.ic_arrow_drop_down_white_24dp);
 
@@ -257,31 +258,28 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                     }
 
                     int width = drawer.getWidth();
-                    int heightCover;
-                    switch (drawerHeaderType) {
+                    int heightCover = 0;
+                    switch(drawerHeaderType) {
                         default:
                         case DRAWERHEADER_ACCOUNTS:
                         case DRAWERHEADER_IMAGE:
                         case DRAWERHEADER_CUSTOM:
-                            // si fa il rapporto in 16 : 9
+                            // si fa il rapporto in 16 : 9 || 16:9 rate
                             heightCover = (9 * width) / 16;
                             break;
                         case DRAWERHEADER_NO_HEADER:
-                            // height cover viene usato per prendere l'altezza della statusbar
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT || (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT && !kitkatTraslucentStatusbar)) {
-                                heightCover = 0;
-                            } else {
-                                // su kitkat (con il traslucentstatusbar attivo) e su Lollipop e' 25 dp
-                                heightCover = (int) (25 * density);
-                            }
                             break;
                     }
 
-                    int heightDrawer = (int) (( ( 8 + 8 + 1) * density ) + heightCover + sections.getHeight() + ((density * 48) * bottomSectionList.size()) +  (subheaderList.size() * (35*density)));
-
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT || (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT && !kitkatTraslucentStatusbar)) {
-                        heightDrawer += (density * 25);
+                    // adding status bar height
+                    if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+                        heightCover += (int) (24 * density); // on lollipop status bar is only 24 dp height
                     }
+                    else {
+                        heightCover += (int) (25 * density);
+                    }
+
+                    int heightDrawer = (int) (( ( 8 + 8 ) * density ) + 1 + heightCover + sections.getHeight() + ((density * 48) * bottomSectionList.size()) +  (subheaderList.size() * (35 * density)));
 
                     View divisor = new View(MaterialNavigationDrawer.this);
                     divisor.setBackgroundColor(Color.parseColor("#e0e0e0"));
@@ -494,6 +492,12 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             }
         }
 
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+
         // INIT ACTION BAR
         this.setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
@@ -533,10 +537,12 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                     if(drawerListener != null)
                         drawerListener.onDrawerClosed(view);
 
-                    if(isFragmentRequested()) {
-                        setFragment(this.getFragmentRequested(), this.getTitleRequested(), this.getOldFragment());
-                        afterFragmentSetted(this.getFragmentRequested(),this.getTitleRequested());
-                        this.removeFragmentRequest();
+                    if(hasRequest()) {
+                        MaterialSection section = getRequestedSection();
+                        changeToolbarColor(section);
+                        setFragment((Fragment) section.getTargetFragment(), section.getTitle(), (Fragment) currentSection.getTargetFragment());
+                        afterFragmentSetted((Fragment) section.getTargetFragment(),section.getTitle());
+                        this.removeRequest();
                     }
                 }
 
@@ -592,7 +598,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                 // change user space to 16:9
                 int width = drawer.getWidth();
 
-                int heightCover;
+                int heightCover = 0;
                 switch(drawerHeaderType) {
                     default:
                     case DRAWERHEADER_ACCOUNTS:
@@ -600,16 +606,15 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                     case DRAWERHEADER_CUSTOM:
                         // si fa il rapporto in 16 : 9
                         heightCover = (9 * width) / 16;
+
+                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                            heightCover += (int) (24 * density);
+
+                        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT && kitkatTraslucentStatusbar)
+                            heightCover += (int) (25 * density);
+
                         break;
                     case DRAWERHEADER_NO_HEADER:
-                        // height cover viene usato per prendere l'altezza della statusbar
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT || (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT && !kitkatTraslucentStatusbar)) {
-                            heightCover = 0;
-                        }
-                        else {
-                            // su kitkat (con il traslucentstatusbar attivo) e su Lollipop e' 25 dp
-                            heightCover = (int) (25 * density);
-                        }
                         break;
                 }
 
@@ -622,12 +627,13 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                     customDrawerHeader.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, heightCover));
                 }
 
-                //  heightCover (DRAWER HEADER) + 8 (PADDING) + sections + 8 (PADDING) + 1 (DIVISOR) + bottomSections + subheaders
-                int heightDrawer = (int) (( ( 8 + 8 + 1) * density ) + heightCover + sections.getHeight() + ((density * 48) * bottomSectionList.size()) +  (subheaderList.size() * (35*density)));
-
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT || (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT && !kitkatTraslucentStatusbar)) {
-                    heightDrawer += (density * 25);
+                // adding status bar height for other version of android that not have traslucent status bar
+                if((Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT && !kitkatTraslucentStatusbar) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT ) {
+                    heightCover += (int) (25 * density);
                 }
+
+                //  heightCover (DRAWER HEADER) + 8 (PADDING) + sections + 8 (PADDING) + 1 (DIVISOR) + bottomSections + subheaders
+                int heightDrawer = (int) (( ( 8 + 8 ) * density ) + 1 + heightCover + sections.getHeight() + ((density * 48) * bottomSectionList.size()) +  (subheaderList.size() * (35 * density)));
 
                 // create the divisor
                 View divisor = new View(MaterialNavigationDrawer.this);
@@ -1205,7 +1211,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     }
 
     private boolean deviceSupportMultiPane() {
-        if(multiPaneSupport && resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && resources.getConfiguration().smallestScreenWidthDp >= 600)
+        if(multiPaneSupport && resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && Utils.isTablet(resources))
             return true;
         else
             return false;
@@ -1259,8 +1265,14 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
         switch (section.getTarget()) {
             case MaterialSection.TARGET_FRAGMENT:
-                changeToolbarColor(section);
+                // se l'utente clicca sulla stessa schermata in cui si trova si chiude il drawer e basta
+                if(section == currentSection) {
+                    layout.closeDrawer(drawer);
+                    return;
+                }
+
                 if(deviceSupportMultiPane()) {
+                    changeToolbarColor(section);
                     setFragment((Fragment) section.getTargetFragment(), section.getTitle(), (Fragment) currentSection.getTargetFragment());
                     afterFragmentSetted((Fragment) section.getTargetFragment(),section.getTitle());
                 }
@@ -1268,7 +1280,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                     // si disattiva il touch sul drawer
                     setDrawerTouchable(false);
                     // la chiamata al fragment viene spostata dopo la chiusura del drawer
-                    pulsante.addFragmentRequest((Fragment) section.getTargetFragment(), section.getTitle(), (Fragment) currentSection.getTargetFragment());
+                    pulsante.addRequest(section);
+
                     layout.closeDrawer(drawer);
 
                 }
@@ -1358,35 +1371,25 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         int sectionPrimaryColorDark;
 
         if (section.hasSectionColor() && !uniqueToolbarColor) {
-            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-                if (!section.hasSectionColorDark())
-                    sectionPrimaryColorDark = darkenColor(section.getSectionColor());
-                else
-                    sectionPrimaryColorDark = section.getSectionColorDark();
-            } else
-                sectionPrimaryColorDark = section.getSectionColor(); // Lollipop have his darker status bar
+            if (!section.hasSectionColorDark())
+                sectionPrimaryColorDark = darkenColor(section.getSectionColor());
+            else
+                sectionPrimaryColorDark = section.getSectionColorDark();
 
             sectionPrimaryColor = section.getSectionColor();
         } else {
-            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT)
-                sectionPrimaryColorDark = primaryDarkColor;
-            else
-                sectionPrimaryColorDark = primaryColor; // Lollipop have his darker status bar | under kitkat is not showed.
-
+            sectionPrimaryColorDark = primaryDarkColor;
             sectionPrimaryColor = primaryColor;
         }
 
         this.getToolbar().setBackgroundColor(sectionPrimaryColor);
-        this.statusBar.setImageDrawable(new ColorDrawable(sectionPrimaryColorDark));
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            this.getWindow().setStatusBarColor(sectionPrimaryColorDark);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            this.statusBar.setImageDrawable(new ColorDrawable(sectionPrimaryColorDark));
     }
 
     public void changeToolbarColor(int primaryColor, int primaryDarkColor) {
         if(statusBar != null)
-            this.statusBar.setImageDrawable(new ColorDrawable(primaryDarkColor));
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            this.getWindow().setStatusBarColor(primaryDarkColor);
+            statusBar.setImageDrawable(new ColorDrawable(primaryDarkColor));
 
         if(getToolbar() != null)
             this.getToolbar().setBackgroundColor(primaryColor);
@@ -1839,20 +1842,40 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
      * @return the section at position or null if the section is not found
      */
     public MaterialSection getSectionAtCurrentPosition(int position) {
-
-        MaterialSection sectionAtPosition = null;
-
         for(MaterialSection section : sectionList) {
             if(section.getPosition() == position)
-                sectionAtPosition = section;
+                return section;
         }
 
         for(MaterialSection section : bottomSectionList) {
             if(section.getPosition() == position)
-                sectionAtPosition = section;
+                return section;
         }
 
-        return sectionAtPosition;
+        return null;
+    }
+
+    /**
+     * Get a setted section knowing his title
+     *
+     * N.B. this search only into section list and bottom section list.
+     * @param title is the title of the section
+     * @return the section with title or null if the section is not founded
+     */
+    public MaterialSection getSectionByTitle(String title) {
+
+        for(MaterialSection section : sectionList) {
+            if(section.getTitle().equals(title)) {
+                return section;
+            }
+        }
+
+        for(MaterialSection section : bottomSectionList) {
+            if(section.getTitle().equals(title))
+                return section;
+        }
+
+        return null;
     }
 
     /**
@@ -1883,7 +1906,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
     /**
      * Get the account list
-     * @return
+     * @return the account lists
      */
     public List<MaterialAccount> getAccountList() {
         return accountManager;
@@ -1902,6 +1925,18 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         return findAccountNumber(position);
     }
 
+    /**
+     * Get the account knowing his title
+     * @param title the title of the account (it can change at runtime!)
+     * @return the account founded or null if the account not exists
+     */
+    public MaterialAccount getAccountByTitle(String title) {
+        for(MaterialAccount account : accountManager)
+            if(currentAccount.getTitle().equals(title))
+                return account;
+
+        return null;
+    }
 
 
 }

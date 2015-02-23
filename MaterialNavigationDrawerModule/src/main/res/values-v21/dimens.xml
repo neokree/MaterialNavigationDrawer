@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="statusMargin">21dp</dimen>
-    <dimen name="userSpace">189dp</dimen>
-    <dimen name="photoMarginTop">41dp</dimen>
+    <dimen name="statusMargin">24dp</dimen>
+    <dimen name="userSpace">188dp</dimen>
+    <dimen name="photoMarginTop">40dp</dimen>
 
 </resources>

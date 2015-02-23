@@ -5,49 +5,37 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 
+import it.neokree.materialnavigationdrawer.elements.MaterialSection;
+
 /**
  * Created by neokree on 14/02/15.
  */
 public class MaterialActionBarDrawerToggle<Fragment> extends ActionBarDrawerToggle {
 
-    private String titleRequested;
-    private Fragment fragmentRequested;
-    private Fragment oldFragment;
+    private MaterialSection<Fragment> requestedSection;
     private boolean request;
 
     public MaterialActionBarDrawerToggle(Activity activity, DrawerLayout drawerLayout, Toolbar toolbar, int openDrawerContentDescRes, int closeDrawerContentDescRes) {
         super(activity, drawerLayout, toolbar, openDrawerContentDescRes, closeDrawerContentDescRes);
+        request = false;
     }
 
-    public void addFragmentRequest(Fragment fragment, String title,Fragment oldFragment) {
+    public void addRequest(MaterialSection section) {
         request = true;
-
-        titleRequested = title;
-        fragmentRequested = fragment;
-        this.oldFragment = oldFragment;
+        requestedSection = section;
     }
 
-    public boolean isFragmentRequested() {
+    public void removeRequest() {
+        request = false;
+        requestedSection = null;
+    }
+
+    public boolean hasRequest() {
         return request;
     }
 
-    public Fragment getFragmentRequested() {
-        return fragmentRequested;
+    public MaterialSection getRequestedSection() {
+        return requestedSection;
     }
 
-    public String getTitleRequested() {
-        return titleRequested;
-    }
-
-    public Fragment getOldFragment() {
-        return oldFragment;
-    }
-
-    public void removeFragmentRequest() {
-        request = false;
-
-        titleRequested = null;
-        fragmentRequested = null;
-        oldFragment = null;
-    }
 }
