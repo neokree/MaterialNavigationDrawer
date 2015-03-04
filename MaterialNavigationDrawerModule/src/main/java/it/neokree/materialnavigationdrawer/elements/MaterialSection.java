@@ -40,7 +40,7 @@ public class MaterialSection<Fragment> implements View.OnTouchListener, View.OnC
     public static final int ICON_24DP = 1;
     public static final int ICON_40DP = 2;
 
-    private int position;
+    private int accountPosition; // used only for keep tracking of account section
     private int targetType;
     private View view;
     private TextView text;
@@ -322,8 +322,8 @@ public class MaterialSection<Fragment> implements View.OnTouchListener, View.OnC
 
     // setter
 
-    public void setPosition(int position) {
-        this.position = position;
+    public void setAccountPosition(int position) { // used only for keep tracking of account section
+        this.accountPosition = position;
     }
 
     public void setOnClickListener(MaterialSectionListener listener) {
@@ -410,8 +410,8 @@ public class MaterialSection<Fragment> implements View.OnTouchListener, View.OnC
         return title;
     }
 
-    public int getPosition() {
-        return position;
+    public int getAccountPosition() { // used only for keep tracking of account section
+        return accountPosition;
     }
 
     public int getTarget() {

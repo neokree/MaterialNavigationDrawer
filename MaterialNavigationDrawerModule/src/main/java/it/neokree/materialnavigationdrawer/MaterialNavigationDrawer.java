@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import it.neokree.materialnavigationdrawer.elements.Element;
 import it.neokree.materialnavigationdrawer.elements.MaterialAccount;
 import it.neokree.materialnavigationdrawer.elements.MaterialSection;
 import it.neokree.materialnavigationdrawer.elements.MaterialSubheader;
@@ -76,13 +77,9 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     private static final int DRAWERHEADER_CUSTOM = 2;
     private static final int DRAWERHEADER_NO_HEADER = 3;
 
-    private static final int ELEMENT_TYPE_SECTION = 0;
-    private static final int ELEMENT_TYPE_DIVISOR = 1;
-    private static final int ELEMENT_TYPE_SUBHEADER = 2;
-    private static final int ELEMENT_TYPE_BOTTOM_SECTION = 3;
-
-    private static final String STATE_SECTION = "section";
-    private static final String STATE_ACCOUNT = "account";
+    private static final String STATE_SECTION = "MaterialNavigationDrawer_section";
+    private static final String STATE_LIST = "MaterialNavigationDrawer_list";
+    private static final String STATE_ACCOUNT = "MaterialNavigationDrawer_account";
 
     private MaterialDrawerLayout layout;
     private ActionBar actionBar;
@@ -109,7 +106,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     private List<MaterialAccount> accountManager;
     private List<MaterialSection> accountSectionList;
     private List<MaterialSubheader> subheaderList;
-    private List<Integer> elementsList;
+    private List<Element> elementsList;
     private List<Fragment> childFragmentStack;
     private List<String> childTitleStack;
 
@@ -231,15 +228,15 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                     userButtonSwitcher.setImageResource(R.drawable.ic_arrow_drop_down_white_24dp);
 
                     int indexSection = 0 ,indexSubheader = 0;
-                    for(int type : elementsList) {
-                        switch(type) {
-                            case ELEMENT_TYPE_SECTION:
+                    for(Element element : elementsList) {
+                        switch(element.getType()) {
+                            case Element.TYPE_SECTION:
                                 MaterialSection section = sectionList.get(indexSection);
                                 indexSection++;
                                 LinearLayout.LayoutParams paramSection = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (48 * density));
                                 sections.addView(section.getView(), paramSection);
                                 break;
-                            case ELEMENT_TYPE_DIVISOR:
+                            case Element.TYPE_DIVISOR:
                                 View view = new View(MaterialNavigationDrawer.this);
                                 view.setBackgroundColor(Color.parseColor("#e0e0e0"));
                                 // height 1 px
@@ -247,12 +244,12 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                                 paramDivisor.setMargins(0,(int) (8 * density), 0 , (int) (8 * density));
                                 sections.addView(view,paramDivisor);
                                 break;
-                            case ELEMENT_TYPE_SUBHEADER:
+                            case Element.TYPE_SUBHEADER:
                                 MaterialSubheader subheader = subheaderList.get(indexSubheader);
                                 indexSubheader++;
                                 sections.addView(subheader.getView());
                                 break;
-                            case ELEMENT_TYPE_BOTTOM_SECTION:
+                            case Element.TYPE_BOTTOM_SECTION:
                                 break; // le bottom section vengono gestite dopo l'inserimento degli altri elementi
                         }
                     }
@@ -317,7 +314,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             section.unSelect(); // remove the selected color
 
             if(!drawerTouchLocked) {
-                int accountPosition = section.getPosition();
+                int accountPosition = section.getAccountPosition();
                 MaterialAccount account = findAccountNumber(accountPosition);
 
                 // switch accounts position
@@ -587,7 +584,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             layout.setMultipaneSupport(false);
         }
 
-        // si procede con gli altri elementi dopo la creazioen delle viste
+        // si procede con gli altri elementi dopo la creazione delle viste
         ViewTreeObserver vto = drawer.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
@@ -706,13 +703,13 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
             notifyAccountDataChanged();
 
-            int accountSelected = savedInstanceState.getInt(STATE_SECTION);
-
-            if(accountSelected >= BOTTOM_SECTION_START) {
-                section = bottomSectionList.get(accountSelected-BOTTOM_SECTION_START);
+            int sectionSelected = savedInstanceState.getInt(STATE_SECTION);
+            int sectionListType = savedInstanceState.getInt(STATE_LIST);
+            if(sectionListType == Element.TYPE_SECTION) {
+                section = sectionList.get(sectionSelected);
             }
             else
-                section = sectionList.get(accountSelected);
+                section = bottomSectionList.get(sectionSelected);
 
             if(section.getTarget() != MaterialSection.TARGET_FRAGMENT) {
                 section = sectionList.get(0);
@@ -868,7 +865,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                             throw new RuntimeException("The restored section must have a fragment as target");
                         }
                         backedSection.select();
-                        //onClick(backedSection);
+                        changeToolbarColor(backedSection);
 
                         setFragment((Fragment) backedSection.getTargetFragment(), backedSection.getTitle(), (Fragment) currentSection.getTargetFragment());
                         afterFragmentSetted((Fragment) backedSection.getTargetFragment(),backedSection.getTitle());
@@ -911,7 +908,21 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-        int position = this.getCurrentSection().getPosition();
+        int position = 0;
+        int type = 0;
+        Element e = findElementBySection(currentSection);
+        switch (e.getType()) {
+            default:
+            case Element.TYPE_SECTION:
+                position = sectionList.indexOf(currentSection);
+                break;
+            case Element.TYPE_BOTTOM_SECTION:
+                position = bottomSectionList.indexOf(currentSection);
+                break;
+        }
+        type = e.getType();
+
+        outState.putInt(STATE_LIST,type);
         outState.putInt(STATE_SECTION,position);
         ArrayList<Integer> list = new ArrayList<>();
         for(MaterialAccount account : accountManager)
@@ -1080,6 +1091,14 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         return null;
     }
 
+    private Element findElementBySection(MaterialSection section) {
+        for(Element element : elementsList)
+            if (element.getElement() == section)
+                return element;
+
+        return null;
+    }
+
     private void switchAccounts(final MaterialAccount newAccount) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             final ImageView floatingImage = new ImageView(this);
@@ -1237,17 +1256,20 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     private void syncSectionsState(MaterialSection section) {
         currentSection = section;
 
-        int position = section.getPosition();
-
-        for (MaterialSection mySection : sectionList) {
-            if (position != mySection.getPosition())
-                mySection.unSelect();
+        // search in first list
+        int position = sectionList.indexOf(section);
+        if(position != -1) {
+            for (int i = 0;i < sectionList.size();i++)
+                if(i != position)
+                    sectionList.get(i).unSelect();
         }
-        for (MaterialSection mySection : bottomSectionList) {
-            if (position != mySection.getPosition())
-                mySection.unSelect();
+        else {
+            // section is a bottom section
+            position = bottomSectionList.indexOf(section);
+            for (int i = 0;i < bottomSectionList.size();i++)
+                if(i != position)
+                    bottomSectionList.get(i).unSelect();
         }
-
     }
 
     protected int darkenColor(int color) {
@@ -1511,7 +1533,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     }
 
     public void addSection(MaterialSection section) {
-        section.setPosition(sectionList.size());
+//        section.setPosition(sectionList.size());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)(48 * density));
         section.setTypeface(fontManager.getRobotoMedium());
         sectionList.add(section);
@@ -1520,20 +1542,28 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         sections.addView(section.getView(),params);
 
         // add the element to the list
-        elementsList.add(ELEMENT_TYPE_SECTION);
+        elementsList.add(new Element(Element.TYPE_SECTION,section));
+    }
+
+    public void removeSection(MaterialSection section) {
+        // remove section from section list and recalculate positions
+        sectionList.remove(section);
+
+        // removes section view from the drawer
+        sections.removeView(section.getView());
     }
 
     public void addBottomSection(MaterialSection section) {
-        section.setPosition(BOTTOM_SECTION_START + bottomSectionList.size());
+//        section.setPosition(BOTTOM_SECTION_START + bottomSectionList.size());
         section.setTypeface(fontManager.getRobotoRegular());
         bottomSectionList.add(section);
 
         // add the element to the list
-        elementsList.add(ELEMENT_TYPE_BOTTOM_SECTION);
+        elementsList.add(new Element(Element.TYPE_BOTTOM_SECTION,section));
     }
 
     public void addAccountSection(MaterialSection section) {
-        section.setPosition(accountSectionList.size());
+//        section.setPosition(accountSectionList.size());
         section.setTypeface(fontManager.getRobotoMedium());
         accountSectionList.add(section);
     }
@@ -1548,7 +1578,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         sections.addView(view, params);
 
         // add the element to the list
-        elementsList.add(ELEMENT_TYPE_DIVISOR);
+        elementsList.add(new Element(Element.TYPE_DIVISOR,view));
     }
 
     public void addSubheader(CharSequence title) {
@@ -1561,7 +1591,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         sections.addView(subheader.getView());
 
         // add the element to the list
-        elementsList.add(ELEMENT_TYPE_SUBHEADER);
+        elementsList.add(new Element(Element.TYPE_SUBHEADER,subheader));
     }
 
     public void addAccount(MaterialAccount account) {
@@ -1834,26 +1864,23 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         return currentSection;
     }
 
-    /**
-     * Get a setted section knowing his position
-     *
-     * N.B. this search only into section list and bottom section list.
-     * @param position is the position of the section
-     * @return the section at position or null if the section is not found
-     */
-    public MaterialSection getSectionAtCurrentPosition(int position) {
-        for(MaterialSection section : sectionList) {
-            if(section.getPosition() == position)
-                return section;
-        }
-
-        for(MaterialSection section : bottomSectionList) {
-            if(section.getPosition() == position)
-                return section;
-        }
-
-        return null;
-    }
+//    /**
+//     * Get a setted section knowing his position
+//     *
+//     * N.B. this search only into section list and bottom section list.
+//     * @param position is the position of the section
+//     * @return the section at position or null if the section is not found
+//     */
+//    public MaterialSection getSectionAtCurrentPosition(int position) {
+//
+//
+//        for(MaterialSection section : bottomSectionList) {
+//            if(section.getPosition() == position)
+//                return section;
+//        }
+//
+//        return null;
+//    }
 
     /**
      * Get a setted section knowing his title

@@ -176,7 +176,7 @@ public class MaterialAccount {
         if(hasNotifications) {
             sectionView.setNotificationsText(notifications);
         }
-        sectionView.setPosition(position);
+        sectionView.setAccountPosition(position);
 
         return sectionView.getView();
     }
