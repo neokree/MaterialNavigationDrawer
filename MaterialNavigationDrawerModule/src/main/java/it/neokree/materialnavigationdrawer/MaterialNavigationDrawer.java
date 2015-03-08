@@ -65,7 +65,7 @@ import it.neokree.materialnavigationdrawer.util.Utils;
 @SuppressLint("InflateParams")
 public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivity implements MaterialSectionListener,MaterialAccount.OnAccountDataLoaded {
 
-    public static final int BOTTOM_SECTION_START = 10000;
+//    public static final int BOTTOM_SECTION_START = 10000;
     private static final int USER_CHANGE_TRANSITION = 500;
 
     public static final int BACKPATTERN_BACK_ANYWHERE = 0;
@@ -692,7 +692,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
             ArrayList<Integer> accountNumbers = savedInstanceState.getIntegerArrayList(STATE_ACCOUNT);
 
-            // ripristina gli account
+            // ripristina gli account | restore accounts
             for(int i = 0; i< accountNumbers.size(); i++) {
                 MaterialAccount account = accountManager.get(i);
                 account.setAccountNumber(accountNumbers.get(i));
@@ -779,7 +779,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
-        if(layout.isDrawerOpen(drawer)) {
+        if(layout.isDrawerOpen(drawer) && !deviceSupportMultiPane()) {
             menu.clear();
         }
 
@@ -962,9 +962,11 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
      * @param section the section which is replaced
      */
     public void setSection(MaterialSection section) {
-        this.onClick(section);
-
-        setDrawerTouchable(true);
+        section.select();
+        syncSectionsState(section);
+        changeToolbarColor(section);
+        setFragment((Fragment) section.getTargetFragment(), section.getTitle(), (Fragment) currentSection.getTargetFragment());
+        afterFragmentSetted((Fragment) section.getTargetFragment(),section.getTitle());
     }
 
     /**
@@ -981,7 +983,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             childFragmentStack.remove(childFragmentStack.size() - 1);
             childTitleStack.remove(childTitleStack.size() - 1);
         }
-        else for(int i = childFragmentStack.size()-1;i >= 0;i++) { // if a section is clicked when user is into a child remove all childs from stack
+        else for(int i = childFragmentStack.size()-1; i >= 0;i--) { // if a section is clicked when user is into a child remove all childs from stack
             childFragmentStack.remove(i);
             childTitleStack.remove(i);
         }
