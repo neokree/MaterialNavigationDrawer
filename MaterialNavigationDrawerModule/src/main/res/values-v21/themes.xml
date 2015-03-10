@@ -10,6 +10,8 @@
         <item name="uniqueToolbarColor">false</item>
         <item name="singleAccount">false</item>
         <item name="multipaneSupport">false</item>
+        <item name="defaultSectionLoaded">0</item>
+        <item name="learningPattern">true</item>
         <item name="sectionStyle">@style/MaterialSectionTheme</item>
         <item name="subheaderStyle">@style/MaterialSubheaderTheme</item>
         <item name="accountStyle">@style/MaterialAccountTheme</item>
@@ -24,6 +26,8 @@
         <item name="uniqueToolbarColor">false</item>
         <item name="singleAccount">false</item>
         <item name="multipaneSupport">false</item>
+        <item name="defaultSectionLoaded">0</item>
+        <item name="learningPattern">true</item>
         <item name="sectionStyle">@style/MaterialSectionTheme.Light</item>
         <item name="subheaderStyle">@style/MaterialSubheaderTheme.Light</item>
         <item name="accountStyle">@style/MaterialAccountTheme</item>
@@ -40,6 +44,8 @@
         <item name="uniqueToolbarColor">false</item>
         <item name="singleAccount">false</item>
         <item name="multipaneSupport">false</item>
+        <item name="defaultSectionLoaded">0</item>
+        <item name="learningPattern">true</item>
         <item name="sectionStyle">@style/MaterialSectionTheme.Light</item>
         <item name="subheaderStyle">@style/MaterialSubheaderTheme.Light</item>
         <item name="accountStyle">@style/MaterialAccountTheme</item>

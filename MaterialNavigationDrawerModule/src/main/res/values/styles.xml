@@ -20,6 +20,8 @@
         <attr name="sectionStyle" format="reference" />
         <attr name="subheaderStyle" format="reference"/>
         <attr name="accountStyle" format="reference" />
+        <attr name="learningPattern" format="boolean" /><!-- true -> attivo, false -> disattivato -->
+        <attr name="defaultSectionLoaded" format="integer" /><!-- la prima section ad essere caricata -->
     </declare-styleable>
 
     <declare-styleable name="MaterialSubheader">

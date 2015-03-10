@@ -65,7 +65,7 @@ import it.neokree.materialnavigationdrawer.util.Utils;
 @SuppressLint("InflateParams")
 public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivity implements MaterialSectionListener,MaterialAccount.OnAccountDataLoaded {
 
-//    public static final int BOTTOM_SECTION_START = 10000;
+    //    public static final int BOTTOM_SECTION_START = 10000;
     private static final int USER_CHANGE_TRANSITION = 500;
 
     public static final int BACKPATTERN_BACK_ANYWHERE = 0;
@@ -131,9 +131,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     private static boolean learningPattern = true;
     private int backPattern = BACKPATTERN_BACK_ANYWHERE;
     private int drawerHeaderType;
-
-    // fragment request
-
+    private int defaultSectionLoaded = 0;
 
     // resources
     private Resources resources;
@@ -371,8 +369,12 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         singleAccount = typedValue.data != 0;
         theme.resolveAttribute(R.attr.multipaneSupport,typedValue,false);
         multiPaneSupport = typedValue.data != 0;
+        theme.resolveAttribute(R.attr.learningPattern,typedValue,false);
+        learningPattern = typedValue.data != 0;
         theme.resolveAttribute(R.attr.drawerColor,typedValue,true);
         drawerColor = typedValue.data;
+        theme.resolveAttribute(R.attr.defaultSectionLoaded,typedValue,true);
+        defaultSectionLoaded = typedValue.data;
 
         if(drawerHeaderType == DRAWERHEADER_ACCOUNTS)
             super.setContentView(R.layout.activity_material_navigation_drawer);
@@ -554,17 +556,11 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                 @Override
                 public void onDrawerSlide(View drawerView, float slideOffset) {
 
-                    if(!isCurrentFragmentChild) { // if user seeing a master fragment
-
-                        // if user wants the sliding arrow it compare
-                        if (slidingDrawerEffect)
-                            super.onDrawerSlide(drawerView, slideOffset);
-                        else
-                            super.onDrawerSlide(drawerView, 0);
-                    }
-                    else {// if user seeing a child fragment always shows the back arrow
-                        super.onDrawerSlide(drawerView,1f);
-                    }
+                    // if user wants the sliding arrow it compare
+                    if (slidingDrawerEffect)
+                        super.onDrawerSlide(drawerView, slideOffset);
+                    else
+                        super.onDrawerSlide(drawerView, 0);
 
                     if(drawerListener != null)
                         drawerListener.onDrawerSlide(drawerView,slideOffset);
@@ -684,7 +680,11 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             }
 
             // init section
-            section = sectionList.get(0);
+            if(defaultSectionLoaded < 0 || defaultSectionLoaded >= sectionList.size()) {
+                throw new RuntimeException("You are trying to open at startup a section that does not exist");
+            }
+
+            section = sectionList.get(defaultSectionLoaded);
             if(section.getTarget() != MaterialSection.TARGET_FRAGMENT)
                 throw new RuntimeException("The first section added must have a fragment as target");
         }
@@ -964,9 +964,37 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     public void setSection(MaterialSection section) {
         section.select();
         syncSectionsState(section);
-        changeToolbarColor(section);
-        setFragment((Fragment) section.getTargetFragment(), section.getTitle(), (Fragment) currentSection.getTargetFragment());
-        afterFragmentSetted((Fragment) section.getTargetFragment(),section.getTitle());
+
+        switch (section.getTarget()) {
+            case MaterialSection.TARGET_FRAGMENT:
+                // se l'utente clicca sulla stessa schermata in cui si trova si chiude il drawer e basta
+                if(section == currentSection) {
+                    layout.closeDrawer(drawer);
+                    return;
+                }
+                changeToolbarColor(section);
+                setFragment((Fragment) section.getTargetFragment(), section.getTitle(), (Fragment) currentSection.getTargetFragment());
+                afterFragmentSetted((Fragment) section.getTargetFragment(),section.getTitle());
+                break;
+            case MaterialSection.TARGET_ACTIVITY:
+                this.startActivity(section.getTargetIntent());
+                if (!deviceSupportMultiPane())
+                    layout.closeDrawer(drawer);
+                break;
+            case MaterialSection.TARGET_LISTENER:
+                // call the section listener
+                section.getTargetListener().onClick(section);
+                if (!deviceSupportMultiPane())
+                    layout.closeDrawer(drawer);
+
+            default:
+                break;
+        }
+
+        // se il target e' un activity la sezione corrente rimane quella precedente
+        if(section.getTarget() != MaterialSection.TARGET_ACTIVITY ) {
+            syncSectionsState(section);
+        }
     }
 
     /**
@@ -1421,6 +1449,15 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
     public void setBackPattern(int backPattern) {
         this.backPattern = backPattern;
+    }
+
+    /**
+     * Set the section that will be opened when the activity starts.
+     * NOTE: 0 is for the first section
+     * @param sectionNumber is the number of section that you have added in the init() method.
+     */
+    public void setDefaultSectionLoaded(int sectionNumber) {
+        defaultSectionLoaded = sectionNumber;
     }
 
     public void setDrawerHeaderCustom(View view) {
@@ -1966,6 +2003,5 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
         return null;
     }
-
 
 }
