@@ -630,7 +630,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
                 // create the divisor
                 View divisor = new View(MaterialNavigationDrawer.this);
-                divisor.setBackgroundColor(Color.parseColor("##8f8f8f"));
+                divisor.setBackgroundColor(Color.parseColor("#8f8f8f"));
 
                 // si aggiungono le bottom sections
                 if(heightDrawer >= Utils.getScreenHeight(MaterialNavigationDrawer.this)) {
