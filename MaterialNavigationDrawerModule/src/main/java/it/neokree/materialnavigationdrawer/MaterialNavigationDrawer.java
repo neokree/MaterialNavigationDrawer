@@ -236,7 +236,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                                 break;
                             case Element.TYPE_DIVISOR:
                                 View view = new View(MaterialNavigationDrawer.this);
-                                view.setBackgroundColor(Color.parseColor("#e0e0e0"));
+                                view.setBackgroundColor(Color.parseColor("#8f8f8f"));
                                 // height 1 px
                                 LinearLayout.LayoutParams paramDivisor = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,1);
                                 paramDivisor.setMargins(0,(int) (8 * density), 0 , (int) (8 * density));
@@ -277,7 +277,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                     int heightDrawer = (int) (( ( 8 + 8 ) * density ) + 1 + heightCover + sections.getHeight() + ((density * 48) * bottomSectionList.size()) +  (subheaderList.size() * (35 * density)));
 
                     View divisor = new View(MaterialNavigationDrawer.this);
-                    divisor.setBackgroundColor(Color.parseColor("#e0e0e0"));
+                    divisor.setBackgroundColor(Color.parseColor("#8f8f8f"));
 
                     // si aggiungono le bottom sections
                     if (heightDrawer >= Utils.getScreenHeight(MaterialNavigationDrawer.this)) {
@@ -630,7 +630,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
                 // create the divisor
                 View divisor = new View(MaterialNavigationDrawer.this);
-                divisor.setBackgroundColor(Color.parseColor("#e0e0e0"));
+                divisor.setBackgroundColor(Color.parseColor("##8f8f8f"));
 
                 // si aggiungono le bottom sections
                 if(heightDrawer >= Utils.getScreenHeight(MaterialNavigationDrawer.this)) {
@@ -1609,7 +1609,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
     public void addDivisor() {
         View view = new View(this);
-        view.setBackgroundColor(Color.parseColor("#e0e0e0"));
+        view.setBackgroundColor(Color.parseColor("#8f8f8f"));
         // height 1 px
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,1);
         params.setMargins(0,(int) (8 * density), 0 , (int) (8 * density));
