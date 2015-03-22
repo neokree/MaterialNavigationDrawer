@@ -25,6 +25,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +35,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -132,6 +134,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
     private int backPattern = BACKPATTERN_BACK_ANYWHERE;
     private int drawerHeaderType;
     private int defaultSectionLoaded = 0;
+    private boolean toolbarElevation;
 
     // resources
     private Resources resources;
@@ -375,6 +378,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
         drawerColor = typedValue.data;
         theme.resolveAttribute(R.attr.defaultSectionLoaded,typedValue,true);
         defaultSectionLoaded = typedValue.data;
+        theme.resolveAttribute(R.attr.toolbarElevation, typedValue, false);
+        toolbarElevation = typedValue.data != 0;
 
         if(drawerHeaderType == DRAWERHEADER_ACCOUNTS)
             super.setContentView(R.layout.activity_material_navigation_drawer);
@@ -496,6 +501,19 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
+
+        // INIT TOOLBAR ELEVATION
+        if (toolbarElevation) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                // 4 dp elevation
+                toolbar.setElevation(4 * density);
+            }
+            else {
+                View elevation = LayoutInflater.from(this).inflate(R.layout.layout_toolbar_elevation,content, false);
+                content.addView(elevation);
+            }
+        }
+
 
         // INIT ACTION BAR
         this.setSupportActionBar(toolbar);
@@ -969,7 +987,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             case MaterialSection.TARGET_FRAGMENT:
                 // se l'utente clicca sulla stessa schermata in cui si trova si chiude il drawer e basta
                 if(section == currentSection) {
-                    layout.closeDrawer(drawer);
+                    if(!deviceSupportMultiPane())
+                        layout.closeDrawer(drawer);
                     return;
                 }
                 changeToolbarColor(section);
@@ -1392,6 +1411,20 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
     public void disableLearningPattern() {
         learningPattern = false;
+    }
+
+    public void enableToolbarElevation() {
+        if (!toolbarElevation) {
+            toolbarElevation = true;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                // 4 dp elevation
+                toolbar.setElevation(4 * density);
+            }
+            else {
+                View elevation = LayoutInflater.from(this).inflate(R.layout.layout_toolbar_elevation,content, false);
+                content.addView(elevation);
+            }
+        }
     }
 
     /**

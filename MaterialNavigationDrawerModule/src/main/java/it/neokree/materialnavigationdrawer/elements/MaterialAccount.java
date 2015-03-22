@@ -227,7 +227,7 @@ public class MaterialAccount {
 
 
             Bitmap photo = Utils.resizeBitmap(params[0],photoSize.x,photoSize.y);
-            params[0].recycle();
+//            params[0].recycle();
 
             circularPhoto = new BitmapDrawable(resources,Utils.getCroppedBitmapDrawable(photo));
             return new BitmapDrawable(resources,photo);
@@ -268,7 +268,7 @@ public class MaterialAccount {
             Point backSize = Utils.getBackgroundSize(resources);
 
             Bitmap back = Utils.resizeBitmap(params[0],backSize.x,backSize.y);
-            params[0].recycle();
+//            params[0].recycle();
 
             return new BitmapDrawable(resources,back);
         }

@@ -13,6 +13,7 @@
         <item name="multipaneSupport">false</item>
         <item name="defaultSectionLoaded">0</item>
         <item name="learningPattern">true</item>
+        <item name="toolbarElevation">false</item>
     </style>
 
     <style name="MaterialNavigationDrawerTheme.Light" parent="Theme.AppCompat.Light.NoActionBar" >
@@ -27,6 +28,7 @@
         <item name="multipaneSupport">false</item>
         <item name="defaultSectionLoaded">0</item>
         <item name="learningPattern">true</item>
+        <item name="toolbarElevation">false</item>
     </style>
 
     <style name="MaterialNavigationDrawerTheme.Light.DarkActionBar" parent="Theme.AppCompat.Light.NoActionBar" >
@@ -43,6 +45,7 @@
         <item name="multipaneSupport">false</item>
         <item name="defaultSectionLoaded">0</item>
         <item name="learningPattern">true</item>
+        <item name="toolbarElevation">false</item>
     </style>
 
     <style name="MaterialNavigationDrawerTheme.Light.TranslucentKitKatStatusBar" parent="MaterialNavigationDrawerTheme.Light" />

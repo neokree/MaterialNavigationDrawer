@@ -141,13 +141,40 @@
             <item name="drawerType">@integer/DRAWERTYPE_NO_HEADER</item>
         </style>
 
-    <!-- Back Pattern -->
-    <style name="BackPattern" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar" >
-        <item name="colorPrimary">#8bc34a</item>
-        <item name="colorPrimaryDark">#558b2f</item>
-        <item name="colorAccent">#FFFFFF</item>
-        <item name="drawerType">@integer/DRAWERTYPE_NO_HEADER</item>
-    </style>
+        <!-- Default Section Loaded -->
+        <style name="DefaultSectionLoaded" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar" >
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="drawerType">@integer/DRAWERTYPE_NO_HEADER</item>
+            <item name="defaultSectionLoaded">3</item>
+        </style>
+
+        <!-- Default Section Loaded -->
+        <style name="ActionBarShadow" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar" >
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="drawerType">@integer/DRAWERTYPE_NO_HEADER</item>
+            <item name="toolbarElevation">true</item>
+        </style>
+
+        <!-- Learning Pattern Disabled -->
+        <style name="LearningPatternDisabled" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar" >
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="drawerType">@integer/DRAWERTYPE_NO_HEADER</item>
+            <item name="learningPattern">false</item>
+        </style>
+
+        <!-- Back Pattern -->
+        <style name="BackPattern" parent="MaterialNavigationDrawerTheme.Light.DarkActionBar" >
+            <item name="colorPrimary">#8bc34a</item>
+            <item name="colorPrimaryDark">#558b2f</item>
+            <item name="colorAccent">#FFFFFF</item>
+            <item name="drawerType">@integer/DRAWERTYPE_NO_HEADER</item>
+        </style>
 
     <!-- Test Theme -->
     <style name="TestTheme" parent="MaterialNavigationDrawerTheme.Light">

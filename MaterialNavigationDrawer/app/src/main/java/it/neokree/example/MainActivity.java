@@ -12,8 +12,11 @@ import java.util.ArrayList;
 import it.neokree.example.backpattern.BackAnywhere;
 import it.neokree.example.backpattern.BackPatternCustom;
 import it.neokree.example.backpattern.BackToFirst;
+import it.neokree.example.functionalities.ActionBarShadow;
 import it.neokree.example.functionalities.CustomAccountSection;
+import it.neokree.example.functionalities.DefaultSectionLoaded;
 import it.neokree.example.functionalities.KitkatStatusBar;
+import it.neokree.example.functionalities.LearningPatternDisabled;
 import it.neokree.example.functionalities.MultiPane;
 import it.neokree.example.functionalities.RealColorSections;
 import it.neokree.example.functionalities.RippleBackport;
@@ -58,12 +61,15 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
         list.add("Functionality: Kitkat trasluncent status bar");
         list.add("Functionality: Master/Child example");
         list.add("Functionality: section not pre-rendered");
+        list.add("Functionality: default section loaded");
+        list.add("Functionality: action bar shadow enabled (toolbar elevation)");
+        list.add("Functionality: learning pattern disabled");
 
         list.add("Back Pattern: Back To first");
         list.add("Back Pattern: Back Anywhere");
         list.add("Back Pattern: Custom");
 
-        //list.add("Test");
+//        list.add("Test");
 
         this.setListAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,list));
         this.getListView().setOnItemClickListener(this);
@@ -125,15 +131,24 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                 intent = new Intent(this, RealColorSections.class);
                 break;
             case 17:
-                intent = new Intent(this, BackToFirst.class);
+                intent = new Intent(this, DefaultSectionLoaded.class);
                 break;
             case 18:
-                intent = new Intent(this, BackAnywhere.class);
+                intent = new Intent(this, ActionBarShadow.class);
                 break;
             case 19:
-                intent = new Intent(this, BackPatternCustom.class);
+                intent = new Intent(this, LearningPatternDisabled.class);
                 break;
             case 20:
+                intent = new Intent(this, BackToFirst.class);
+                break;
+            case 21:
+                intent = new Intent(this, BackAnywhere.class);
+                break;
+            case 22:
+                intent = new Intent(this, BackPatternCustom.class);
+                break;
+            case 23:
                 intent = new Intent(this, Test.class);
                 break;
             default:

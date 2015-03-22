@@ -41,6 +41,9 @@
         <activity android:name=".functionalities.UniqueToolbarColor" android:theme="@style/UniqueToolbarColor" />
         <activity android:name=".functionalities.master_child.MasterChildActivity" android:theme="@style/MasterChild" />
         <activity android:name=".functionalities.RealColorSections" android:theme="@style/RealColorSections" />
+        <activity android:name=".functionalities.DefaultSectionLoaded" android:theme="@style/DefaultSectionLoaded" />
+        <activity android:name=".functionalities.ActionBarShadow" android:theme="@style/ActionBarShadow" />
+        <activity android:name=".functionalities.LearningPatternDisabled" android:theme="@style/LearningPatternDisabled" />
 
         <activity android:name=".backpattern.BackToFirst" android:theme="@style/BackPattern" />
         <activity android:name=".backpattern.BackAnywhere" android:theme="@style/BackPattern" />

@@ -34,7 +34,7 @@ public class MaterialSubheader {
 
         // inflate the line
         View view = new View(ctx);
-        view.setBackgroundColor(Color.parseColor("#e0e0e0"));
+        view.setBackgroundColor(Color.parseColor("#8f8f8f"));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,1);
         params.setMargins(0,(int) (8 * density), 0 , (int) (8 * density));
         layout.addView(view,params);

@@ -23,8 +23,15 @@ public class TestFragment2 extends Fragment {
         Bundle data = this.getArguments();
 
         ((Button)view.findViewById(R.id.next_section)).setText(data.getString("Test"));
-
+        ((Button)view.findViewById(R.id.next_section)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
         return view;
     }
+
+
 
 }

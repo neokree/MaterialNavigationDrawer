@@ -22,14 +22,14 @@
             android:layout_height="?attr/actionBarSize"
             android:layout_width="match_parent"
             android:background="?attr/colorPrimary"
-            android:layout_below="@+id/statusBar">
-        </android.support.v7.widget.Toolbar>
+            android:layout_below="@+id/statusBar" />
 
         <FrameLayout
             android:id="@+id/frame_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/toolbar"/>
+
 
     </RelativeLayout>
 

@@ -22,6 +22,7 @@
         <attr name="accountStyle" format="reference" />
         <attr name="learningPattern" format="boolean" /><!-- true -> attivo, false -> disattivato -->
         <attr name="defaultSectionLoaded" format="integer" /><!-- la prima section ad essere caricata -->
+        <attr name="toolbarElevation" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="MaterialSubheader">
