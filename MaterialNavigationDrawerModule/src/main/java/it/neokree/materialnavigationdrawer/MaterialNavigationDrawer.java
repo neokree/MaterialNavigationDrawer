@@ -1469,7 +1469,7 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
 
         this.getToolbar().setBackgroundColor(sectionPrimaryColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-            this.statusBar.setImageDrawable(new ColorDrawable(sectionPrimaryColorDark));
+            statusBar.setImageDrawable(new ColorDrawable(sectionPrimaryColorDark));
     }
 
     public void changeToolbarColor(int primaryColor, int primaryDarkColor) {

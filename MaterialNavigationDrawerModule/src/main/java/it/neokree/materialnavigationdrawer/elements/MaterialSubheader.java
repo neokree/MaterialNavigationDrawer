@@ -53,19 +53,17 @@ public class MaterialSubheader {
         // get attributes from current theme
         Resources.Theme theme = ctx.getTheme();
         TypedValue typedValue = new TypedValue();
-        theme.resolveAttribute(R.attr.sectionStyle,typedValue,true);
-        TypedArray values = theme.obtainStyledAttributes(typedValue.resourceId,R.styleable.MaterialSection);
+        theme.resolveAttribute(R.attr.subheaderStyle,typedValue,true);
+        TypedArray values = theme.obtainStyledAttributes(typedValue.resourceId,R.styleable.MaterialSubheader);
         try {
             titleColor = values.getColor(R.styleable.MaterialSubheader_subheaderTitleColor,0x000);
-
-
         }
         finally {
             values.recycle();
         }
 
         // set attributes to the view
-        text.setTextColor(Color.BLACK);
+        text.setTextColor(titleColor);
 
     }
 
