@@ -1311,6 +1311,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             for (int i = 0;i < sectionList.size();i++)
                 if(i != position)
                     sectionList.get(i).unSelect();
+            for (int i = 0; i < bottomSectionList.size();i++)
+                bottomSectionList.get(i).unSelect();
         }
         else {
             // section is a bottom section
@@ -1318,6 +1320,8 @@ public abstract class MaterialNavigationDrawer<Fragment> extends ActionBarActivi
             for (int i = 0;i < bottomSectionList.size();i++)
                 if(i != position)
                     bottomSectionList.get(i).unSelect();
+            for (int i = 0;i < sectionList.size();i++)
+                sectionList.get(i).unSelect();
         }
     }
 
