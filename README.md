@@ -9,7 +9,8 @@ It requires 10+ API and android support v7 (Toolbar)<br>
 [Download example apk](https://raw.github.com/neokree/MaterialNavigationDrawer/master/example.apk)<br>
 
 ## IMPORTANT NOTICE
-This library is no longer supported.<BR>If someone wants to keep alive this library please contact me in private [neokree@gmail.com](mailto:neokree@gmail.com)
+This library is no longer supported.<br /> 
+I have not enough time to continue developing at this time. From september I will start a new branch for the 2.0 version based on the android design support library. If someone want to keep alive the current version please send pull requests AFTER testing the code and explaining what you have changed and why. Thanks to all contributors
 
 ## Set up a Navigation Drawer
 check the [wiki page](https://github.com/neokree/MaterialNavigationDrawer/wiki/Set-Up-a-Navigation-Drawer-Activity)
