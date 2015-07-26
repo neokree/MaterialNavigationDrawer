@@ -47,7 +47,6 @@
             android:textColor="#000"
             android:alpha="0.54"
             android:lines="1"
-            android:maxLength="3"
             android:textSize="14sp"
             android:textStyle="bold"
             android:gravity="center_horizontal"
