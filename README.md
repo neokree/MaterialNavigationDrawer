@@ -6,8 +6,6 @@ Navigation Drawer Activity with material design style and simplified methods<br>
 
 It requires 10+ API and android support v7 (Toolbar)<br>
 
-[Download example apk](https://raw.github.com/neokree/MaterialNavigationDrawer/master/example.apk)<br>
-
 ## IMPORTANT NOTICE
 I'm working on the version 2 of this library, but I want to restart from scratch. 
 If you need a stable version you can use the first version of this library, available [here](https://github.com/neokree/MaterialNavigationDrawer/tree/v1)
