@@ -981,8 +981,6 @@ public abstract class MaterialNavigationDrawer<Fragment> extends AppCompatActivi
      */
     public void setSection(MaterialSection section) {
         section.select();
-        syncSectionsState(section);
-
         switch (section.getTarget()) {
             case MaterialSection.TARGET_FRAGMENT:
                 // se l'utente clicca sulla stessa schermata in cui si trova si chiude il drawer e basta
